@@ -82,7 +82,7 @@
                         </div>
                         <div class="relative">
                             <i class="fa-solid fa-user absolute left-4 top-3.5 text-slate-500"></i>
-                            <input type="text" id="student-search-input" onkeydown="handleSearchKeyDown(event)" placeholder="Введите вашу фамилию..." 
+                            <input type="text" id="student-search-input" value="" autocomplete="off" onkeydown="handleSearchKeyDown(event)" placeholder="Введите вашу фамилию..." 
                                 class="w-full pl-11 pr-36 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             <button id="search-btn" onclick="searchStudentGrade()" class="absolute right-2 top-2 px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                                 Найти
@@ -336,7 +336,7 @@
                 </div>
             </div>
 
-            <!-- Main Interactive Table Grid & Inputs (Расширено для полного отображения ФИО) -->
+            <!-- Main Interactive Table Grid & Inputs -->
             <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                 <div class="xl:col-span-9 flex flex-col space-y-6">
                     <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-2xl">
@@ -475,6 +475,7 @@
         // Уникальный ключ хранения в localStorage конкретно для группы MBA-О26-МД (4 компонента оценки)
         const STORAGE_KEY = 'almau_mba_o26md_grades_v2';
         const LOCK_KEY = 'almau_o26md_locked_student_id';
+        const LOCK_CLEAN_FLAG = 'almau_o26md_lock_reset_v1';
 
         // Расписание 8 занятий (23 академических часа: 7 занятий по 3 ч. + 1 занятие 2 ч.)
         const SCHEDULE_SESSIONS = [
@@ -516,6 +517,14 @@
         let activeEditingStudentId = null, tempAttendanceHours = [];
 
         window.onload = function() {
+            // Одноразовый сброс тестовой фиксации профиля, чтобы по умолчанию поле ввода было пустым
+            try {
+                if (!localStorage.getItem(LOCK_CLEAN_FLAG)) {
+                    removeLockedStudentId();
+                    localStorage.setItem(LOCK_CLEAN_FLAG, '1');
+                }
+            } catch (e) {}
+
             loadDatabase();
             initGroupChart();
             updateDashboardData();
@@ -658,6 +667,7 @@
         }
 
         function checkAndApplyDeviceLock() {
+            const searchInput = document.getElementById('student-search-input');
             const lockedStudentId = getLockedStudentId();
             if (lockedStudentId) {
                 const student = students.find(s => s.id === lockedStudentId);
@@ -665,8 +675,11 @@
                     setLockedStudentId(student.id);
                     lockSearchInputForStudent(student);
                     displayStudentCard(student);
+                    return;
                 }
             }
+            // По умолчанию поле ввода чистое
+            if (searchInput) searchInput.value = '';
         }
 
         function lockSearchInputForStudent(student) {
@@ -1083,18 +1096,32 @@
         function updateStats() {
             const total = students.length;
             document.getElementById('stat-total-students').textContent = total;
-            if (total === 0) return;
-            let sum = 0, passes = 0, topStudent = null, topScore = -1;
+            const bestEl = document.getElementById('stat-best-student');
+            if (total === 0) {
+                bestEl.textContent = '—';
+                return;
+            }
+            let sum = 0, passes = 0, topStudent = null, topScore = 0;
             students.forEach(s => {
                 const final = calculateWeightedScore(s.attendance, s.activity, s.assignment, s.exam);
-                sum += final; if (final >= 50) passes++;
-                if (final > topScore) { topScore = final; topStudent = s; }
+                sum += final;
+                if (final >= 50) passes++;
+                if (final > topScore) {
+                    topScore = final;
+                    topStudent = s;
+                }
             });
             const avg = sum / total;
             document.getElementById('stat-average-grade').textContent = avg.toFixed(1);
             document.getElementById('stat-average-letter').textContent = getLetterGrade(avg).letter;
             document.getElementById('stat-pass-rate').textContent = `${Math.round((passes / total) * 100)}%`;
-            if (topStudent) document.getElementById('stat-best-student').textContent = `${formatSurnameInitials(topStudent.name)} (${topScore})`;
+            
+            // Показываем лидера только тогда, когда появились ненулевые баллы
+            if (topStudent && topScore > 0) {
+                bestEl.textContent = `${formatSurnameInitials(topStudent.name)} (${topScore})`;
+            } else {
+                bestEl.textContent = '—';
+            }
         }
 
         function initGroupChart() {
