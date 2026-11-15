@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Высшая школа бизнеса ALMAU — Управленческая экономика (MBA-В26-М)</title>
+    <title>Высшая школа бизнеса ALMAU — Управленческая экономика (MBA-О26-МД)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts (Inter) -->
@@ -36,7 +36,7 @@
                     <img src="top4/gsb.logo.png" alt="Логотип ВШБ ALMAU" class="h-10 w-auto object-contain block" onerror="this.style.display='none'">
                 </div>
                 <div>
-                    <span class="text-xs font-bold tracking-widest text-indigo-400 uppercase">Управленческая экономика — Группа MBA-В26-М</span>
+                    <span class="text-xs font-bold tracking-widest text-indigo-400 uppercase">Управленческая экономика — Группа MBA-О26-МД</span>
                     <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-200 bg-clip-text text-transparent">Высшая школа бизнеса ALMAU</h1>
                 </div>
             </div>
@@ -62,7 +62,7 @@
         <div id="student-view" class="space-y-8 block">
             <div class="max-w-2xl mx-auto text-center space-y-4 py-6">
                 <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-indigo-200 to-slate-400 bg-clip-text text-transparent">
-                    Личный кабинет успеваемости слушателя (MBA-В26-М)
+                    Личный кабинет успеваемости слушателя (MBA-О26-МД)
                 </h2>
                 <p class="text-sm sm:text-base text-slate-400">
                     Введите вашу Фамилию для просмотра успеваемости. При первом поиске ваше имя зафиксируется на данном устройстве.
@@ -93,10 +93,10 @@
             </div>
 
             <!-- Student Result Presentation Card -->
-            <div id="student-result-card" class="max-w-3xl mx-auto bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden hidden">
+            <div id="student-result-card" class="max-w-4xl mx-auto bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden hidden">
                 <div class="bg-gradient-to-r from-indigo-950/40 to-slate-900 px-6 py-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <span class="text-[10px] font-bold bg-indigo-900/50 text-indigo-300 px-2.5 py-1 rounded-full border border-indigo-800/30 uppercase tracking-wider">Слушатель курса MBA-В26-М</span>
+                        <span class="text-[10px] font-bold bg-indigo-900/50 text-indigo-300 px-2.5 py-1 rounded-full border border-indigo-800/30 uppercase tracking-wider">Слушатель курса MBA-О26-МД</span>
                         <h3 id="sr-name" class="text-xl font-extrabold text-white mt-1.5">ФИО студента</h3>
                     </div>
                     <div class="text-right">
@@ -108,51 +108,62 @@
                     </div>
                 </div>
 
-                <!-- Dashboard Graphs Grid -->
+                <!-- Dashboard Graphs Grid (5 widgets: 4 criteria + final circle) -->
                 <div class="p-6 border-b border-slate-800 bg-slate-950/30">
                     <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6 flex items-center gap-2">
                         <i class="fa-solid fa-chart-line text-indigo-400"></i>
                         Интерактивная карта успеваемости по критериям
                     </h4>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <!-- Widget 1: Attendance -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <!-- Widget 1: Attendance (25%) -->
                         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center">
                             <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                                <i class="fa-solid fa-calendar-check"></i> Посещение (30%)
+                                <i class="fa-solid fa-calendar-check"></i> Посещение (25%)
                             </span>
-                            <div class="relative w-full h-28 flex items-center justify-center">
+                            <div class="relative w-full h-24 flex items-center justify-center">
                                 <canvas id="attendanceBarChart"></canvas>
                             </div>
                             <div class="text-sm font-bold text-emerald-400 mt-2" id="val-att-text">0%</div>
                         </div>
 
-                        <!-- Widget 2: Activity -->
+                        <!-- Widget 2: Activity (15%) -->
                         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center">
                             <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                                <i class="fa-solid fa-bolt"></i> Активность (30%)
+                                <i class="fa-solid fa-bolt"></i> Активность (15%)
                             </span>
-                            <div class="relative w-full h-28 flex items-center justify-center">
+                            <div class="relative w-full h-24 flex items-center justify-center">
                                 <canvas id="activityLineChart"></canvas>
                             </div>
                             <div class="text-sm font-bold text-blue-400 mt-2" id="val-act-text">0/100</div>
                         </div>
 
-                        <!-- Widget 3: Exam -->
+                        <!-- Widget 3: Assignment (20%) -->
+                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center">
+                            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                                <i class="fa-solid fa-list-check"></i> Задание (20%)
+                            </span>
+                            <div class="relative w-full h-24 flex items-center justify-center">
+                                <canvas id="assignmentBarChart"></canvas>
+                            </div>
+                            <div class="text-sm font-bold text-amber-400 mt-2" id="val-asg-text">0/100</div>
+                        </div>
+
+                        <!-- Widget 4: Exam (40%) -->
                         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center">
                             <span class="text-[10px] font-bold text-rose-400 uppercase tracking-wider mb-2 flex items-center gap-1">
                                 <i class="fa-solid fa-gauge-high"></i> Экзамен (40%)
                             </span>
-                            <div class="relative w-full h-28 flex items-center justify-center">
+                            <div class="relative w-full h-24 flex items-center justify-center">
                                 <canvas id="examGaugeChart"></canvas>
                             </div>
                             <div class="text-sm font-bold text-rose-400 mt-2" id="val-ex-text">0/100</div>
                         </div>
 
-                        <!-- Widget 4: Final Progress -->
-                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden">
-                            <span class="text-[10px] font-bold text-violet-400 uppercase tracking-wider mb-3 flex items-center gap-1">
-                                <i class="fa-solid fa-circle-nodes"></i> Итоговый итог
+                        <!-- Widget 5: Final Progress -->
+                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden sm:col-span-2 lg:col-span-1">
+                            <span class="text-[10px] font-bold text-violet-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-nodes"></i> Итог (100%)
                             </span>
                             <div class="relative w-24 h-24 flex items-center justify-center">
                                 <svg class="w-full h-full transform -rotate-90">
@@ -164,20 +175,19 @@
                                     <span class="text-[10px] text-slate-400 font-semibold" id="finalCircleScore">0.0</span>
                                 </div>
                             </div>
-                            <div class="text-[9px] text-violet-300 font-semibold uppercase mt-3 tracking-widest">Макс: 100</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Three grade breakdown columns -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-800 border-b border-slate-800 bg-slate-900/20">
+                <!-- Four grade breakdown columns -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-800 border-b border-slate-800 bg-slate-900/20">
                     <div class="p-5 text-center space-y-1.5">
                         <div class="inline-flex h-9 w-9 bg-emerald-500/10 text-emerald-400 rounded-xl items-center justify-center text-base">
                             <i class="fa-solid fa-calendar-check"></i>
                         </div>
                         <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Посещение</h4>
                         <div class="text-xl font-bold text-emerald-400" id="sr-val-attendance">0 / 100</div>
-                        <p class="text-[10px] text-slate-500">Вес в оценке: <strong class="text-emerald-400">30%</strong></p>
+                        <p class="text-[10px] text-slate-500">Вес в оценке: <strong class="text-emerald-400">25%</strong></p>
                     </div>
 
                     <div class="p-5 text-center space-y-1.5">
@@ -186,7 +196,16 @@
                         </div>
                         <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Активность</h4>
                         <div class="text-xl font-bold text-blue-400" id="sr-val-activity">0 / 100</div>
-                        <p class="text-[10px] text-slate-500">Вес в оценке: <strong class="text-blue-400">30%</strong></p>
+                        <p class="text-[10px] text-slate-500">Вес в оценке: <strong class="text-blue-400">15%</strong></p>
+                    </div>
+
+                    <div class="p-5 text-center space-y-1.5">
+                        <div class="inline-flex h-9 w-9 bg-amber-500/10 text-amber-400 rounded-xl items-center justify-center text-base">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                        <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Задание</h4>
+                        <div class="text-xl font-bold text-amber-400" id="sr-val-assignment">0 / 100</div>
+                        <p class="text-[10px] text-slate-500">Вес в оценке: <strong class="text-amber-400">20%</strong></p>
                     </div>
 
                     <div class="p-5 text-center space-y-1.5">
@@ -204,7 +223,7 @@
                     <button onclick="toggleStudentAttDetails()" class="w-full flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider hover:text-slate-200 transition-colors">
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-list-check text-emerald-400"></i>
-                            Детализация посещений по дням занятий
+                            Детализация посещений по дням занятий (8 занятий / 23 ак. часа)
                         </span>
                         <span id="student-att-toggle-icon" class="text-[10px] bg-slate-800 px-2.5 py-1 rounded border border-slate-700 transition-all">Развернуть ▾</span>
                     </button>
@@ -230,7 +249,7 @@
                 <i class="fa-solid fa-user-slash text-rose-500 text-2xl mb-2.5"></i>
                 <h4 class="text-sm font-bold text-rose-400">Слушатель не найден</h4>
                 <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                    Проверьте написание фамилии. Попробуйте написать только фамилию (например, <strong class="text-slate-300">Исаев</strong> или <strong class="text-slate-300">Букина</strong>).
+                    Проверьте написание фамилии. Попробуйте написать только фамилию (например, <strong class="text-slate-300">Еменов</strong> или <strong class="text-slate-300">Жумабеков</strong>).
                 </p>
             </div>
         </div>
@@ -308,7 +327,7 @@
                     <div>
                         <h3 class="text-base font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-chart-column text-indigo-400"></i>
-                            Визуальный анализ группы MBA-В26-М по компонентам
+                            Визуальный анализ группы MBA-О26-МД по компонентам
                         </h3>
                     </div>
                 </div>
@@ -318,23 +337,27 @@
             </div>
 
             <!-- Main Interactive Table Grid & Inputs -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 flex flex-col space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <div class="lg:col-span-3 flex flex-col space-y-6">
                     <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-2xl">
                         <div class="p-5 border-b border-slate-800 bg-slate-900/50 flex flex-col sm:flex-row justify-between items-center gap-4">
-                            <div class="relative w-full sm:w-72">
+                            <div class="relative w-full sm:w-64">
                                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-500"></i>
-                                <input type="text" id="teacher-search-input" placeholder="Поиск..." 
+                                <input type="text" id="teacher-search-input" placeholder="Поиск слушателя..." 
                                     class="w-full pl-9 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <button onclick="exportToCSV()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-md flex items-center space-x-2">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button onclick="exportToCSV()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-md flex items-center space-x-1.5">
                                     <i class="fa-solid fa-file-excel"></i>
                                     <span>Экспорт CSV</span>
                                 </button>
-                                <button onclick="clearDeviceLock()" class="px-4 py-2.5 bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 rounded-xl text-xs font-semibold border border-amber-500/30 flex items-center space-x-2" title="Сбросить привязку профиля на этом ПК">
+                                <button onclick="resetDatabaseToDefault()" class="px-3.5 py-2.5 bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 rounded-xl text-xs font-semibold border border-rose-800/50 flex items-center space-x-1.5" title="Сбросить все оценки к исходному состоянию">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    <span>Сброс оценок</span>
+                                </button>
+                                <button onclick="clearDeviceLock()" class="px-3.5 py-2.5 bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 rounded-xl text-xs font-semibold border border-amber-500/30 flex items-center space-x-1.5" title="Сбросить привязку профиля студента на этом ПК">
                                     <i class="fa-solid fa-key"></i>
-                                    <span>Сбросить замок ПК</span>
+                                    <span>Замок ПК</span>
                                 </button>
                             </div>
                         </div>
@@ -343,13 +366,14 @@
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="border-b border-slate-800 bg-slate-900/40 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
-                                        <th class="py-3.5 px-5">Слушатель</th>
-                                        <th class="py-3.5 px-4 text-center w-28">Посещ. (30%)</th>
-                                        <th class="py-3.5 px-4 text-center w-24">Активн. (30%)</th>
-                                        <th class="py-3.5 px-4 text-center w-24">Экзамен (40%)</th>
-                                        <th class="py-3.5 px-5 text-right w-24 bg-indigo-950/20">Итог</th>
-                                        <th class="py-3.5 px-5 text-center w-20">Грейд</th>
-                                        <th class="py-3.5 px-4 text-center w-14"></th>
+                                        <th class="py-3.5 px-4">Слушатель</th>
+                                        <th class="py-3.5 px-3 text-center w-24">Посещ. (25%)</th>
+                                        <th class="py-3.5 px-3 text-center w-24">Активн. (15%)</th>
+                                        <th class="py-3.5 px-3 text-center w-24">Задание (20%)</th>
+                                        <th class="py-3.5 px-3 text-center w-24">Экзамен (40%)</th>
+                                        <th class="py-3.5 px-4 text-right w-20 bg-indigo-950/20">Итог</th>
+                                        <th class="py-3.5 px-4 text-center w-16">Грейд</th>
+                                        <th class="py-3.5 px-3 text-center w-12"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="students-table-body" class="divide-y divide-slate-800/40"></tbody>
@@ -359,6 +383,7 @@
                 </div>
 
                 <div class="space-y-6">
+                    <!-- Add Student Card -->
                     <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-2xl">
                         <h3 class="text-sm font-bold text-white mb-3 flex items-center space-x-2">
                             <i class="fa-solid fa-user-plus text-blue-400"></i>
@@ -366,12 +391,33 @@
                         </h3>
                         <div class="space-y-3">
                             <input type="text" id="add-student-name" placeholder="ФИО слушателя" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200">
-                            <div class="grid grid-cols-3 gap-2">
-                                <input type="number" id="add-student-attendance" min="0" max="100" placeholder="Посещ" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
-                                <input type="number" id="add-student-activity" min="0" max="100" placeholder="Актив" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
-                                <input type="number" id="add-student-exam" min="0" max="100" placeholder="Экз" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="add-student-attendance" min="0" max="100" placeholder="Посещ (25%)" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
+                                <input type="number" id="add-student-activity" min="0" max="100" placeholder="Актив (15%)" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
+                                <input type="number" id="add-student-assignment" min="0" max="100" placeholder="Задан (20%)" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
+                                <input type="number" id="add-student-exam" min="0" max="100" placeholder="Экз (40%)" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
                             </div>
-                            <button onclick="addSingleStudent()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs border border-slate-700">Записать</button>
+                            <button onclick="addSingleStudent()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs border border-slate-700 font-semibold transition-colors">Записать в журнал</button>
+                        </div>
+                    </div>
+
+                    <!-- Auto-Save Info & Backup Card -->
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-2xl space-y-3">
+                        <h3 class="text-sm font-bold text-emerald-400 flex items-center space-x-2">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Автосохранение включено</span>
+                        </h3>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            Все выставленные баллы, посещения и добавленные слушатели автоматически сохраняются в памяти вашего браузера (<code class="text-slate-300">localStorage</code>) для группы <strong>MBA-О26-МД</strong>. При закрытии или обновлении вкладки данные не пропадут.
+                        </p>
+                        <div class="pt-2 border-t border-slate-800 flex flex-col gap-2">
+                            <button onclick="downloadBackupJSON()" class="w-full py-2 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-colors">
+                                <i class="fa-solid fa-download"></i> Скачать резервную копию (.json)
+                            </button>
+                            <label class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors">
+                                <i class="fa-solid fa-upload"></i> Загрузить из копии (.json)
+                                <input type="file" id="restore-json-input" accept=".json" onchange="restoreBackupJSON(event)" class="hidden">
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -398,12 +444,23 @@
     <div id="attendance-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
         <div class="bg-slate-900 p-6 rounded-2xl max-w-md w-full mx-4 shadow-2xl border border-slate-800 flex flex-col max-h-[85vh]">
             <div class="flex justify-between items-center pb-3 border-b border-slate-800">
-                <h3 class="text-sm font-extrabold text-white" id="att-modal-student-name">Посещаемость</h3>
+                <div>
+                    <h3 class="text-sm font-extrabold text-white" id="att-modal-student-name">Посещаемость</h3>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Расписание: 15 нояб – 5 дек 2026 (23 ак. часа)</p>
+                </div>
                 <button onclick="closeAttendanceModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="flex-grow overflow-y-auto custom-scrollbar my-4 space-y-2.5" id="attendance-dates-grid"></div>
-            <div class="pt-4 border-t border-slate-800 flex justify-between">
-                <button onclick="saveAttendanceDetails()" class="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-xl text-xs">Сохранить</button>
+            <div class="flex items-center justify-between mt-3 pb-2 border-b border-slate-800/60">
+                <span class="text-[11px] text-slate-400">Быстрая отметка:</span>
+                <div class="space-x-2">
+                    <button onclick="setAllTempHours(true)" class="px-2.5 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded text-[10px] font-bold">Все (100%)</button>
+                    <button onclick="setAllTempHours(false)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 rounded text-[10px] font-bold">Очистить (0%)</button>
+                </div>
+            </div>
+            <div class="flex-grow overflow-y-auto custom-scrollbar my-3 space-y-2" id="attendance-dates-grid"></div>
+            <div class="pt-3 border-t border-slate-800 flex justify-end space-x-2">
+                <button onclick="closeAttendanceModal()" class="px-4 py-2 bg-slate-800 text-slate-300 font-semibold rounded-xl text-xs">Отмена</button>
+                <button onclick="saveAttendanceDetails()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs">Сохранить</button>
             </div>
         </div>
     </div>
@@ -411,41 +468,51 @@
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2"></div>
 
     <footer class="bg-slate-950 border-t border-slate-900 py-6 text-center text-xs text-slate-500">
-        <p>© 2026 Высшая школа бизнеса ALMAU. Группа MBA-В26-М.</p>
+        <p>© 2026 Высшая школа бизнеса ALMAU. Группа MBA-О26-МД.</p>
     </footer>
 
     <script>
-        // Вшитые официальные оценки из Excel/CSV файла группы MBA-В26-М
+        // Уникальный ключ хранения в localStorage конкретно для группы MBA-О26-МД (4 компонента оценки)
+        const STORAGE_KEY = 'almau_mba_o26md_grades_v2';
+        const LOCK_KEY = 'almau_o26md_locked_student_id';
+
+        // Расписание 8 занятий (23 академических часа: 7 занятий по 3 ч. + 1 занятие 2 ч.)
+        const SCHEDULE_SESSIONS = [
+            { date: '15 ноября (Вс)', time: '19:00–21:30', type: 'Премодуль', hours: 3 },
+            { date: '17 ноября (Вт)', time: '19:00–21:30', type: 'Основной модуль', hours: 3 },
+            { date: '19 ноября (Чт)', time: '19:00–21:30', type: 'Основной модуль', hours: 3 },
+            { date: '24 ноября (Вт)', time: '19:00–21:30', type: 'Основной модуль', hours: 3 },
+            { date: '26 ноября (Чт)', time: '19:00–21:30', type: 'Основной модуль', hours: 3 },
+            { date: '30 ноября (Пн)', time: '19:00–21:30', type: 'Основной модуль', hours: 3 },
+            { date: '2 декабря (Ср)', time: '19:00–21:30', type: 'Основной модуль', hours: 3 },
+            { date: '5 декабря (Сб)', time: '19:00–20:40', type: 'Итоговое занятие', hours: 2 }
+        ];
+        const TOTAL_ACADEMIC_HOURS = SCHEDULE_SESSIONS.reduce((sum, s) => sum + s.hours, 0); // 23 часа
+
+        // Объединённый список слушателей группы MBA-О26-МД (14 основного состава + 2 прикреплённых)
         const initialGroupStudents = [
-            { id: 'v26m-1', name: 'Акпаева Асия Абубакировна', attendance: 100, activity: 87, exam: 85, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-2', name: 'Али Исламбек Серікбайұлы', attendance: 25, activity: 0, exam: 0, attendanceHours: [true, false, false, false] },
-            { id: 'v26m-3', name: 'Ахметов Азрет Даулетович', attendance: 0, activity: 0, exam: 0, attendanceHours: [false, false, false, false] },
-            { id: 'v26m-4', name: 'Байдарбеков Өнербек Өмірханұлы', attendance: 0, activity: 0, exam: 0, attendanceHours: [false, false, false, false] },
-            { id: 'v26m-5', name: 'Баймұқан Мөлдір Қуандыққызы', attendance: 100, activity: 75, exam: 85, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-6', name: 'Баязит Бауржан Балтабаевич', attendance: 100, activity: 90, exam: 85, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-7', name: 'Болекбаева Галия Абзаловна', attendance: 100, activity: 80, exam: 93, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-8', name: 'Букина Наталья Сергеевна', attendance: 100, activity: 90, exam: 85, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-9', name: 'Жалгасбаев Нурбек Ержанович', attendance: 100, activity: 90, exam: 85, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-10', name: 'Жанаева Раушан Ерланкызы', attendance: 100, activity: 75, exam: 75, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-11', name: 'Исаев Хаджи Асланович', attendance: 75, activity: 70, exam: 0, attendanceHours: [true, true, true, false] },
-            { id: 'v26m-12', name: 'Калтаев Ержан Сеиткарымович', attendance: 100, activity: 100, exam: 80, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-13', name: 'Ким Александр Анатольевич', attendance: 100, activity: 100, exam: 80, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-14', name: 'Ким Вадим Анатольевич', attendance: 100, activity: 90, exam: 85, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-15', name: 'Коптлеев Ермек Суесинович', attendance: 0, activity: 0, exam: 0, attendanceHours: [false, false, false, false] },
-            { id: 'v26m-16', name: 'Сагимбаева Асель Есболовна', attendance: 100, activity: 95, exam: 90, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-17', name: 'Саматдин Темирхан Темурлан Аблайхан', attendance: 75, activity: 70, exam: 0, attendanceHours: [true, true, true, false] },
-            { id: 'v26m-18', name: 'Саядянц Армен Рубенович', attendance: 100, activity: 90, exam: 97, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-19', name: 'Смирнягина Татьяна Владимировна', attendance: 100, activity: 100, exam: 85, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-20', name: 'Степанюк Андрей Александрович', attendance: 100, activity: 95, exam: 95, attendanceHours: [true, true, true, true] },
-            { id: 'v26m-21', name: 'Султанова Сабина Максутовна', attendance: 100, activity: 100, exam: 85, attendanceHours: [true, true, true, true] }
+            { id: 'o26md-1', name: 'Ахменкеева Надира Куанышевна', company: 'ИП', role: 'Руководитель', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-2', name: 'Еменов Гафур Галымович', company: 'АО "Казпромгеофизика"', role: 'Главный инженер', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-3', name: 'Жанабаева Лаура Мынбаевна', company: 'ТОО Grain Flow Trading', role: 'Директор по правовым и административным вопросам', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-4', name: 'Жаныбаева Асель Нургельдиевна', company: 'Ликвидационная комиссия АО Банк Астаны', role: 'Начальник Управления отчетности', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-5', name: 'Жумабеков Жасулан Нурланович', company: 'АО "Халык Банк" (ЗКО филиал)', role: 'Директор филиала', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-6', name: 'Кабылжанов Данияр Бауржанович', company: 'АО ПАССАЖИРСКИЕ ПЕРЕВОЗКИ', role: 'Главный менеджер Группы по маркетингу', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-7', name: 'Кострецов Виктор Николаевич', company: 'ТОО "ТрастМашОйл-Казахстан"', role: 'Директор', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-8', name: 'Мансурова Мадина Есимхановна', company: 'Al-Farabi Kazakh National University', role: 'Декан механико-математического факультета', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-9', name: 'Нурбекова Лаура Нурлыбековна', company: 'АО "Алатау Жарык Компаниясы"', role: 'Начальник отдела', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-10', name: 'Нысанбеков Мақсат Мырзабекұлы', company: 'АО БЦК', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-11', name: 'Потапова Наталья Сергеевна', company: 'ТОО "Флора Алма-Ата"', role: 'Директор по развитию бизнеса', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-12', name: 'Тажихан Ажар Шарханқызы', company: 'АО «Эйр Астана»', role: 'Бортпроводник', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-13', name: 'Тілеужанова Лаура Талғатқызы', company: 'ТОО «Торговый дом «Бирюса»', role: 'Оператор', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-14', name: 'Тулеев Бахыт Сейдазамович', company: 'Национальная академия наук РК при Президенте РК', role: 'Управляющий директор по стратегическому планированию', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-15', name: 'Уресаев Асхат Ордабекович', company: 'Tengizchevroil', role: 'Team Lead', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-16', name: 'Шабельский Александр Владимирович', company: 'Филиал "Консолидэйтед Контракторс Интернэшнл Компани С.А.Л."', role: 'Инженер-проектировщик', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] }
         ];
 
-        const ATTENDANCE_DATES = ['14 сентября', '18 сентября', '19 сентября', '20 сентября'];
-
         let students = [];
-        let personalAttChart = null, personalActChart = null, personalExamChart = null, groupChart = null, bellCurveChart = null;
+        let personalAttChart = null, personalActChart = null, personalAsgChart = null, personalExamChart = null, groupChart = null, bellCurveChart = null;
         let isTeacherMode = false;
-        const correctPassword = 'MEE-12072026';
+        const correctPassword = 'MEO26MD';
         let activeEditingStudentId = null, tempAttendanceHours = [];
 
         window.onload = function() {
@@ -459,24 +526,105 @@
             });
         };
 
-        function ensureAttendanceHours(student) {
-            if (!student.hasOwnProperty('attendanceHours') || !Array.isArray(student.attendanceHours) || student.attendanceHours.length !== 4) {
-                student.attendanceHours = [];
-                const numTrue = Math.round((student.attendance || 0) / 25);
-                for (let i = 0; i < 4; i++) {
-                    student.attendanceHours.push(i < numTrue);
+        // Расчёт процента посещаемости пропорционально академическим часам (из 23 часов)
+        function calculateAttendancePercent(hoursArray) {
+            if (!Array.isArray(hoursArray)) return 0;
+            let attendedHours = 0;
+            SCHEDULE_SESSIONS.forEach((session, idx) => {
+                if (hoursArray[idx]) attendedHours += session.hours;
+            });
+            return Math.round((attendedHours / TOTAL_ACADEMIC_HOURS) * 100);
+        }
+
+        function ensureStudentFields(student) {
+            if (typeof student.assignment !== 'number') {
+                student.assignment = 0;
+            }
+            if (!student.hasOwnProperty('attendanceHours') || !Array.isArray(student.attendanceHours) || student.attendanceHours.length !== SCHEDULE_SESSIONS.length) {
+                student.attendanceHours = new Array(SCHEDULE_SESSIONS.length).fill(false);
+                if (student.attendance >= 100) {
+                    student.attendanceHours.fill(true);
                 }
             }
         }
 
+        // Сохранение состояния в localStorage браузера
+        function saveDatabase() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+            } catch (e) {
+                console.error('Ошибка сохранения в localStorage:', e);
+                showToast('Не удалось сохранить данные в память браузера', 'error');
+            }
+        }
+
+        // Загрузка из localStorage (или инициализация стартовым списком при первом запуске)
         function loadDatabase() {
-            students = [...initialGroupStudents];
-            students.forEach(student => ensureAttendanceHours(student));
-            updateDashboardData();
+            try {
+                const savedData = localStorage.getItem(STORAGE_KEY);
+                if (savedData) {
+                    const parsed = JSON.parse(savedData);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        students = parsed;
+                        students.forEach(student => ensureStudentFields(student));
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.error('Ошибка чтения из localStorage:', e);
+            }
+            students = JSON.parse(JSON.stringify(initialGroupStudents));
+            students.forEach(student => ensureStudentFields(student));
+            saveDatabase();
+        }
+
+        function resetDatabaseToDefault() {
+            if (confirm('Вы уверены, что хотите сбросить все введённые оценки и посещаемость к исходному нулевому журналу?')) {
+                students = JSON.parse(JSON.stringify(initialGroupStudents));
+                saveDatabase();
+                updateDashboardData();
+                showToast('Журнал сброшен к исходному списку', 'info');
+            }
+        }
+
+        function downloadBackupJSON() {
+            const dataStr = JSON.stringify(students, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MBA_O26MD_Backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Резервная копия JSON скачана', 'success');
+        }
+
+        function restoreBackupJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        students = imported;
+                        students.forEach(s => ensureStudentFields(s));
+                        saveDatabase();
+                        updateDashboardData();
+                        showToast('Данные успешно восстановлены из файла!', 'success');
+                    } else {
+                        showToast('Неверный формат файла резервной копии', 'error');
+                    }
+                } catch (err) {
+                    showToast('Ошибка чтения JSON файла', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
         }
 
         function checkAndApplyDeviceLock() {
-            const lockedStudentId = localStorage.getItem('almau_v26m_locked_student_id');
+            const lockedStudentId = localStorage.getItem(LOCK_KEY);
             if (lockedStudentId) {
                 const student = students.find(s => s.id === lockedStudentId);
                 if (student) {
@@ -503,15 +651,17 @@
         }
 
         function clearDeviceLock() {
-            localStorage.removeItem('almau_v26m_locked_student_id');
+            localStorage.removeItem(LOCK_KEY);
             location.reload();
         }
 
-        function calculateWeightedScore(attendance, activity, exam) {
-            const attWeight = (attendance || 0) * 0.30;
-            const actWeight = (activity || 0) * 0.30;
+        // Формула расчёта: Посещение (25%) + Активность (15%) + Задание (20%) + Экзамен (40%) = 100%
+        function calculateWeightedScore(attendance, activity, assignment, exam) {
+            const attWeight = (attendance || 0) * 0.25;
+            const actWeight = (activity || 0) * 0.15;
+            const asgWeight = (assignment || 0) * 0.20;
             const exmWeight = (exam || 0) * 0.40;
-            return parseFloat((attWeight + actWeight + exmWeight).toFixed(1));
+            return parseFloat((attWeight + actWeight + asgWeight + exmWeight).toFixed(1));
         }
 
         function getLetterGrade(score) {
@@ -529,7 +679,7 @@
         }
 
         function searchStudentGrade() {
-            const lockedStudentId = localStorage.getItem('almau_v26m_locked_student_id');
+            const lockedStudentId = localStorage.getItem(LOCK_KEY);
             if (lockedStudentId) {
                 const lockedStudent = students.find(s => s.id === lockedStudentId);
                 if (lockedStudent) {
@@ -556,7 +706,7 @@
             if (matchedStudent) {
                 notFoundCard.classList.add('hidden');
                 
-                localStorage.setItem('almau_v26m_locked_student_id', matchedStudent.id);
+                localStorage.setItem(LOCK_KEY, matchedStudent.id);
                 lockSearchInputForStudent(matchedStudent);
 
                 displayStudentCard(matchedStudent);
@@ -569,8 +719,9 @@
         }
 
         function displayStudentCard(student) {
+            ensureStudentFields(student);
             const resultCard = document.getElementById('student-result-card');
-            const finalScore = calculateWeightedScore(student.attendance, student.activity, student.exam);
+            const finalScore = calculateWeightedScore(student.attendance, student.activity, student.assignment, student.exam);
             const gradeInfo = getLetterGrade(finalScore);
 
             document.getElementById('sr-name').textContent = student.name;
@@ -581,10 +732,11 @@
             document.getElementById('sr-total-score').textContent = finalScore;
             document.getElementById('sr-val-attendance').textContent = `${student.attendance || 0} / 100`;
             document.getElementById('sr-val-activity').textContent = `${student.activity || 0} / 100`;
+            document.getElementById('sr-val-assignment').textContent = `${student.assignment || 0} / 100`;
             document.getElementById('sr-val-exam').textContent = `${student.exam || 0} / 100`;
 
             renderStudentAttendanceDetails(student);
-            renderPersonalCharts(student.attendance, student.activity, student.exam, finalScore, gradeInfo.letter);
+            renderPersonalCharts(student.attendance, student.activity, student.assignment, student.exam, finalScore, gradeInfo.letter);
 
             resultCard.classList.remove('hidden');
             resultCard.classList.add('fade-enter');
@@ -597,11 +749,13 @@
             if (event.key === 'Enter') searchStudentGrade();
         }
 
-        function renderPersonalCharts(attendance, activity, exam, total, letter) {
+        function renderPersonalCharts(attendance, activity, assignment, exam, total, letter) {
             if (personalAttChart) personalAttChart.destroy();
             if (personalActChart) personalActChart.destroy();
+            if (personalAsgChart) personalAsgChart.destroy();
             if (personalExamChart) personalExamChart.destroy();
 
+            // 1. Attendance Bar Chart
             const attCtx = document.getElementById('attendanceBarChart').getContext('2d');
             document.getElementById('val-att-text').textContent = `${attendance}%`;
             personalAttChart = new Chart(attCtx, {
@@ -617,6 +771,7 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } }, y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { display: false } } } }
             });
 
+            // 2. Activity Line Chart
             const actCtx = document.getElementById('activityLineChart').getContext('2d');
             document.getElementById('val-act-text').textContent = `${activity}/100`;
             const trendPoints = [
@@ -638,6 +793,23 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 8 } } }, y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { display: false } } } }
             });
 
+            // 3. Assignment Bar Chart
+            const asgCtx = document.getElementById('assignmentBarChart').getContext('2d');
+            document.getElementById('val-asg-text').textContent = `${assignment}/100`;
+            personalAsgChart = new Chart(asgCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Результат', 'Цель'],
+                    datasets: [{
+                        data: [assignment, 100],
+                        backgroundColor: ['rgba(245, 158, 11, 0.85)', 'rgba(245, 158, 11, 0.15)'],
+                        borderRadius: 6, maxBarThickness: 16
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } }, y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { display: false } } } }
+            });
+
+            // 4. Exam Gauge Chart
             const exCtx = document.getElementById('examGaugeChart').getContext('2d');
             document.getElementById('val-ex-text').textContent = `${exam}/100`;
             personalExamChart = new Chart(exCtx, {
@@ -649,6 +821,7 @@
                 options: { circumference: 180, rotation: 270, cutout: '80%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
             });
 
+            // 5. Final Progress Circle
             const circle = document.getElementById('finalScoreCircle');
             document.getElementById('finalCircleLetter').textContent = letter;
             document.getElementById('finalCircleScore').textContent = total.toFixed(1);
@@ -659,7 +832,7 @@
         function renderBellCurveChart() {
             if (bellCurveChart) bellCurveChart.destroy();
 
-            const scores = students.map(s => calculateWeightedScore(s.attendance, s.activity, s.exam));
+            const scores = students.map(s => calculateWeightedScore(s.attendance, s.activity, s.assignment, s.exam));
             if (scores.length === 0) return;
 
             const n = scores.length;
@@ -824,26 +997,32 @@
             const tbody = document.getElementById('students-table-body');
             tbody.innerHTML = '';
             const query = filterQuery.toLowerCase().trim();
-            const filtered = students.filter(s => s.name.toLowerCase().includes(query));
+            const filtered = students.filter(s => s.name.toLowerCase().includes(query) || (s.company && s.company.toLowerCase().includes(query)));
 
             filtered.forEach(student => {
-                const finalScore = calculateWeightedScore(student.attendance, student.activity, student.exam);
+                ensureStudentFields(student);
+                const finalScore = calculateWeightedScore(student.attendance, student.activity, student.assignment, student.exam);
                 const gradeInfo = getLetterGrade(finalScore);
+                const metaInfo = [student.company, student.role].filter(Boolean).join(' • ');
 
                 const row = document.createElement('tr');
                 row.className = "hover:bg-slate-900/60 transition-colors border-b border-slate-800/40";
                 row.innerHTML = `
-                    <td class="py-3 px-5 font-medium text-slate-100"><span class="block font-bold text-slate-200 truncate max-w-[240px]">${student.name}</span></td>
-                    <td class="py-3 px-4">
-                        <button onclick="openAttendanceModal('${student.id}')" class="px-2 py-1.5 bg-slate-950 border border-slate-800 text-emerald-400 text-xs font-bold w-full rounded-lg">
+                    <td class="py-3 px-4 font-medium text-slate-100">
+                        <span class="block font-bold text-slate-200 truncate max-w-[220px]" title="${student.name}">${student.name}</span>
+                        ${metaInfo ? `<span class="block text-[10px] text-slate-500 truncate max-w-[220px] mt-0.5" title="${metaInfo}">${metaInfo}</span>` : ''}
+                    </td>
+                    <td class="py-3 px-3">
+                        <button onclick="openAttendanceModal('${student.id}')" class="px-2 py-1.5 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 text-emerald-400 text-xs font-bold w-full rounded-lg transition-colors">
                             <span>${student.attendance}%</span>
                         </button>
                     </td>
-                    <td class="py-3 px-4"><input type="number" min="0" max="100" value="${student.activity}" onchange="updateStudentGrade('${student.id}', 'activity', this.value)" class="w-full text-center py-1 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 text-sm font-semibold"></td>
-                    <td class="py-3 px-4"><input type="number" min="0" max="100" value="${student.exam}" onchange="updateStudentGrade('${student.id}', 'exam', this.value)" class="w-full text-center py-1 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 text-sm font-semibold"></td>
-                    <td class="py-3 px-5 text-right font-extrabold text-violet-400 bg-indigo-950/10">${finalScore}</td>
-                    <td class="py-3 px-5 text-center"><span class="inline-flex items-center justify-center px-2.5 py-1 text-xs font-bold rounded-lg border ${gradeInfo.class} w-12">${gradeInfo.letter}</span></td>
-                    <td class="py-3 px-4 text-center"><button onclick="deleteStudent('${student.id}')" class="p-1.5 text-slate-500 hover:text-rose-400"><i class="fa-regular fa-trash-can text-sm"></i></button></td>
+                    <td class="py-3 px-3"><input type="number" min="0" max="100" value="${student.activity}" onchange="updateStudentGrade('${student.id}', 'activity', this.value)" class="w-full text-center py-1 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 text-sm font-semibold focus:border-blue-500 focus:outline-none"></td>
+                    <td class="py-3 px-3"><input type="number" min="0" max="100" value="${student.assignment}" onchange="updateStudentGrade('${student.id}', 'assignment', this.value)" class="w-full text-center py-1 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 text-sm font-semibold focus:border-amber-500 focus:outline-none"></td>
+                    <td class="py-3 px-3"><input type="number" min="0" max="100" value="${student.exam}" onchange="updateStudentGrade('${student.id}', 'exam', this.value)" class="w-full text-center py-1 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 text-sm font-semibold focus:border-rose-500 focus:outline-none"></td>
+                    <td class="py-3 px-4 text-right font-extrabold text-violet-400 bg-indigo-950/10">${finalScore}</td>
+                    <td class="py-3 px-4 text-center"><span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-lg border ${gradeInfo.class} w-11">${gradeInfo.letter}</span></td>
+                    <td class="py-3 px-3 text-center"><button onclick="deleteStudent('${student.id}')" class="p-1.5 text-slate-500 hover:text-rose-400 transition-colors" title="Удалить слушателя"><i class="fa-regular fa-trash-can text-sm"></i></button></td>
                 `;
                 tbody.appendChild(row);
             });
@@ -854,7 +1033,9 @@
             const student = students.find(s => s.id === id);
             if (student) {
                 student[field] = numVal;
-                updateStats(); updateGroupChart(); renderBellCurveChart(); renderTeacherTable();
+                saveDatabase();
+                updateStats(); updateGroupChart(); renderBellCurveChart(); renderTeacherTable(document.getElementById('teacher-search-input').value);
+                showToast('Оценка сохранена', 'success');
             }
         }
 
@@ -864,7 +1045,7 @@
             if (total === 0) return;
             let sum = 0, passes = 0, topStudent = null, topScore = -1;
             students.forEach(s => {
-                const final = calculateWeightedScore(s.attendance, s.activity, s.exam);
+                const final = calculateWeightedScore(s.attendance, s.activity, s.assignment, s.exam);
                 sum += final; if (final >= 50) passes++;
                 if (final > topScore) { topScore = final; topStudent = s; }
             });
@@ -880,12 +1061,13 @@
             groupChart = new Chart(ctx, {
                 type: 'bar',
                 data: { labels: [], datasets: [
-                    { label: 'Посещение', data: [], backgroundColor: 'rgba(16, 185, 129, 0.85)', borderRadius: 4 },
-                    { label: 'Активность', data: [], backgroundColor: 'rgba(59, 130, 246, 0.85)', borderRadius: 4 },
-                    { label: 'Экзамен', data: [], backgroundColor: 'rgba(244, 63, 94, 0.85)', borderRadius: 4 },
+                    { label: 'Посещение (25%)', data: [], backgroundColor: 'rgba(16, 185, 129, 0.85)', borderRadius: 4 },
+                    { label: 'Активность (15%)', data: [], backgroundColor: 'rgba(59, 130, 246, 0.85)', borderRadius: 4 },
+                    { label: 'Задание (20%)', data: [], backgroundColor: 'rgba(245, 158, 11, 0.85)', borderRadius: 4 },
+                    { label: 'Экзамен (40%)', data: [], backgroundColor: 'rgba(244, 63, 94, 0.85)', borderRadius: 4 },
                     { label: 'Итог', data: [], backgroundColor: 'rgba(139, 92, 246, 0.85)', borderRadius: 4 }
                 ]},
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { min: 0, max: 100, ticks: { color: '#94a3b8' } } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { color: '#94a3b8', font: { size: 10 } } } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { min: 0, max: 100, ticks: { color: '#94a3b8' } } } }
             });
         }
 
@@ -895,12 +1077,18 @@
             groupChart.data.labels = sorted.map(s => s.name.split(' ')[0]);
             groupChart.data.datasets[0].data = sorted.map(s => s.attendance);
             groupChart.data.datasets[1].data = sorted.map(s => s.activity);
-            groupChart.data.datasets[2].data = sorted.map(s => s.exam);
-            groupChart.data.datasets[3].data = sorted.map(s => calculateWeightedScore(s.attendance, s.activity, s.exam));
+            groupChart.data.datasets[2].data = sorted.map(s => s.assignment || 0);
+            groupChart.data.datasets[3].data = sorted.map(s => s.exam);
+            groupChart.data.datasets[4].data = sorted.map(s => calculateWeightedScore(s.attendance, s.activity, s.assignment, s.exam));
             groupChart.update();
         }
 
-        function updateDashboardData() { renderTeacherTable(); updateStats(); updateGroupChart(); renderBellCurveChart(); }
+        function updateDashboardData() { 
+            renderTeacherTable(document.getElementById('teacher-search-input')?.value || ''); 
+            updateStats(); 
+            updateGroupChart(); 
+            renderBellCurveChart(); 
+        }
 
         function toggleStudentAttDetails() {
             const container = document.getElementById('student-att-details');
@@ -908,14 +1096,18 @@
         }
 
         function renderStudentAttendanceDetails(student) {
-            ensureAttendanceHours(student);
+            ensureStudentFields(student);
             const grid = document.getElementById('student-att-list-grid');
             grid.innerHTML = '';
-            ATTENDANCE_DATES.forEach((date, idx) => {
+            SCHEDULE_SESSIONS.forEach((session, idx) => {
                 const isAttended = student.attendanceHours[idx];
                 const dateRow = document.createElement('div');
                 dateRow.className = "bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between text-xs";
-                dateRow.innerHTML = `<span class="font-bold text-slate-300"><i class="fa-solid fa-calendar-day text-slate-500 mr-1.5"></i>${date}</span>
+                dateRow.innerHTML = `
+                    <div>
+                        <span class="font-bold text-slate-300 block"><i class="fa-solid fa-calendar-day text-slate-500 mr-1.5"></i>${session.date}</span>
+                        <span class="text-[10px] text-slate-500">${session.type} • ${session.time} (${session.hours} ак.ч.)</span>
+                    </div>
                     <span class="px-2.5 py-1 rounded font-semibold text-[10px] ${isAttended ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-950 text-slate-600 border border-slate-800'}">
                         ${isAttended ? 'Зачтено' : 'Пропуск'}
                     </span>`;
@@ -925,15 +1117,19 @@
 
         function openAttendanceModal(studentId) {
             const student = students.find(s => s.id === studentId); if (!student) return;
-            activeEditingStudentId = studentId; ensureAttendanceHours(student);
+            activeEditingStudentId = studentId; ensureStudentFields(student);
             tempAttendanceHours = [...student.attendanceHours];
             document.getElementById('att-modal-student-name').textContent = student.name;
             const grid = document.getElementById('attendance-dates-grid'); grid.innerHTML = '';
-            ATTENDANCE_DATES.forEach((date, idx) => {
+            SCHEDULE_SESSIONS.forEach((session, idx) => {
                 const row = document.createElement('div');
-                row.className = "bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between";
-                row.innerHTML = `<span class="text-xs font-bold text-slate-300">${date}</span>
-                    <button onclick="toggleTempHour(${idx})" id="temp-chk-${idx}" class="px-3 py-1.5 rounded-lg text-[10px] font-bold border"></button>`;
+                row.className = "bg-slate-950/60 border border-slate-800 p-3 rounded-xl flex items-center justify-between";
+                row.innerHTML = `
+                    <div>
+                        <span class="text-xs font-bold text-slate-200 block">${session.date}</span>
+                        <span class="text-[10px] text-slate-500">${session.type} • ${session.time} (${session.hours} ак.ч.)</span>
+                    </div>
+                    <button onclick="toggleTempHour(${idx})" id="temp-chk-${idx}" class="px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-colors"></button>`;
                 grid.appendChild(row); updateTempHourButtonUI(idx);
             });
             const modal = document.getElementById('attendance-modal'); modal.classList.remove('hidden');
@@ -945,15 +1141,20 @@
             setTimeout(() => { modal.classList.add('hidden'); }, 200);
         }
 
+        function setAllTempHours(status) {
+            tempAttendanceHours = tempAttendanceHours.map(() => status);
+            SCHEDULE_SESSIONS.forEach((_, idx) => updateTempHourButtonUI(idx));
+        }
+
         function toggleTempHour(idx) { tempAttendanceHours[idx] = !tempAttendanceHours[idx]; updateTempHourButtonUI(idx); }
 
         function updateTempHourButtonUI(idx) {
             const btn = document.getElementById(`temp-chk-${idx}`); if (!btn) return;
             if (tempAttendanceHours[idx]) {
                 btn.className = "px-3 py-1.5 rounded-lg text-[10px] font-bold bg-emerald-500/10 border-emerald-500/30 text-emerald-400 border";
-                btn.innerHTML = `Присутствует`;
+                btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i>Присутствует`;
             } else {
-                btn.className = "px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-950 border-slate-800 text-slate-500 border";
+                btn.className = "px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-900 border-slate-800 text-slate-500 border";
                 btn.innerHTML = `Отсутствует`;
             }
         }
@@ -963,53 +1164,71 @@
             const student = students.find(s => s.id === activeEditingStudentId);
             if (student) {
                 student.attendanceHours = [...tempAttendanceHours];
-                student.attendance = student.attendanceHours.filter(Boolean).length * 25;
+                student.attendance = calculateAttendancePercent(student.attendanceHours);
+                saveDatabase();
                 updateDashboardData(); closeAttendanceModal();
-                showToast(`Посещаемость сохранена.`, 'success');
+                showToast(`Посещаемость сохранена (${student.attendance}%).`, 'success');
             }
         }
 
         function addSingleStudent() {
             const nameInput = document.getElementById('add-student-name');
             const name = nameInput.value.trim(); if (!name) return;
+            const attVal = Math.max(0, Math.min(100, parseInt(document.getElementById('add-student-attendance').value) || 0));
             const newStudent = {
-                id: 'v26m-' + Date.now(), name,
-                attendance: Math.min(100, parseInt(document.getElementById('add-student-attendance').value) || 0),
-                activity: Math.min(100, parseInt(document.getElementById('add-student-activity').value) || 0),
-                exam: Math.min(100, parseInt(document.getElementById('add-student-exam').value) || 0)
+                id: 'o26md-' + Date.now(), name, company: '', role: '',
+                attendance: attVal,
+                activity: Math.max(0, Math.min(100, parseInt(document.getElementById('add-student-activity').value) || 0)),
+                assignment: Math.max(0, Math.min(100, parseInt(document.getElementById('add-student-assignment').value) || 0)),
+                exam: Math.max(0, Math.min(100, parseInt(document.getElementById('add-student-exam').value) || 0))
             };
-            ensureAttendanceHours(newStudent); students.push(newStudent);
+            ensureStudentFields(newStudent); students.push(newStudent);
             students.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
-            updateDashboardData(); nameInput.value = '';
-            showToast(`Слушатель ${name} внесен!`, 'success');
+            saveDatabase();
+            updateDashboardData(); 
+            nameInput.value = '';
+            document.getElementById('add-student-attendance').value = '';
+            document.getElementById('add-student-activity').value = '';
+            document.getElementById('add-student-assignment').value = '';
+            document.getElementById('add-student-exam').value = '';
+            showToast(`Слушатель ${name} внесен и сохранён!`, 'success');
         }
 
         function deleteStudent(id) {
-            const index = students.findIndex(s => s.id === id);
-            if (index !== -1) { students.splice(index, 1); updateDashboardData(); }
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+            if (confirm(`Удалить слушателя ${student.name} из журнала?`)) {
+                const index = students.findIndex(s => s.id === id);
+                if (index !== -1) { 
+                    students.splice(index, 1); 
+                    saveDatabase();
+                    updateDashboardData(); 
+                    showToast('Слушатель удалён из журнала', 'info');
+                }
+            }
         }
 
         function exportToCSV() {
-            let csvContent = "\uFEFFФ.И.О. Слушателя;Посещение (30%);Активность (30%);Экзамен (40%);Итог;Грейд\n";
+            let csvContent = "\uFEFFФ.И.О. Слушателя;Компания;Должность;Посещение (25%);Активность (15%);Задание (20%);Экзамен (40%);Итог;Грейд\n";
             students.forEach(s => {
-                const final = calculateWeightedScore(s.attendance, s.activity, s.exam);
-                csvContent += `"${s.name}";${s.attendance};${s.activity};${s.exam};${final};${getLetterGrade(final).letter}\n`;
+                const final = calculateWeightedScore(s.attendance, s.activity, s.assignment, s.exam);
+                csvContent += `"${s.name}";"${s.company || ''}";"${s.role || ''}";${s.attendance};${s.activity};${s.assignment || 0};${s.exam};${final};${getLetterGrade(final).letter}\n`;
             });
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob); link.download = "MBA_V26M_Economics_Grades.csv";
+            link.href = URL.createObjectURL(blob); link.download = "MBA_O26MD_Economics_Grades.csv";
             link.click();
         }
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            let bgClass = type === 'success' ? 'bg-emerald-950/80 text-emerald-300 border-emerald-900/50' : (type === 'error' ? 'bg-rose-950/80 text-rose-300 border-rose-900/50' : 'bg-indigo-950/80 text-indigo-300 border-indigo-900/50');
+            let bgClass = type === 'success' ? 'bg-emerald-950/90 text-emerald-300 border-emerald-900/60' : (type === 'error' ? 'bg-rose-950/90 text-rose-300 border-rose-900/60' : 'bg-indigo-950/90 text-indigo-300 border-indigo-900/60');
             toast.className = `${bgClass} border px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-2.5 text-xs font-semibold transform translate-y-2 opacity-0 transition-all duration-300 max-w-sm`;
             toast.innerHTML = `<span>${message}</span>`;
             container.appendChild(toast);
             setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
-            setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3500);
+            setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
     </script>
 </body>
