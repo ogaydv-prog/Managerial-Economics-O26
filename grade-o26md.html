@@ -30,7 +30,7 @@
 
     <!-- Header with ALMAU branding -->
     <header class="bg-slate-900 text-white border-b border-slate-800 shadow-xl sticky top-0 z-40 backdrop-blur-md bg-opacity-95">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="max-w-[1600px] mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-4">
                 <div class="p-1.5 bg-slate-900 rounded-xl border border-slate-800 shadow-lg shadow-indigo-500/10 flex items-center justify-center">
                     <img src="top4/gsb.logo.png" alt="Логотип ВШБ ALMAU" class="h-10 w-auto object-contain block" onerror="this.style.display='none'">
@@ -56,7 +56,7 @@
     </header>
 
     <!-- Main Content Dynamic Area -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-grow max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         <!-- ================= STUDENT VIEW ================= -->
         <div id="student-view" class="space-y-8 block">
@@ -65,7 +65,7 @@
                     Личный кабинет успеваемости слушателя (MBA-О26-МД)
                 </h2>
                 <p class="text-sm sm:text-base text-slate-400">
-                    Введите вашу Фамилию для просмотра успеваемости. При первом поиске ваше имя зафиксируется на данном устройстве.
+                    Введите вашу Фамилию для просмотра успеваемости. При первом входе ваш профиль навсегда фиксируется на данном устройстве — просмотр других слушателей невозможен.
                 </p>
             </div>
 
@@ -76,14 +76,14 @@
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Ф.И.О. Слушателя</label>
-                            <span id="lock-status-tag" class="text-[10px] text-slate-500 font-semibold flex items-center gap-1 hidden">
-                                <i class="fa-solid fa-lock text-amber-400"></i> Профиль зафиксирован
+                            <span id="lock-status-tag" class="text-[10px] text-amber-400 font-semibold flex items-center gap-1 hidden">
+                                <i class="fa-solid fa-lock text-amber-400"></i> Профиль зафиксирован за этим устройством
                             </span>
                         </div>
                         <div class="relative">
                             <i class="fa-solid fa-user absolute left-4 top-3.5 text-slate-500"></i>
                             <input type="text" id="student-search-input" onkeydown="handleSearchKeyDown(event)" placeholder="Введите вашу фамилию..." 
-                                class="w-full pl-11 pr-32 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                class="w-full pl-11 pr-36 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             <button id="search-btn" onclick="searchStudentGrade()" class="absolute right-2 top-2 px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                                 Найти
                             </button>
@@ -236,9 +236,9 @@
                 <div class="bg-indigo-950/20 px-6 py-4 flex items-start space-x-3">
                     <i class="fa-solid fa-shield-halved text-indigo-400 text-lg mt-0.5"></i>
                     <div>
-                        <h5 class="text-xs font-bold text-slate-300">Защита данных</h5>
+                        <h5 class="text-xs font-bold text-slate-300">Защита конфиденциальности</h5>
                         <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
-                            Ваш профиль персонально зафиксирован на данном устройстве. Просмотр результатов других слушателей заблокирован.
+                            Ваш профиль жёстко привязан к этому устройству после первого входа. Повторный ввод другой фамилии и просмотр оценок других слушателей заблокированы.
                         </p>
                     </div>
                 </div>
@@ -291,9 +291,9 @@
                 <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 flex items-center justify-between shadow-lg">
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Лучший результат</p>
-                        <h3 class="text-sm font-bold text-violet-400 mt-2 truncate max-w-[150px]" id="stat-best-student">—</h3>
+                        <h3 class="text-sm font-bold text-violet-400 mt-2" id="stat-best-student">—</h3>
                     </div>
-                    <div class="h-12 w-12 bg-violet-500/10 text-violet-400 rounded-xl flex items-center justify-center text-xl border border-violet-500/20">
+                    <div class="h-12 w-12 bg-violet-500/10 text-violet-400 rounded-xl flex items-center justify-center text-xl border border-violet-500/20 shrink-0">
                         <i class="fa-solid fa-trophy"></i>
                     </div>
                 </div>
@@ -336,12 +336,12 @@
                 </div>
             </div>
 
-            <!-- Main Interactive Table Grid & Inputs -->
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <div class="lg:col-span-3 flex flex-col space-y-6">
+            <!-- Main Interactive Table Grid & Inputs (Расширено для полного отображения ФИО) -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                <div class="xl:col-span-9 flex flex-col space-y-6">
                     <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-2xl">
                         <div class="p-5 border-b border-slate-800 bg-slate-900/50 flex flex-col sm:flex-row justify-between items-center gap-4">
-                            <div class="relative w-full sm:w-64">
+                            <div class="relative w-full sm:w-72">
                                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-500"></i>
                                 <input type="text" id="teacher-search-input" placeholder="Поиск слушателя..." 
                                     class="w-full pl-9 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -366,7 +366,7 @@
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="border-b border-slate-800 bg-slate-900/40 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
-                                        <th class="py-3.5 px-4">Слушатель</th>
+                                        <th class="py-3.5 px-4 min-w-[270px]">Слушатель (Ф.И.О. полностью)</th>
                                         <th class="py-3.5 px-3 text-center w-24">Посещ. (25%)</th>
                                         <th class="py-3.5 px-3 text-center w-24">Активн. (15%)</th>
                                         <th class="py-3.5 px-3 text-center w-24">Задание (20%)</th>
@@ -382,7 +382,7 @@
                     </div>
                 </div>
 
-                <div class="space-y-6">
+                <div class="xl:col-span-3 space-y-6">
                     <!-- Add Student Card -->
                     <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-2xl">
                         <h3 class="text-sm font-bold text-white mb-3 flex items-center space-x-2">
@@ -526,6 +526,40 @@
             });
         };
 
+        // Форматирование "Фамилия И.О." для графика
+        function formatSurnameInitials(fullName) {
+            const parts = fullName.trim().split(/\s+/);
+            if (parts.length === 1) return parts[0];
+            if (parts.length === 2) return `${parts[0]} ${parts[1][0]}.`;
+            return `${parts[0]} ${parts[1][0]}.${parts[2][0]}.`;
+        }
+
+        // Надёжное сохранение и чтение блокировки профиля (localStorage + sessionStorage + cookie)
+        function setLockedStudentId(studentId) {
+            try { localStorage.setItem(LOCK_KEY, studentId); } catch (e) {}
+            try { sessionStorage.setItem(LOCK_KEY, studentId); } catch (e) {}
+            document.cookie = `${LOCK_KEY}=${encodeURIComponent(studentId)}; max-age=31536000; path=/; SameSite=Lax`;
+        }
+
+        function getLockedStudentId() {
+            try {
+                const ls = localStorage.getItem(LOCK_KEY);
+                if (ls) return ls;
+            } catch (e) {}
+            try {
+                const ss = sessionStorage.getItem(LOCK_KEY);
+                if (ss) return ss;
+            } catch (e) {}
+            const match = document.cookie.match(new RegExp('(?:^|; )' + LOCK_KEY.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)'));
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+
+        function removeLockedStudentId() {
+            try { localStorage.removeItem(LOCK_KEY); } catch (e) {}
+            try { sessionStorage.removeItem(LOCK_KEY); } catch (e) {}
+            document.cookie = `${LOCK_KEY}=; max-age=0; path=/`;
+        }
+
         // Расчёт процента посещаемости пропорционально академическим часам (из 23 часов)
         function calculateAttendancePercent(hoursArray) {
             if (!Array.isArray(hoursArray)) return 0;
@@ -624,10 +658,11 @@
         }
 
         function checkAndApplyDeviceLock() {
-            const lockedStudentId = localStorage.getItem(LOCK_KEY);
+            const lockedStudentId = getLockedStudentId();
             if (lockedStudentId) {
                 const student = students.find(s => s.id === lockedStudentId);
                 if (student) {
+                    setLockedStudentId(student.id);
                     lockSearchInputForStudent(student);
                     displayStudentCard(student);
                 }
@@ -641,17 +676,18 @@
 
             searchInput.value = student.name;
             searchInput.disabled = true;
-            searchInput.classList.add('bg-slate-900', 'text-slate-400', 'cursor-not-allowed');
+            searchInput.readOnly = true;
+            searchInput.classList.add('bg-slate-900', 'text-slate-300', 'cursor-not-allowed', 'select-none');
 
             searchBtn.disabled = true;
             searchBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Зафиксировано';
-            searchBtn.className = "absolute right-2 top-2 px-3.5 py-1.5 bg-slate-800 text-slate-400 text-xs font-bold rounded-lg cursor-not-allowed flex items-center gap-1.5 border border-slate-700";
+            searchBtn.className = "absolute right-2 top-2 px-3.5 py-1.5 bg-slate-800 text-amber-400 text-xs font-bold rounded-lg cursor-not-allowed flex items-center gap-1.5 border border-amber-500/30";
 
             if (lockTag) lockTag.classList.remove('hidden');
         }
 
         function clearDeviceLock() {
-            localStorage.removeItem(LOCK_KEY);
+            removeLockedStudentId();
             location.reload();
         }
 
@@ -679,12 +715,13 @@
         }
 
         function searchStudentGrade() {
-            const lockedStudentId = localStorage.getItem(LOCK_KEY);
+            const lockedStudentId = getLockedStudentId();
             if (lockedStudentId) {
                 const lockedStudent = students.find(s => s.id === lockedStudentId);
                 if (lockedStudent) {
+                    lockSearchInputForStudent(lockedStudent);
                     displayStudentCard(lockedStudent);
-                    showToast(`Профиль зафиксирован: ${lockedStudent.name}`, 'info');
+                    showToast(`Доступ разрешён только к вашему профилю: ${lockedStudent.name}`, 'error');
                     return;
                 }
             }
@@ -706,7 +743,7 @@
             if (matchedStudent) {
                 notFoundCard.classList.add('hidden');
                 
-                localStorage.setItem(LOCK_KEY, matchedStudent.id);
+                setLockedStudentId(matchedStudent.id);
                 lockSearchInputForStudent(matchedStudent);
 
                 displayStudentCard(matchedStudent);
@@ -746,6 +783,10 @@
         }
 
         function handleSearchKeyDown(event) {
+            if (getLockedStudentId()) {
+                event.preventDefault();
+                return;
+            }
             if (event.key === 'Enter') searchStudentGrade();
         }
 
@@ -1008,9 +1049,9 @@
                 const row = document.createElement('tr');
                 row.className = "hover:bg-slate-900/60 transition-colors border-b border-slate-800/40";
                 row.innerHTML = `
-                    <td class="py-3 px-4 font-medium text-slate-100">
-                        <span class="block font-bold text-slate-200 truncate max-w-[220px]" title="${student.name}">${student.name}</span>
-                        ${metaInfo ? `<span class="block text-[10px] text-slate-500 truncate max-w-[220px] mt-0.5" title="${metaInfo}">${metaInfo}</span>` : ''}
+                    <td class="py-3.5 px-4 font-medium text-slate-100">
+                        <span class="block font-bold text-slate-200 leading-snug">${student.name}</span>
+                        ${metaInfo ? `<span class="block text-[11px] text-slate-500 leading-snug mt-0.5">${metaInfo}</span>` : ''}
                     </td>
                     <td class="py-3 px-3">
                         <button onclick="openAttendanceModal('${student.id}')" class="px-2 py-1.5 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 text-emerald-400 text-xs font-bold w-full rounded-lg transition-colors">
@@ -1053,7 +1094,7 @@
             document.getElementById('stat-average-grade').textContent = avg.toFixed(1);
             document.getElementById('stat-average-letter').textContent = getLetterGrade(avg).letter;
             document.getElementById('stat-pass-rate').textContent = `${Math.round((passes / total) * 100)}%`;
-            if (topStudent) document.getElementById('stat-best-student').textContent = `${topStudent.name} (${topScore})`;
+            if (topStudent) document.getElementById('stat-best-student').textContent = `${formatSurnameInitials(topStudent.name)} (${topScore})`;
         }
 
         function initGroupChart() {
@@ -1067,14 +1108,22 @@
                     { label: 'Экзамен (40%)', data: [], backgroundColor: 'rgba(244, 63, 94, 0.85)', borderRadius: 4 },
                     { label: 'Итог', data: [], backgroundColor: 'rgba(139, 92, 246, 0.85)', borderRadius: 4 }
                 ]},
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { color: '#94a3b8', font: { size: 10 } } } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { min: 0, max: 100, ticks: { color: '#94a3b8' } } } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: true, labels: { color: '#94a3b8', font: { size: 10 } } } },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8', font: { size: 10, weight: '600' }, maxRotation: 45, minRotation: 30 } },
+                        y: { min: 0, max: 100, ticks: { color: '#94a3b8' } }
+                    }
+                }
             });
         }
 
         function updateGroupChart() {
             if (!groupChart) return;
             const sorted = [...students].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
-            groupChart.data.labels = sorted.map(s => s.name.split(' ')[0]);
+            groupChart.data.labels = sorted.map(s => formatSurnameInitials(s.name));
             groupChart.data.datasets[0].data = sorted.map(s => s.attendance);
             groupChart.data.datasets[1].data = sorted.map(s => s.activity);
             groupChart.data.datasets[2].data = sorted.map(s => s.assignment || 0);
