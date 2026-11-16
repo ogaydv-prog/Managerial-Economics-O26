@@ -397,6 +397,10 @@
                                 <input type="number" id="add-student-assignment" min="0" max="100" placeholder="Задан (20%)" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
                                 <input type="number" id="add-student-exam" min="0" max="100" placeholder="Экз (40%)" class="px-2 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-center">
                             </div>
+                            <label class="flex items-center space-x-2 text-xs text-slate-400 cursor-pointer select-none pt-1">
+                                <input type="checkbox" id="add-student-transfer" class="rounded bg-slate-950 border-slate-700 text-amber-500 focus:ring-amber-500">
+                                <span>Пометить как «Подсадка» (видно только вам)</span>
+                            </label>
                             <button onclick="addSingleStudent()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs border border-slate-700 font-semibold transition-colors">Записать в журнал</button>
                         </div>
                     </div>
@@ -490,32 +494,32 @@
         ];
         const TOTAL_ACADEMIC_HOURS = SCHEDULE_SESSIONS.reduce((sum, s) => sum + s.hours, 0); // 23 часа
 
-        // Полный список слушателей группы MBA-О26-МД (24 человека: 16 основного состава + 8 подсадка)
+        // Полный список слушателей группы MBA-О26-МД (24 человека: 16 основного состава + 8 подсадка с флагом isTransfer: true)
         const initialGroupStudents = [
-            { id: 'o26md-1', name: 'Ахменкеева Надира Куанышевна', company: 'ИП', role: 'Руководитель', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-17', name: 'Батухтина Наталья Борисовна', company: '', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-18', name: 'Болат Қуаныш Болатұлы', company: '', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-19', name: 'Болатова Жанерке Ерлановна', company: '', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-20', name: 'Боранбаева Зарема Джанибековна', company: '', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-21', name: 'Денисов Алексей Владимирович', company: '', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-2', name: 'Еменов Гафур Галымович', company: 'АО "Казпромгеофизика"', role: 'Главный инженер', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-3', name: 'Жанабаева Лаура Мынбаевна', company: 'ТОО Grain Flow Trading', role: 'Директор по правовым и административным вопросам', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-4', name: 'Жаныбаева Асель Нургельдиевна', company: 'Ликвидационная комиссия АО Банк Астаны', role: 'Начальник Управления отчетности', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-5', name: 'Жумабеков Жасулан Нурланович', company: 'АО "Халык Банк" (ЗКО филиал)', role: 'Директор филиала', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-6', name: 'Кабылжанов Данияр Бауржанович', company: 'АО ПАССАЖИРСКИЕ ПЕРЕВОЗКИ', role: 'Главный менеджер Группы по маркетингу', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-22', name: 'Керешова Эльнура Куатбековна', company: '', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-7', name: 'Кострецов Виктор Николаевич', company: 'ТОО "ТрастМашОйл-Казахстан"', role: 'Директор', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-23', name: 'Лозовецкая Юлия Николаевна', company: '', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-8', name: 'Мансурова Мадина Есимхановна', company: 'Al-Farabi Kazakh National University', role: 'Декан механико-математического факультета', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-9', name: 'Нурбекова Лаура Нурлыбековна', company: 'АО "Алатау Жарык Компаниясы"', role: 'Начальник отдела', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-10', name: 'Нысанбеков Мақсат Мырзабекұлы', company: 'АО БЦК', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-11', name: 'Потапова Наталья Сергеевна', company: 'ТОО "Флора Алма-Ата"', role: 'Директор по развитию бизнеса', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-24', name: 'Симакова Юлия Сергеевна', company: '', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-12', name: 'Тажихан Ажар Шарханқызы', company: 'АО «Эйр Астана»', role: 'Бортпроводник', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-13', name: 'Тілеужанова Лаура Талғатқызы', company: 'ТОО «Торговый дом «Бирюса»', role: 'Оператор', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-14', name: 'Тулеев Бахыт Сейдазамович', company: 'Национальная академия наук РК при Президенте РК', role: 'Управляющий директор по стратегическому планированию', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-15', name: 'Уресаев Асхат Ордабекович', company: 'Tengizchevroil', role: 'Team Lead', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
-            { id: 'o26md-16', name: 'Шабельский Александр Владимирович', company: 'Филиал "Консолидэйтед Контракторс Интернэшнл Компани С.А.Л."', role: 'Инженер-проектировщик', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] }
+            { id: 'o26md-1', name: 'Ахменкеева Надира Куанышевна', company: 'ИП', role: 'Руководитель', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-17', name: 'Батухтина Наталья Борисовна', company: '', role: '', isTransfer: true, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-18', name: 'Болат Қуаныш Болатұлы', company: '', role: '', isTransfer: true, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-19', name: 'Болатова Жанерке Ерлановна', company: '', role: '', isTransfer: true, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-20', name: 'Боранбаева Зарема Джанибековна', company: '', role: '', isTransfer: true, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-21', name: 'Денисов Алексей Владимирович', company: '', role: '', isTransfer: true, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-2', name: 'Еменов Гафур Галымович', company: 'АО "Казпромгеофизика"', role: 'Главный инженер', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-3', name: 'Жанабаева Лаура Мынбаевна', company: 'ТОО Grain Flow Trading', role: 'Директор по правовым и административным вопросам', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-4', name: 'Жаныбаева Асель Нургельдиевна', company: 'Ликвидационная комиссия АО Банк Астаны', role: 'Начальник Управления отчетности', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-5', name: 'Жумабеков Жасулан Нурланович', company: 'АО "Халык Банк" (ЗКО филиал)', role: 'Директор филиала', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-6', name: 'Кабылжанов Данияр Бауржанович', company: 'АО ПАССАЖИРСКИЕ ПЕРЕВОЗКИ', role: 'Главный менеджер Группы по маркетингу', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-22', name: 'Керешова Эльнура Куатбековна', company: '', role: '', isTransfer: true, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-7', name: 'Кострецов Виктор Николаевич', company: 'ТОО "ТрастМашОйл-Казахстан"', role: 'Директор', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-23', name: 'Лозовецкая Юлия Николаевна', company: '', role: '', isTransfer: true, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-8', name: 'Мансурова Мадина Есимхановна', company: 'Al-Farabi Kazakh National University', role: 'Декан механико-математического факультета', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-9', name: 'Нурбекова Лаура Нурлыбековна', company: 'АО "Алатау Жарык Компаниясы"', role: 'Начальник отдела', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-10', name: 'Нысанбеков Мақсат Мырзабекұлы', company: 'АО БЦК', role: '', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-11', name: 'Потапова Наталья Сергеевна', company: 'ТОО "Флора Алма-Ата"', role: 'Директор по развитию бизнеса', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-24', name: 'Симакова Юлия Сергеевна', company: '', role: '', isTransfer: true, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-12', name: 'Тажихан Ажар Шарханқызы', company: 'АО «Эйр Астана»', role: 'Бортпроводник', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-13', name: 'Тілеужанова Лаура Талғатқызы', company: 'ТОО «Торговый дом «Бирюса»', role: 'Оператор', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-14', name: 'Тулеев Бахыт Сейдазамович', company: 'Национальная академия наук РК при Президенте РК', role: 'Управляющий директор по стратегическому планированию', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-15', name: 'Уресаев Асхат Ордабекович', company: 'Tengizchevroil', role: 'Team Lead', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-16', name: 'Шабельский Александр Владимирович', company: 'Филиал "Консолидэйтед Контракторс Интернэшнл Компани С.А.Л."', role: 'Инженер-проектировщик', isTransfer: false, attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] }
         ];
 
         let students = [];
@@ -591,6 +595,10 @@
             if (typeof student.assignment !== 'number') {
                 student.assignment = 0;
             }
+            if (typeof student.isTransfer !== 'boolean') {
+                const base = initialGroupStudents.find(b => b.id === student.id || b.name.toLowerCase() === student.name.toLowerCase());
+                student.isTransfer = base ? Boolean(base.isTransfer) : false;
+            }
             if (!student.hasOwnProperty('attendanceHours') || !Array.isArray(student.attendanceHours) || student.attendanceHours.length !== SCHEDULE_SESSIONS.length) {
                 student.attendanceHours = new Array(SCHEDULE_SESSIONS.length).fill(false);
                 if (student.attendance >= 100) {
@@ -617,7 +625,6 @@
                     const parsed = JSON.parse(savedData);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         students = parsed;
-                        // Добавляем недостающих слушателей из базового списка (например, подсадку 8 чел.)
                         initialGroupStudents.forEach(baseSt => {
                             const exists = students.some(s => s.id === baseSt.id || s.name.toLowerCase() === baseSt.name.toLowerCase());
                             if (!exists) {
@@ -792,6 +799,7 @@
             const finalScore = calculateWeightedScore(student.attendance, student.activity, student.assignment, student.exam);
             const gradeInfo = getLetterGrade(finalScore);
 
+            // В личном кабинете слушателя отображаются ТОЛЬКО ФИО и оценки (никаких меток про подсадку)
             document.getElementById('sr-name').textContent = student.name;
             const letterBadge = document.getElementById('sr-letter');
             letterBadge.textContent = gradeInfo.letter;
@@ -1069,19 +1077,31 @@
             const tbody = document.getElementById('students-table-body');
             tbody.innerHTML = '';
             const query = filterQuery.toLowerCase().trim();
-            const filtered = students.filter(s => s.name.toLowerCase().includes(query) || (s.company && s.company.toLowerCase().includes(query)));
+            const filtered = students.filter(s => 
+                s.name.toLowerCase().includes(query) || 
+                (s.company && s.company.toLowerCase().includes(query)) ||
+                (query === 'подсадка' && s.isTransfer)
+            );
 
             filtered.forEach(student => {
                 ensureStudentFields(student);
                 const finalScore = calculateWeightedScore(student.attendance, student.activity, student.assignment, student.exam);
                 const gradeInfo = getLetterGrade(finalScore);
                 const metaInfo = [student.company, student.role].filter(Boolean).join(' • ');
+                
+                // Бейдж «Подсадка» отображается ТОЛЬКО здесь, в таблице преподавателя
+                const transferBadge = student.isTransfer 
+                    ? `<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 uppercase tracking-wider align-middle">Подсадка</span>` 
+                    : '';
 
                 const row = document.createElement('tr');
                 row.className = "hover:bg-slate-900/60 transition-colors border-b border-slate-800/40";
                 row.innerHTML = `
                     <td class="py-3.5 px-4 font-medium text-slate-100">
-                        <span class="block font-bold text-slate-200 leading-snug">${student.name}</span>
+                        <div class="flex flex-wrap items-center">
+                            <span class="font-bold text-slate-200 leading-snug">${student.name}</span>
+                            ${transferBadge}
+                        </div>
                         ${metaInfo ? `<span class="block text-[11px] text-slate-500 leading-snug mt-0.5">${metaInfo}</span>` : ''}
                     </td>
                     <td class="py-3 px-3">
@@ -1269,8 +1289,9 @@
             const nameInput = document.getElementById('add-student-name');
             const name = nameInput.value.trim(); if (!name) return;
             const attVal = Math.max(0, Math.min(100, parseInt(document.getElementById('add-student-attendance').value) || 0));
+            const isTransferVal = document.getElementById('add-student-transfer').checked;
             const newStudent = {
-                id: 'o26md-' + Date.now(), name, company: '', role: '',
+                id: 'o26md-' + Date.now(), name, company: '', role: '', isTransfer: isTransferVal,
                 attendance: attVal,
                 activity: Math.max(0, Math.min(100, parseInt(document.getElementById('add-student-activity').value) || 0)),
                 assignment: Math.max(0, Math.min(100, parseInt(document.getElementById('add-student-assignment').value) || 0)),
@@ -1285,6 +1306,7 @@
             document.getElementById('add-student-activity').value = '';
             document.getElementById('add-student-assignment').value = '';
             document.getElementById('add-student-exam').value = '';
+            document.getElementById('add-student-transfer').checked = false;
             showToast(`Слушатель ${name} внесен и сохранён!`, 'success');
         }
 
@@ -1303,10 +1325,11 @@
         }
 
         function exportToCSV() {
-            let csvContent = "\uFEFFФ.И.О. Слушателя;Компания;Должность;Посещение (25%);Активность (15%);Задание (20%);Экзамен (40%);Итог;Грейд\n";
+            let csvContent = "\uFEFFФ.И.О. Слушателя;Статус;Компания;Должность;Посещение (25%);Активность (15%);Задание (20%);Экзамен (40%);Итог;Грейд\n";
             students.forEach(s => {
                 const final = calculateWeightedScore(s.attendance, s.activity, s.assignment, s.exam);
-                csvContent += `"${s.name}";"${s.company || ''}";"${s.role || ''}";${s.attendance};${s.activity};${s.assignment || 0};${s.exam};${final};${getLetterGrade(final).letter}\n`;
+                const status = s.isTransfer ? 'Подсадка' : 'Основной состав';
+                csvContent += `"${s.name}";"${status}";"${s.company || ''}";"${s.role || ''}";${s.attendance};${s.activity};${s.assignment || 0};${s.exam};${final};${getLetterGrade(final).letter}\n`;
             });
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
