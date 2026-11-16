@@ -473,7 +473,7 @@
 
     <script>
         // Уникальный ключ хранения в localStorage конкретно для группы MBA-О26-МД (4 компонента оценки)
-        const STORAGE_KEY = 'almau_mba_o26md_grades_v2';
+        const STORAGE_KEY = 'almau_mba_o26md_grades_v3';
         const LOCK_KEY = 'almau_o26md_locked_student_id';
         const LOCK_CLEAN_FLAG = 'almau_o26md_lock_reset_v1';
 
@@ -490,19 +490,27 @@
         ];
         const TOTAL_ACADEMIC_HOURS = SCHEDULE_SESSIONS.reduce((sum, s) => sum + s.hours, 0); // 23 часа
 
-        // Объединённый список слушателей группы MBA-О26-МД (14 основного состава + 2 прикреплённых)
+        // Полный список слушателей группы MBA-О26-МД (24 человека: 16 основного состава + 8 подсадка)
         const initialGroupStudents = [
             { id: 'o26md-1', name: 'Ахменкеева Надира Куанышевна', company: 'ИП', role: 'Руководитель', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-17', name: 'Батухтина Наталья Борисовна', company: 'Подсадка MBA-О26-МД', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-18', name: 'Болат Қуаныш Болатұлы', company: 'Подсадка MBA-О26-МД', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-19', name: 'Болатова Жанерке Ерлановна', company: 'Подсадка MBA-О26-МД', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-20', name: 'Боранбаева Зарема Джанибековна', company: 'Подсадка MBA-О26-МД', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-21', name: 'Денисов Алексей Владимирович', company: 'Подсадка MBA-О26-МД', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-2', name: 'Еменов Гафур Галымович', company: 'АО "Казпромгеофизика"', role: 'Главный инженер', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-3', name: 'Жанабаева Лаура Мынбаевна', company: 'ТОО Grain Flow Trading', role: 'Директор по правовым и административным вопросам', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-4', name: 'Жаныбаева Асель Нургельдиевна', company: 'Ликвидационная комиссия АО Банк Астаны', role: 'Начальник Управления отчетности', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-5', name: 'Жумабеков Жасулан Нурланович', company: 'АО "Халык Банк" (ЗКО филиал)', role: 'Директор филиала', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-6', name: 'Кабылжанов Данияр Бауржанович', company: 'АО ПАССАЖИРСКИЕ ПЕРЕВОЗКИ', role: 'Главный менеджер Группы по маркетингу', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-22', name: 'Керешова Эльнура Куатбековна', company: 'Подсадка MBA-О26-МД', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-7', name: 'Кострецов Виктор Николаевич', company: 'ТОО "ТрастМашОйл-Казахстан"', role: 'Директор', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-23', name: 'Лозовецкая Юлия Николаевна', company: 'Подсадка MBA-О26-МД', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-8', name: 'Мансурова Мадина Есимхановна', company: 'Al-Farabi Kazakh National University', role: 'Декан механико-математического факультета', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-9', name: 'Нурбекова Лаура Нурлыбековна', company: 'АО "Алатау Жарык Компаниясы"', role: 'Начальник отдела', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-10', name: 'Нысанбеков Мақсат Мырзабекұлы', company: 'АО БЦК', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-11', name: 'Потапова Наталья Сергеевна', company: 'ТОО "Флора Алма-Ата"', role: 'Директор по развитию бизнеса', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
+            { id: 'o26md-24', name: 'Симакова Юлия Сергеевна', company: 'Подсадка MBA-О26-МД', role: '', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-12', name: 'Тажихан Ажар Шарханқызы', company: 'АО «Эйр Астана»', role: 'Бортпроводник', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-13', name: 'Тілеужанова Лаура Талғатқызы', company: 'ТОО «Торговый дом «Бирюса»', role: 'Оператор', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
             { id: 'o26md-14', name: 'Тулеев Бахыт Сейдазамович', company: 'Национальная академия наук РК при Президенте РК', role: 'Управляющий директор по стратегическому планированию', attendance: 0, activity: 0, assignment: 0, exam: 0, attendanceHours: [false, false, false, false, false, false, false, false] },
@@ -601,15 +609,24 @@
             }
         }
 
-        // Загрузка из localStorage (или инициализация стартовым списком при первом запуске)
+        // Загрузка из localStorage + автоматическое добавление новых слушателей из initialGroupStudents
         function loadDatabase() {
             try {
-                const savedData = localStorage.getItem(STORAGE_KEY);
+                const savedData = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('almau_mba_o26md_grades_v2');
                 if (savedData) {
                     const parsed = JSON.parse(savedData);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         students = parsed;
+                        // Добавляем недостающих слушателей из базового списка (например, подсадку 8 чел.)
+                        initialGroupStudents.forEach(baseSt => {
+                            const exists = students.some(s => s.id === baseSt.id || s.name.toLowerCase() === baseSt.name.toLowerCase());
+                            if (!exists) {
+                                students.push(JSON.parse(JSON.stringify(baseSt)));
+                            }
+                        });
                         students.forEach(student => ensureStudentFields(student));
+                        students.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+                        saveDatabase();
                         return;
                     }
                 }
@@ -618,12 +635,14 @@
             }
             students = JSON.parse(JSON.stringify(initialGroupStudents));
             students.forEach(student => ensureStudentFields(student));
+            students.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
             saveDatabase();
         }
 
         function resetDatabaseToDefault() {
             if (confirm('Вы уверены, что хотите сбросить все введённые оценки и посещаемость к исходному нулевому журналу?')) {
                 students = JSON.parse(JSON.stringify(initialGroupStudents));
+                students.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
                 saveDatabase();
                 updateDashboardData();
                 showToast('Журнал сброшен к исходному списку', 'info');
@@ -678,7 +697,6 @@
                     return;
                 }
             }
-            // По умолчанию поле ввода чистое
             if (searchInput) searchInput.value = '';
         }
 
