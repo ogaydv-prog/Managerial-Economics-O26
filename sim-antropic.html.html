@@ -1,0 +1,3126 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANTHROPIC, PBC — Form S-1 Financial Intelligence Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            obsidian: '#0D0E11',
+            neoncard: '#16181D',
+            neonelev: '#1E2128',
+            neonsilver: '#F3F5F8',
+            neonmuted: '#A6AEBC',
+            neondim: '#6E7787',
+            terracotta: '#D97757',
+            icesilver: '#E2E8F0',
+            mint: '#34D399',
+            ambergold: '#FBBF24',
+            crimson: '#F87171',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --bg-canvas: #0D0E11;
+      --bg-card: #16181D;
+      --bg-elevated: #1E2128;
+      --border-luminous: rgba(210, 216, 228, 0.14);
+      --border-hover: rgba(226, 232, 244, 0.28);
+      --text-primary: #F3F5F8;
+      --text-secondary: #A6AEBC;
+      --text-muted: #6E7787;
+      --accent-terracotta: #D97757;
+      --accent-mint: #34D399;
+      --accent-amber: #FBBF24;
+      --accent-crimson: #F87171;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Subtle Neon-Gray Architectural Grid Background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 18% 0%, rgba(217, 119, 87, 0.065) 0%, transparent 42%),
+        radial-gradient(circle at 85% 12%, rgba(226, 232, 240, 0.05) 0%, transparent 45%),
+        linear-gradient(to right, rgba(210, 216, 228, 0.024) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(210, 216, 228, 0.024) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+      z-index: 0;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Neon-Gray Card Surface */
+    .ng-card {
+      background: radial-gradient(120% 100% at 0% 0%, rgba(255, 255, 255, 0.032) 0%, rgba(22, 24, 29, 0.96) 62%), #16181D;
+      border: 1px solid var(--border-luminous);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .ng-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.8), 0 0 22px -8px rgba(226, 232, 244, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .ng-panel {
+      background: #1E2128;
+      border: 1px solid rgba(210, 216, 228, 0.12);
+      border-radius: 10px;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0D0E11;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2B303B;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #434B5C;
+    }
+
+    /* Navigation Tabs */
+    .nav-scroll {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .nav-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      position: relative;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(180deg, rgba(226, 232, 240, 0.11) 0%, rgba(226, 232, 240, 0.04) 100%);
+      border-color: rgba(226, 232, 240, 0.24);
+      color: #F3F5F8;
+      box-shadow: 0 0 18px -6px rgba(226, 232, 240, 0.28);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 16%;
+      right: 16%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #D97757, #F3F5F8, #D97757, transparent);
+      border-radius: 999px;
+    }
+
+    /* Sub-view toggle buttons */
+    .sub-pill {
+      transition: all 0.18s ease;
+    }
+    .sub-pill.active {
+      background: #272B35;
+      color: #F3F5F8;
+      border-color: rgba(217, 119, 87, 0.55);
+      box-shadow: 0 0 14px -4px rgba(217, 119, 87, 0.35);
+    }
+
+    /* Financial Table Styling */
+    .fin-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .fin-table th {
+      background: #1A1D24;
+      color: #A6AEBC;
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.7rem 0.85rem;
+      border-bottom: 1px solid rgba(210, 216, 228, 0.16);
+      white-space: nowrap;
+    }
+    .fin-table td {
+      padding: 0.62rem 0.85rem;
+      border-bottom: 1px solid rgba(210, 216, 228, 0.07);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+    .fin-table tr:hover td {
+      background: rgba(226, 232, 240, 0.035);
+    }
+    .fin-table tr.row-total td {
+      background: rgba(226, 232, 240, 0.055);
+      font-weight: 600;
+      color: #F3F5F8;
+      border-top: 1px solid rgba(210, 216, 228, 0.18);
+      border-bottom: 1px solid rgba(210, 216, 228, 0.22);
+    }
+    .fin-table tr.row-section td {
+      background: rgba(217, 119, 87, 0.06);
+      color: #D97757;
+      font-weight: 600;
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+    .sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: #16181D;
+    }
+    .fin-table tr:hover .sticky-col {
+      background: #1D2027;
+    }
+    .fin-table tr.row-total .sticky-col {
+      background: #1F232B;
+    }
+    .fin-table th.sticky-col {
+      z-index: 3;
+      background: #1A1D24;
+    }
+
+    /* Precision Radio-Dial Slider Styling (Tab 7) */
+    .dial-wrapper {
+      position: relative;
+      padding: 12px 14px 10px 14px;
+      background: linear-gradient(180deg, #13151A 0%, #1B1E26 100%);
+      border: 1px solid rgba(210, 216, 228, 0.16);
+      border-radius: 12px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.65);
+    }
+
+    .dial-scale {
+      position: relative;
+      height: 24px;
+      margin-top: 6px;
+      border-top: 1px solid rgba(210, 216, 228, 0.15);
+      background-image:
+        repeating-linear-gradient(
+          to right,
+          rgba(226, 232, 240, 0.42) 0px,
+          rgba(226, 232, 240, 0.42) 1px,
+          transparent 1px,
+          transparent 10%
+        ),
+        repeating-linear-gradient(
+          to right,
+          rgba(166, 174, 188, 0.2) 0px,
+          rgba(166, 174, 188, 0.2) 1px,
+          transparent 1px,
+          transparent 2%
+        );
+      background-size: 100% 11px, 100% 6px;
+      background-repeat: no-repeat;
+      background-position: 0 0, 0 0;
+    }
+
+    .dial-needle {
+      position: absolute;
+      top: -4px;
+      width: 3px;
+      height: 26px;
+      border-radius: 2px;
+      transform: translateX(-50%);
+      transition: left 0.06s linear;
+      pointer-events: none;
+    }
+
+    .dial-needle.terracotta {
+      background: #D97757;
+      box-shadow: 0 0 10px #D97757, 0 0 20px rgba(217, 119, 87, 0.7);
+    }
+
+    .dial-needle.mint {
+      background: #34D399;
+      box-shadow: 0 0 10px #34D399, 0 0 20px rgba(52, 211, 153, 0.7);
+    }
+
+    input[type="range"].neon-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(210, 216, 228, 0.14);
+      border-radius: 999px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"].neon-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #FFFFFF, #CBD5E1);
+      border: 2px solid #D97757;
+      box-shadow: 0 0 12px rgba(217, 119, 87, 0.85);
+      cursor: grab;
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"].neon-range.mint-thumb::-webkit-slider-thumb {
+      border-color: #34D399;
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.85);
+    }
+
+    input[type="range"].neon-range::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    input[type="range"].neon-range::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #F3F5F8;
+      border: 2px solid #D97757;
+      box-shadow: 0 0 12px rgba(217, 119, 87, 0.85);
+      cursor: grab;
+    }
+
+    /* Fade animation for tab panels */
+    .tab-panel {
+      display: none;
+      animation: fadeSlideIn 0.25s ease forwards;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Evidence legend and beginner-friendly chart explainers */
+    .evidence-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.55rem;
+      border: 1px solid rgba(210, 216, 228, 0.14);
+      border-radius: 999px;
+      background: rgba(13, 14, 17, 0.46);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1;
+      color: #A6AEBC;
+    }
+    .evidence-dot {
+      width: 0.42rem;
+      height: 0.42rem;
+      border-radius: 999px;
+      box-shadow: 0 0 10px currentColor;
+    }
+    .chart-card {
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 1400px;
+      transition: transform 0.48s cubic-bezier(.2,.8,.2,1), border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .chart-card.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .chart-face {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .chart-front {
+      min-height: inherit;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .chart-back {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      transform: rotateY(180deg);
+      overflow: auto;
+      border-radius: 14px;
+      padding: 1.25rem;
+      background:
+        radial-gradient(circle at 88% 8%, rgba(217,119,87,.16), transparent 34%),
+        linear-gradient(145deg, #191B21, #111318);
+    }
+    .explain-btn {
+      position: absolute;
+      top: 0.85rem;
+      right: 0.85rem;
+      z-index: 7;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border: 1px solid rgba(217,119,87,.42);
+      border-radius: 999px;
+      padding: 0.34rem 0.58rem;
+      background: rgba(13,14,17,.82);
+      color: #F3F5F8;
+      font: 600 0.64rem/1 'JetBrains Mono', monospace;
+      letter-spacing: .02em;
+      transition: background .18s ease, transform .18s ease;
+    }
+    .explain-btn:hover {
+      background: rgba(217,119,87,.2);
+      transform: translateY(-1px);
+    }
+    .explain-btn:focus-visible,
+    .chart-back button:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid #FBBF24;
+      outline-offset: 3px;
+    }
+    .chart-back-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .chart-back-block {
+      border: 1px solid rgba(210,216,228,.12);
+      border-radius: 10px;
+      background: rgba(255,255,255,.025);
+      padding: 0.85rem;
+    }
+    .chart-back-block h4 {
+      margin: 0 0 .35rem;
+      color: #D97757;
+      font: 600 .66rem/1.25 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .chart-back-block p {
+      margin: 0;
+      color: #CBD2DE;
+      font-size: .77rem;
+      line-height: 1.55;
+    }
+    .chart-back-source {
+      margin-top: .85rem;
+      color: #6E7787;
+      font: .66rem/1.45 'JetBrains Mono', monospace;
+    }
+    @media (max-width: 640px) {
+      .chart-back-grid { grid-template-columns: 1fr; }
+      .chart-back { padding: 1rem; }
+      .explain-btn { top: .7rem; right: .7rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen relative z-10">
+
+  <!-- STICKY TOP HEADER WITH BACK-COVER VECTOR LOGO & BILINGUAL SWITCHER -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-[#0D0E11]/90 border-b border-[rgba(210,216,228,0.14)]">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <!-- Brand Logo Block (Custom Inline Vector SVG matching Prospectus Back Cover F-68) -->
+        <div class="flex items-center gap-4">
+          <div class="flex flex-col">
+            <!-- Custom Architectural Geometric Wordmark: A N T H R O P I C -->
+            <svg class="h-6 sm:h-7 w-auto" viewBox="0 0 436 38" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ANTHROPIC">
+              <defs>
+                <linearGradient id="neonSilverGrad" x1="0" y1="0" x2="436" y2="38" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FFFFFF" />
+                  <stop offset="50%" stop-color="#E2E8F0" />
+                  <stop offset="100%" stop-color="#B8C2D1" />
+                </linearGradient>
+                <linearGradient id="terracottaSlash" x1="0" y1="0" x2="36" y2="38" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#F3F5F8" />
+                  <stop offset="72%" stop-color="#F3F5F8" />
+                  <stop offset="100%" stop-color="#D97757" />
+                </linearGradient>
+              </defs>
+              <!-- A (Signature Anthropic forward-angled architectural apex & crossbar cut) -->
+              <path d="M16.4 3H23.2L36.5 35H29.1L26.1 27.4H13.3L10.3 35H3.1L16.4 3ZM15.5 21.7H23.9L19.7 10.6L15.5 21.7Z" fill="url(#terracottaSlash)" />
+              <!-- N -->
+              <path d="M52 3H58.6L73.8 23.7V3H80.4V35H74.2L58.6 13.8V35H52V3Z" fill="url(#neonSilverGrad)" />
+              <!-- T -->
+              <path d="M97 3H125.6V8.9H114.7V35H107.9V8.9H97V3Z" fill="url(#neonSilverGrad)" />
+              <!-- H -->
+              <path d="M141.4 3H148.2V15.8H163.6V3H170.4V35H163.6V21.7H148.2V35H141.4V3Z" fill="url(#neonSilverGrad)" />
+              <!-- R -->
+              <path d="M189.2 3H204.6C211.7 3 216.1 6.8 216.1 12.9C216.1 17.5 213.4 20.8 208.9 22.1L216.9 35H209.1L202.1 23.1H196V35H189.2V3ZM196 8.7V17.6H204.1C207.5 17.6 209.3 15.8 209.3 13.1C209.3 10.4 207.5 8.7 204.1 8.7H196Z" fill="url(#neonSilverGrad)" />
+              <!-- O -->
+              <path d="M249.4 2.4C259.2 2.4 266.3 9.4 266.3 19C266.3 28.6 259.2 35.6 249.4 35.6C239.6 35.6 232.5 28.6 232.5 19C232.5 9.4 239.6 2.4 249.4 2.4ZM249.4 8.5C243.4 8.5 239.5 13.1 239.5 19C239.5 24.9 243.4 29.5 249.4 29.5C255.4 29.5 259.3 24.9 259.3 19C259.3 13.1 255.4 8.5 249.4 8.5Z" fill="url(#neonSilverGrad)" />
+              <!-- P -->
+              <path d="M284.4 3H299.4C306.6 3 311.1 7.1 311.1 13.4C311.1 19.7 306.6 23.8 299.4 23.8H291.2V35H284.4V3ZM291.2 8.7V18.1H298.9C302.4 18.1 304.3 16.3 304.3 13.4C304.3 10.5 302.4 8.7 298.9 8.7H291.2Z" fill="url(#neonSilverGrad)" />
+              <!-- I -->
+              <path d="M328.2 3H335V35H328.2V3Z" fill="url(#neonSilverGrad)" />
+              <!-- C -->
+              <path d="M369.8 2.4C376.4 2.4 381.4 5.4 383.8 10.4L377.7 13.3C376.1 10.1 373.4 8.5 369.8 8.5C363.9 8.5 360.1 13.1 360.1 19C360.1 24.9 363.9 29.5 369.8 29.5C373.5 29.5 376.3 27.8 377.9 24.5L384 27.4C381.5 32.5 376.5 35.6 369.8 35.6C360 35.6 353.1 28.6 353.1 19C353.1 9.4 360 2.4 369.8 2.4Z" fill="url(#neonSilverGrad)" />
+              <!-- Subtle geometric trademark dot -->
+              <circle cx="394" cy="31.5" r="2.6" fill="#D97757" />
+            </svg>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-[10px] font-mono uppercase tracking-[0.2em] text-[#A6AEBC]" data-i18n="headerSubtitle">PBC • ДОСЬЕ FORM S-1 & АУДИТ F-1..F-68</span>
+              <span class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#D97757]/15 text-[#D97757] border border-[#D97757]/30" data-i18n="headerPeriodBadge">9M 2026 + СОБЫТИЯ ДО 10 НОЯ 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Controls: Filing Metadata + Language Pill Toggle -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="hidden xl:flex items-center gap-3 px-3 py-1.5 rounded-lg bg-[#16181D] border border-[rgba(210,216,228,0.12)] text-xs font-mono text-[#A6AEBC]">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#34D399] animate-pulse"></span>
+              <span data-i18n="splitNote">Сплит 10:1 (17 сен 2026)</span>
+            </span>
+            <span class="text-[#6E7787]">|</span>
+            <span data-i18n="headerSerH">Series H Common-экв.: <strong class="text-[#F3F5F8]">$58.90</strong></span>
+          </div>
+
+          <!-- Bilingual Toggle [ RU | EN ] -->
+          <div class="inline-flex items-center p-1 rounded-full bg-[#16181D] border border-[rgba(210,216,228,0.2)] shadow-inner" role="group" aria-label="Language Switcher">
+            <button id="btn-lang-ru" onclick="setLanguage('ru')" class="px-3 py-1 rounded-full text-xs font-mono font-semibold transition-all bg-[#F3F5F8] text-[#0D0E11] shadow">
+              RU
+            </button>
+            <button id="btn-lang-en" onclick="setLanguage('en')" class="px-3 py-1 rounded-full text-xs font-mono font-semibold transition-all text-[#A6AEBC] hover:text-[#F3F5F8]">
+              EN
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7-TAB NAVIGATION BAR -->
+      <nav class="mt-3.5 flex items-center gap-1.5 overflow-x-auto nav-scroll pb-1" aria-label="Dashboard Sections">
+        <button onclick="switchTab('overview')" id="tab-btn-overview" class="tab-btn active px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-medium text-[#A6AEBC] hover:text-[#F3F5F8] flex items-center gap-2">
+          <span class="font-mono text-[11px] text-[#D97757]">01</span>
+          <span data-i18n="navOverview">Обзор и IPO-профиль</span>
+        </button>
+        <button onclick="switchTab('pnl')" id="tab-btn-pnl" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-medium text-[#A6AEBC] hover:text-[#F3F5F8] flex items-center gap-2">
+          <span class="font-mono text-[11px] text-[#D97757]">02</span>
+          <span data-i18n="navPnl">Отчёт о прибылях и убытках</span>
+        </button>
+        <button onclick="switchTab('balance')" id="tab-btn-balance" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-medium text-[#A6AEBC] hover:text-[#F3F5F8] flex items-center gap-2">
+          <span class="font-mono text-[11px] text-[#D97757]">03</span>
+          <span data-i18n="navBalance">Бухгалтерский баланс</span>
+        </button>
+        <button onclick="switchTab('cashflow')" id="tab-btn-cashflow" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-medium text-[#A6AEBC] hover:text-[#F3F5F8] flex items-center gap-2">
+          <span class="font-mono text-[11px] text-[#D97757]">04</span>
+          <span data-i18n="navCashflow">Денежные потоки и раунды</span>
+        </button>
+        <button onclick="switchTab('infra')" id="tab-btn-infra" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-medium text-[#A6AEBC] hover:text-[#F3F5F8] flex items-center gap-2">
+          <span class="font-mono text-[11px] text-[#D97757]">05</span>
+          <span data-i18n="navInfra">Инфраструктура и риски</span>
+        </button>
+        <button onclick="switchTab('captable')" id="tab-btn-captable" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-medium text-[#A6AEBC] hover:text-[#F3F5F8] flex items-center gap-2">
+          <span class="font-mono text-[11px] text-[#D97757]">06</span>
+          <span data-i18n="navCaptable">Капитал и управление (LTBT)</span>
+        </button>
+        <button onclick="switchTab('simulator')" id="tab-btn-simulator" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-medium text-[#A6AEBC] hover:text-[#F3F5F8] flex items-center gap-2">
+          <span class="font-mono text-[11px] text-[#34D399]">07</span>
+          <span data-i18n="navSimulator">Симулятор оценки IPO</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
+
+    <!-- ===================================================================== -->
+    <!-- TAB 1: EXECUTIVE OVERVIEW / ОБЗОР И IPO-ПРОФИЛЬ                        -->
+    <!-- ===================================================================== -->
+    <section id="panel-overview" class="tab-panel active space-y-6">
+      <!-- Evidence and interpretation guide -->
+      <div class="ng-card p-4 sm:p-5 border-l-4 border-l-[#34D399] flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="max-w-3xl">
+          <div class="text-[11px] font-mono uppercase tracking-[0.12em] text-[#34D399]" data-i18n="evidenceEyebrow">ПРОВЕРЕНО ПО S-1 И MD&amp;A • 10 НОЯБРЯ 2026</div>
+          <h1 class="text-base sm:text-lg font-semibold text-[#F3F5F8] mt-1" data-i18n="evidenceTitle">Как читать дашборд: факт, расчёт и сценарий — это разные уровни данных</h1>
+          <p class="text-xs text-[#A6AEBC] mt-1 leading-relaxed" data-i18n="evidenceText">Все исходные финансовые показатели сверены с проспектом. Расчётные коэффициенты явно помечены, а симулятор не является прогнозом Anthropic или инвестиционной рекомендацией.</p>
+        </div>
+        <div class="flex flex-wrap gap-2 shrink-0">
+          <span class="evidence-chip"><span class="evidence-dot text-[#34D399] bg-[#34D399]"></span><span data-i18n="evidenceFiled">Раскрыто компанией</span></span>
+          <span class="evidence-chip"><span class="evidence-dot text-[#FBBF24] bg-[#FBBF24]"></span><span data-i18n="evidenceDerived">Рассчитано</span></span>
+          <span class="evidence-chip"><span class="evidence-dot text-[#D97757] bg-[#D97757]"></span><span data-i18n="evidenceScenario">Сценарий</span></span>
+        </div>
+      </div>
+
+      <!-- Top 6 KPI Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <!-- KPI 1 -->
+        <div class="ng-card p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-[#A6AEBC]" data-i18n="kpiRevTitle">Выручка 9M 2026</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#34D399]/15 text-[#34D399]" data-i18n="kpiRevDelta">+1,206% г/г</span>
+          </div>
+          <div class="my-2">
+            <div class="text-2xl font-bold font-mono tabular-nums text-[#F3F5F8]">$33,242M</div>
+            <div class="text-xs text-[#A6AEBC] mt-0.5" data-i18n="kpiRevSub">Q3'26 Run-Rate: $67.8B/год</div>
+          </div>
+          <div class="text-[11px] text-[#6E7787] font-mono tabular-nums" data-i18n="kpiRevFoot">против $2,545M за 9M'25</div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="ng-card p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-[#A6AEBC]" data-i18n="kpiMarginTitle">Скорр. опер. маржа</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#34D399]/15 text-[#34D399]" data-i18n="kpiMarginDelta">+236 п.п.</span>
+          </div>
+          <div class="my-2">
+            <div class="text-2xl font-bold font-mono tabular-nums text-[#34D399]">+15.0%</div>
+            <div class="text-xs text-[#A6AEBC] mt-0.5" data-i18n="kpiMarginSub">Пик +19% в Q2'26</div>
+          </div>
+          <div class="text-[11px] text-[#6E7787] font-mono tabular-nums" data-i18n="kpiMarginFoot">против -221% в Q1'25</div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="ng-card p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-[#A6AEBC]" data-i18n="kpiLiqTitle">Общая ликвидность</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#E2E8F0]/15 text-[#E2E8F0]">30.09.2026</span>
+          </div>
+          <div class="my-2">
+            <div class="text-2xl font-bold font-mono tabular-nums text-[#F3F5F8]">$146,640M</div>
+            <div class="text-xs text-[#A6AEBC] mt-0.5" data-i18n="kpiLiqSub">$95.6B кэш + $36.3B инвестиции + $14.8B RCF</div>
+          </div>
+          <div class="text-[11px] text-[#6E7787] font-mono tabular-nums" data-i18n="kpiLiqFoot">Ограниченный кэш $2.54B не включён</div>
+        </div>
+
+        <!-- KPI 4 -->
+        <div class="ng-card p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-[#A6AEBC]" data-i18n="kpiOcfTitle">Опер. денежный поток</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#34D399]/15 text-[#34D399]" data-i18n="kpiOcfBadge">ПЕРЕЛОМ</span>
+          </div>
+          <div class="my-2">
+            <div class="text-2xl font-bold font-mono tabular-nums text-[#34D399]">+$6,569M</div>
+            <div class="text-xs text-[#A6AEBC] mt-0.5" data-i18n="kpiOcfSub">Впервые положительный</div>
+          </div>
+          <div class="text-[11px] text-[#6E7787] font-mono tabular-nums" data-i18n="kpiOcfFoot">против -$2,024M за 9M'25</div>
+        </div>
+
+        <!-- KPI 5 -->
+        <div class="ng-card p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-[#A6AEBC]" data-i18n="kpiRpoTitle">Бэклог (RPO)</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#FBBF24]/15 text-[#FBBF24]">75% ≤ 12M</span>
+          </div>
+          <div class="my-2">
+            <div class="text-2xl font-bold font-mono tabular-nums text-[#F3F5F8]">$13.8B</div>
+            <div class="text-xs text-[#A6AEBC] mt-0.5" data-i18n="kpiRpoSub">Неотменяемые контракты</div>
+          </div>
+          <div class="text-[11px] text-[#6E7787] font-mono tabular-nums" data-i18n="kpiRpoFoot">Отлож. выручка: $1,971M</div>
+        </div>
+
+        <!-- KPI 6 -->
+        <div class="ng-card p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-[#A6AEBC]" data-i18n="kpiSerHTitle">Series H: эквивалент Common</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#D97757]/20 text-[#D97757]">Q2 2026</span>
+          </div>
+          <div class="my-2">
+            <div class="text-2xl font-bold font-mono tabular-nums text-[#D97757]">$58.90</div>
+            <div class="text-xs text-[#A6AEBC] mt-0.5" data-i18n="kpiSerHSub">OIP $589.01 ÷ конвертация 10:1</div>
+          </div>
+          <div class="text-[11px] text-[#6E7787] font-mono tabular-nums" data-i18n="kpiSerHFoot">Series G: $25.91 за Common-экв.</div>
+        </div>
+      </div>
+
+      <!-- Charts Row: Quarterly Trajectory + Revenue Mix -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Chart A: Quarterly & Annual Revenue Trajectory -->
+        <div class="ng-card p-5 lg:col-span-7 flex flex-col">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h2 class="text-base font-semibold text-[#F3F5F8]" data-i18n="chartQtrRevTitle">Поквартальная динамика выручки и скорр. маржи (Q1'25 – Q3'26)</h2>
+              <p class="text-xs text-[#A6AEBC]" data-i18n="chartQtrRevSub">Выручка выросла в 45 раз; положительной стала скорректированная, а не GAAP-маржа</p>
+            </div>
+            <span class="text-[11px] font-mono px-2.5 py-1 rounded bg-[#1E2128] text-[#E2E8F0] border border-[rgba(210,216,228,0.14)]">MD&A • F-7</span>
+          </div>
+          <div class="relative w-full h-[310px] sm:h-[340px]">
+            <canvas id="chartQuarterlyTrajectory"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart B: Monetization, Geography & CSP Marketplace Mix -->
+        <div class="ng-card p-5 lg:col-span-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <div>
+                <h2 class="text-base font-semibold text-[#F3F5F8]" data-i18n="chartMixTitle">Структура выручки (9M 2026: $33,242M)</h2>
+                <p class="text-xs text-[#A6AEBC]" data-i18n="chartMixSub">Монетизация, география и доля облачных маркетплейсов</p>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded bg-[#1E2128] text-[#A6AEBC] border border-[rgba(210,216,228,0.14)]">Note 2</span>
+            </div>
+
+            <div class="relative w-full h-[215px]">
+              <canvas id="chartRevenueMix"></canvas>
+            </div>
+          </div>
+
+          <!-- Progress Bars for Channels & Geography -->
+          <div class="mt-4 pt-3 border-t border-[rgba(210,216,228,0.1)] space-y-2.5 text-xs">
+            <div>
+              <div class="flex justify-between font-mono mb-1">
+                <span class="text-[#A6AEBC]" data-i18n="mixConsLabel">Consumption / API (Токены)</span>
+                <span class="text-[#F3F5F8] tabular-nums">$26,306M (79.1%)</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-[#1E2128] overflow-hidden">
+                <div class="h-full bg-[#D97757] rounded-full" style="width: 79.1%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between font-mono mb-1">
+                <span class="text-[#A6AEBC]" data-i18n="mixSubLabel">Подписки (Claude Pro/Team/Enterprise)</span>
+                <span class="text-[#F3F5F8] tabular-nums">$6,936M (20.9%)</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-[#1E2128] overflow-hidden">
+                <div class="h-full bg-[#E2E8F0] rounded-full" style="width: 20.9%"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <div class="ng-panel p-2.5">
+                <div class="text-[10px] font-mono text-[#6E7787] uppercase" data-i18n="geoUsLabel">США / Междунар.</div>
+                <div class="text-xs font-mono font-semibold text-[#F3F5F8] mt-0.5 tabular-nums">70.6% / 29.4%</div>
+              </div>
+              <div class="ng-panel p-2.5">
+                <div class="text-[10px] font-mono text-[#6E7787] uppercase" data-i18n="cspShareLabel">CSP Маркетплейсы</div>
+                <div class="text-xs font-mono font-semibold text-[#34D399] mt-0.5 tabular-nums" data-i18n="cspTrend">44% (11% в FY23)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enterprise Penetration & Historical Scale Strip -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="ng-card p-4">
+          <div class="flex items-center gap-2 text-xs font-mono text-[#D97757] uppercase mb-1.5">
+            <span>◆</span>
+            <span data-i18n="entCard1Title">Проникновение в Fortune 500</span>
+          </div>
+          <p class="text-sm text-[#F3F5F8] font-medium" data-i18n="entCard1Main">&gt;50% компаний Fortune 500 и &gt;30% Global 2000 платят ≥$100K/год</p>
+          <p class="text-xs text-[#A6AEBC] mt-1.5" data-i18n="entCard1Desc">При этом расходы на Claude у Топ-10 клиентов из Fortune 500 всё ещё составляют &lt;1% их общих операционных затрат — огромный потенциал масштабирования.</p>
+        </div>
+
+        <div class="ng-card p-4">
+          <div class="flex items-center gap-2 text-xs font-mono text-[#34D399] uppercase mb-1.5">
+            <span>◆</span>
+            <span data-i18n="entCard2Title">Траектория масштабирования</span>
+          </div>
+          <p class="text-sm text-[#F3F5F8] font-medium font-mono tabular-nums" data-i18n="entCard2Main">FY23: $41M → FY24: $386M → FY25: $4,585M → 9M'26: $33,242M</p>
+          <p class="text-xs text-[#A6AEBC] mt-1.5" data-i18n="entCard2Desc">Рост в 9.4x в 2024 г., в 11.9x в 2025 г. и в 13.1x за 9 месяцев 2026 г. год-к-году. Выручка за 9M'26 в 7.25 раза превысила весь 2025 год.</p>
+        </div>
+
+        <div class="ng-card p-4">
+          <div class="flex items-center gap-2 text-xs font-mono text-[#FBBF24] uppercase mb-1.5">
+            <span>◆</span>
+            <span data-i18n="entCard3Title">Комплаенс и качество выручки</span>
+          </div>
+          <p class="text-sm text-[#F3F5F8] font-medium" data-i18n="entCard3Main">5–7% выручки 9M'26 приходилось на аккаунты с нарушениями политик</p>
+          <p class="text-xs text-[#A6AEBC] mt-1.5" data-i18n="entCard3Desc">В августе–сентябре 2026 г. внедрены усиленные механизмы контроля использования и фильтрации нарушающих аккаунтов перед выходом на IPO.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 2: STATEMENTS OF OPERATIONS (P&L) / ОТЧЁТ О ПРИБЫЛЯХ И УБЫТКАХ    -->
+    <!-- ===================================================================== -->
+    <section id="panel-pnl" class="tab-panel space-y-6">
+      <!-- Top Controls & View Switcher -->
+      <div class="ng-card p-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-semibold text-[#F3F5F8]" data-i18n="pnlHeaderTitle">Консолидированный отчёт о прибылях и убытках (GAAP & Non-GAAP)</h2>
+          <p class="text-xs text-[#A6AEBC] mt-0.5" data-i18n="pnlHeaderSub">Переключение между классификацией по характеру затрат (F-7), функциональной (Note 8) и поквартальной динамикой</p>
+        </div>
+        <div class="inline-flex flex-wrap gap-1.5 p-1 rounded-xl bg-[#13151A] border border-[rgba(210,216,228,0.14)]">
+          <button onclick="setPnlView('nature')" id="pnl-view-nature" class="sub-pill active px-3 py-1.5 rounded-lg text-xs font-medium border border-transparent text-[#A6AEBC]" data-i18n="pnlBtnNature">По характеру затрат (F-7)</button>
+          <button onclick="setPnlView('function')" id="pnl-view-function" class="sub-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-transparent text-[#A6AEBC]" data-i18n="pnlBtnFunction">По функциям (Note 8)</button>
+          <button onclick="setPnlView('quarterly')" id="pnl-view-quarterly" class="sub-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-transparent text-[#A6AEBC]" data-i18n="pnlBtnQuarterly">Поквартально (Q1'25–Q3'26)</button>
+        </div>
+      </div>
+
+      <!-- Crucial Accounting Callout Banner -->
+      <div class="ng-card p-4 border-l-4 border-l-[#D97757] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-mono uppercase tracking-wider text-[#D97757]" data-i18n="pnlCalloutTag">КЛЮЧЕВОЙ ИНСАЙТ АУДИТА (GAAP vs ОПЕРАЦИОННАЯ ПРИБЫЛЬ)</div>
+          <p class="text-xs sm:text-sm text-[#F3F5F8] mt-1" data-i18n="pnlCalloutText">
+            Из чистого убытка по GAAP за 9M 2026 в размере <strong>$(104,039)M</strong> более <strong>99% ($104,601M)</strong> составляют исключаемые при расчёте Adjusted Net Income неденежные переоценки: <strong>$(94,324)M</strong> по конвертируемым нотам и <strong>$(10,277)M</strong> по mark-to-market инструментам. Операционный убыток по GAAP сократился до <strong>$(1,260)M (-3.8%)</strong>; скорректированная маржа составила <strong>+19%</strong> во II кв. и <strong>+15%</strong> в III кв. 2026 г.
+          </p>
+        </div>
+      </div>
+
+      <!-- P&L Table Container -->
+      <div class="ng-card overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="fin-table" id="pnl-table">
+            <!-- Populated dynamically by JS based on view & language -->
+          </table>
+        </div>
+      </div>
+
+      <!-- Bottom Charts: Compute Efficiency + Expense Composition -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="ng-card p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="chartCompEffTitle">Эффективность вычислений (Revenue / Compute Ratio)</h3>
+              <p class="text-xs text-[#A6AEBC]" data-i18n="chartCompEffSub">Авторский расчёт: квартальная выручка ÷ расходы на compute; 0.40x → 2.08x → 1.72x</p>
+            </div>
+            <span class="text-[11px] font-mono text-[#34D399] bg-[#34D399]/10 px-2 py-0.5 rounded">MD&A p.141</span>
+          </div>
+          <div class="relative w-full h-[260px]">
+            <canvas id="chartComputeEfficiency"></canvas>
+          </div>
+        </div>
+
+        <div class="ng-card p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="chartFuncExpTitle">Функциональная структура расходов и валовая маржа (9M'26)</h3>
+              <p class="text-xs text-[#A6AEBC]" data-i18n="chartFuncExpSub">Cost of Revenue $4,812M → подразумеваемая валовая маржа 85.5%</p>
+            </div>
+            <span class="text-[11px] font-mono text-[#E2E8F0] bg-[#1E2128] px-2 py-0.5 rounded">Note 8 (F-39)</span>
+          </div>
+          <div class="relative w-full h-[260px]">
+            <canvas id="chartFunctionalExpenses"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 3: CONSOLIDATED BALANCE SHEET / БУХГАЛТЕРСКИЙ БАЛАНС              -->
+    <!-- ===================================================================== -->
+    <section id="panel-balance" class="tab-panel space-y-6">
+      <!-- Top Balance Sheet Highlights -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="ng-card p-4">
+          <div class="text-[11px] font-mono uppercase text-[#A6AEBC]" data-i18n="bsKpi1Title">Совокупные активы</div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#F3F5F8] mt-1">$154,320M</div>
+          <div class="text-xs text-[#34D399] font-mono mt-1" data-i18n="bsGrowth">+525.8% к FY25 ($24,661M)</div>
+        </div>
+        <div class="ng-card p-4">
+          <div class="text-[11px] font-mono uppercase text-[#A6AEBC]" data-i18n="bsKpi2Title">Денежные средства и казн. бумаги</div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#34D399] mt-1">$131,845M</div>
+          <div class="text-xs text-[#A6AEBC] font-mono mt-1" data-i18n="bsKpi2Sub">$95,562M кэш + $36,283M ST инв.</div>
+        </div>
+        <div class="ng-card p-4">
+          <div class="text-[11px] font-mono uppercase text-[#A6AEBC]" data-i18n="bsKpi3Title">Конвертируемые ноты (Level 3)</div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#F87171] mt-1">$130,502M</div>
+          <div class="text-xs text-[#A6AEBC] font-mono mt-1" data-i18n="bsKpi3Sub">Переоценка MTM (vs $41,677M в FY25)</div>
+        </div>
+        <div class="ng-card p-4">
+          <div class="text-[11px] font-mono uppercase text-[#A6AEBC]" data-i18n="bsKpi4Title">Кредитная линия Morgan Stanley</div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#FBBF24] mt-1">$15.0B</div>
+          <div class="text-xs text-[#A6AEBC] font-mono mt-1" data-i18n="bsKpi4Sub">$0 выбрано • $14.8B свободно</div>
+        </div>
+      </div>
+
+      <!-- Balance Sheet Table + Structure Chart -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="ng-card overflow-hidden lg:col-span-8">
+          <div class="p-4 border-b border-[rgba(210,216,228,0.12)] flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-semibold text-[#F3F5F8]" data-i18n="bsTableTitle">Консолидированный бухгалтерский баланс (F-5 – F-6)</h2>
+              <p class="text-xs text-[#A6AEBC]" data-i18n="bsTableSub">В миллионах долларов США ($M) • Аудировано за 2024–2025 гг., неаудировано на 30.09.2026</p>
+            </div>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-[#1E2128] text-[#A6AEBC]">GAAP</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="fin-table" id="balance-table">
+              <!-- Populated by JS -->
+            </table>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 space-y-6">
+          <div class="ng-card p-5">
+            <h3 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="bsChartTitle">Динамика структуры активов ($B)</h3>
+            <p class="text-xs text-[#A6AEBC] mb-3" data-i18n="bsChartSub">91.4% активов на 30.09.2026 — оборотные активы ($141.0B)</p>
+            <div class="relative w-full h-[250px]">
+              <canvas id="chartBalanceAssets"></canvas>
+            </div>
+          </div>
+
+          <!-- Revolving Credit Facility Card -->
+          <div class="ng-card p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono uppercase tracking-wider text-[#FBBF24]" data-i18n="rcfBadge">A&R CREDIT AGREEMENT • СЕН 2026</span>
+              <span class="text-xs font-mono text-[#34D399]" data-i18n="rcfStatus">КОМПЛАЕНС ОК</span>
+            </div>
+            <h3 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="rcfTitle">Револьверная кредитная линия Morgan Stanley Senior Funding</h3>
+            <div class="space-y-2 text-xs font-mono">
+              <div class="flex justify-between py-1 border-b border-[rgba(210,216,228,0.08)]">
+                <span class="text-[#A6AEBC]" data-i18n="rcfLine1">Лимит кредитной линии:</span>
+                <span class="text-[#F3F5F8] font-semibold" data-i18n="rcfVal1">$15,000M (расширен с $2.5B)</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-[rgba(210,216,228,0.08)]">
+                <span class="text-[#A6AEBC]" data-i18n="rcfLine2">Выбрано / Аккредитивы:</span>
+                <span class="text-[#F3F5F8]">$0 / $205M</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-[rgba(210,216,228,0.08)]">
+                <span class="text-[#A6AEBC]" data-i18n="rcfLine3">Ковенант мин. ликвидности:</span>
+                <span class="text-[#FBBF24]" data-i18n="rcfVal3">$5,000M (с Q4 2026)</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-[#A6AEBC]" data-i18n="rcfLine4">Срок погашения:</span>
+                <span class="text-[#F3F5F8]" data-i18n="rcfVal4">Сентябрь 2031</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 4: CASH FLOWS & CAPITAL RAISES / ДЕНЕЖНЫЕ ПОТОКИ И РАУНДЫ         -->
+    <!-- ===================================================================== -->
+    <section id="panel-cashflow" class="tab-panel space-y-6">
+      <!-- Cash Flow Chart & Summary -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="ng-card p-5 lg:col-span-7">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-base font-semibold text-[#F3F5F8]" data-i18n="cfChartTitle">Денежные потоки: OCF, Investing и Financing (FY23 – 9M'26)</h2>
+              <p class="text-xs text-[#A6AEBC]" data-i18n="cfChartSub">Перелом операционного денежного потока (+$6,569M за 9M'26) и рекордные привлечения ($110.7B)</p>
+            </div>
+            <span class="text-[11px] font-mono px-2.5 py-1 rounded bg-[#1E2128] text-[#E2E8F0]">F-12 – F-13</span>
+          </div>
+          <div class="relative w-full h-[300px]">
+            <canvas id="chartCashFlows"></canvas>
+          </div>
+        </div>
+
+        <!-- 9M 2026 Cash Bridge Card -->
+        <div class="ng-card p-5 lg:col-span-5 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-semibold text-[#F3F5F8]" data-i18n="cfBridgeTitle">Мост денежных средств за 9M 2026 ($M)</h3>
+            <p class="text-xs text-[#A6AEBC] mb-4" data-i18n="cfBridgeSub">Кэш, эквиваленты и restricted cash выросли с $17,401M до $98,152M</p>
+
+            <div class="space-y-2.5 text-xs font-mono">
+              <div class="ng-panel p-2.5 flex justify-between items-center">
+                <span class="text-[#A6AEBC]" data-i18n="cfBStart">Остаток на 31.12.2025</span>
+                <span class="text-[#F3F5F8] font-semibold tabular-nums">$17,401M</span>
+              </div>
+              <div class="ng-panel p-2.5 flex justify-between items-center border-l-2 border-l-[#34D399]">
+                <span class="text-[#A6AEBC]" data-i18n="cfBOcf">Операционный поток (OCF)</span>
+                <span class="text-[#34D399] font-semibold tabular-nums">+$6,569M</span>
+              </div>
+              <div class="ng-panel p-2.5 flex justify-between items-center border-l-2 border-l-[#F87171]">
+                <span class="text-[#A6AEBC]" data-i18n="cfBInv">Инвестиционный поток (CapEx + T-Bills)</span>
+                <span class="text-[#F87171] font-semibold tabular-nums">-$36,546M</span>
+              </div>
+              <div class="ng-panel p-2.5 flex justify-between items-center border-l-2 border-l-[#D97757]">
+                <span class="text-[#A6AEBC]" data-i18n="cfBFin">Финансовый поток (выпуск Preferred)</span>
+                <span class="text-[#34D399] font-semibold tabular-nums">+$110,735M</span>
+              </div>
+              <div class="ng-panel p-2.5 flex justify-between items-center">
+                <span class="text-[#A6AEBC]" data-i18n="cfBFx">Курсовые разницы</span>
+                <span class="text-[#F87171] tabular-nums">-$7M</span>
+              </div>
+              <div class="p-3 rounded-lg bg-[#34D399]/10 border border-[#34D399]/30 flex justify-between items-center">
+                <span class="text-[#F3F5F8] font-semibold" data-i18n="cfBEnd">Кэш + restricted cash на 30.09.2026</span>
+                <span class="text-[#34D399] font-bold text-sm tabular-nums">$98,152M</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategic Partner Financing & Note Purchase Agreements Grid -->
+      <div class="ng-card p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-base font-semibold text-[#F3F5F8]" data-i18n="partnersTitle">Стратегическое партнёрское финансирование и кредитные линии NPA (Note 9 & Note 17)</h3>
+            <p class="text-xs text-[#A6AEBC]" data-i18n="partnersSub">Структура инвестиций Google, Amazon, AMD и инфраструктурных кредитных линий под аренду ЦОД</p>
+          </div>
+          <span class="text-[11px] font-mono px-2.5 py-1 rounded bg-[#D97757]/15 text-[#D97757]">F-40 – F-44 • F-66</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <!-- Google Card -->
+          <div class="ng-panel p-4 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-[#F3F5F8]">Google LLC</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-[#E2E8F0]/15 text-[#E2E8F0]">2023–2026 NPAs</span>
+              </div>
+              <ul class="mt-3 space-y-1.5 text-xs text-[#A6AEBC]" data-i18n-list="googleList">
+                <li>• <strong class="text-[#F3F5F8]">2023 NPA ($2.0B) & 2024 NPA ($1.3B):</strong> полностью конвертированы в Series E-3, E-4, E-5 и G-4.</li>
+                <li>• <strong class="text-[#F3F5F8]">Март 2026 NPA ($30.0B):</strong> ставка 9.0%, до 31.12.2030.</li>
+                <li>• <strong class="text-[#34D399]">Май 2026:</strong> вложено $10.0B в Series H.</li>
+                <li>• <strong class="text-[#FBBF24]">Ноя 2026 (IPO):</strong> обяз. выкуп Class N на $10.0B по цене IPO (остаток линии: $10.0B).</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Amazon Card -->
+          <div class="ng-panel p-4 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-[#F3F5F8]">Amazon (AWS)</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-[#FBBF24]/15 text-[#FBBF24]">$6.2B Notes O/S</span>
+              </div>
+              <ul class="mt-3 space-y-1.5 text-xs text-[#A6AEBC]" data-i18n-list="amazonList">
+                <li>• <strong class="text-[#F3F5F8]">2023 NPA ($4.0B осн. / $4.6B ном.):</strong> часть конвертирована по $20.93 в E-2/F-2/G-3; остаток беспроцентной rollover-ноты <strong>$2.2B</strong> (погашение март 2034).</li>
+                <li>• <strong class="text-[#F3F5F8]">2024 NPA ($4.0B):</strong> все 3 транша в обращении (погашение 2034–2035).</li>
+                <li>• <strong class="text-[#34D399]">Апр–Май 2026 NPA ($20.0B):</strong> $5.0B вложено в Series H; остаток доступной линии — <strong>$15.0B</strong>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- AMD Card -->
+          <div class="ng-panel p-4 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-[#F3F5F8]">AMD (Hardware Supply)</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-[#D97757]/15 text-[#D97757]" data-i18n="amdPeriodBadge">Июл &amp; ноя 2026</span>
+              </div>
+              <ul class="mt-3 space-y-1.5 text-xs text-[#A6AEBC]" data-i18n-list="amdList">
+                <li>• <strong class="text-[#F3F5F8]">Июль 2026:</strong> соглашение на поставку ускорителей AMD Instinct MI450 (&gt;$20.0B).</li>
+                <li>• <strong class="text-[#F3F5F8]">Purchased Put Option ($5.0B):</strong> право Anthropic продать AMD акции Class N на сумму до $5.0B.</li>
+                <li>• <strong class="text-[#FBBF24]">Ноя 2026 (IPO):</strong> AMD подписалась на выкуп Class N на <strong>$2.5B</strong> при закрытии IPO (остаток опциона: $2.5B).</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Infrastructure Lease NPAs Card -->
+          <div class="ng-panel p-4 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-[#F3F5F8]" data-i18n="infraNpaTitle">Лизинговые линии NPA</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-[#34D399]/15 text-[#34D399]" data-i18n="infraNpaBadge">Лимит $52.0B</span>
+              </div>
+              <ul class="mt-3 space-y-1.5 text-xs text-[#A6AEBC]" data-i18n-list="infraNpaList">
+                <li>• <strong class="text-[#F3F5F8]">Август 2025 NPA ($10.0B):</strong> выпуск конвертируемых нот исключительно для оплаты аренды вычислительного оборудования (до IPO).</li>
+                <li>• <strong class="text-[#F3F5F8]">Март 2026 NPA ($42.0B):</strong> ставка 9.0% PIK для финансирования лизинга инфраструктуры (5 лет с запуска).</li>
+                <li>• <strong class="text-[#34D399]">На 30.09.2026:</strong> выбрано $0 по обеим линиям.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full Cash Flow Table -->
+      <div class="ng-card overflow-hidden">
+        <div class="p-4 border-b border-[rgba(210,216,228,0.12)]">
+          <h3 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="cfTableTitle">Сводная таблица движения денежных средств ($M)</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="fin-table" id="cashflow-table">
+            <!-- Populated by JS -->
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 5: COMPUTE COMMITMENTS & RISK MATRIX / ИНФРАСТРУКТУРА И РИСКИ     -->
+    <!-- ===================================================================== -->
+    <section id="panel-infra" class="tab-panel space-y-6">
+      <!-- Top Infrastructure Summary Strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="ng-card p-4 border-t-2 border-t-[#D97757]">
+          <div class="text-[11px] font-mono uppercase text-[#A6AEBC]" data-i18n="infKpi1Title">Совокупный портфель обязательств</div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#F3F5F8] mt-1">$900.9B+</div>
+          <div class="text-xs text-[#A6AEBC] mt-1" data-i18n="infKpi1Sub">Контракты на облака, чипы и ЦОД</div>
+        </div>
+        <div class="ng-card p-4 border-t-2 border-t-[#FBBF24]">
+          <div class="text-[11px] font-mono uppercase text-[#A6AEBC]" data-i18n="infKpi2Title">Фикс. обязательства (30.09.2026)</div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#FBBF24] mt-1">$313.8B</div>
+          <div class="text-xs text-[#A6AEBC] mt-1" data-i18n="infKpi2Sub">Рост в 5.75x vs $54.6B на 31.12.25</div>
+        </div>
+        <div class="ng-card p-4 border-t-2 border-t-[#E2E8F0]">
+          <div class="text-[11px] font-mono uppercase text-[#A6AEBC]" data-i18n="infKpi3Title">Неначатая аренда ЦОД (Note 7)</div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#E2E8F0] mt-1">$451.2B</div>
+          <div class="text-xs text-[#A6AEBC] mt-1" data-i18n="infKpi3Sub">Запуск в 2026–2028 гг. (до 20 лет)</div>
+        </div>
+        <div class="ng-card p-4 border-t-2 border-t-[#34D399]">
+          <div class="text-[11px] font-mono uppercase text-[#A6AEBC]" data-i18n="infKpi4Title">Контракты после 30.09.2026</div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#34D399] mt-1">$112.3B</div>
+          <div class="text-xs text-[#A6AEBC] mt-1" data-i18n="infKpi4Sub">$105.7B долгоср. + $6.6B краткоср.</div>
+        </div>
+      </div>
+
+      <!-- Counterparty Breakdown Chart + Maturity Schedule Chart -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="ng-card p-5 lg:col-span-7">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-base font-semibold text-[#F3F5F8]" data-i18n="chartCounterpartyTitle">Выбранные инфраструктурные соглашения ($B)</h2>
+              <p class="text-xs text-[#A6AEBC]" data-i18n="chartCounterpartySub">Смешаны минимумы, верхние пределы и оценки — значения нельзя складывать</p>
+            </div>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-[#1E2128] text-[#D97757]">MD&A p.178–180</span>
+          </div>
+          <div class="relative w-full h-[310px]">
+            <canvas id="chartCounterparties"></canvas>
+          </div>
+        </div>
+
+        <div class="ng-card p-5 lg:col-span-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-base font-semibold text-[#F3F5F8]" data-i18n="chartMaturityTitle">График фиксированных платежей ($320.0B)</h2>
+              <p class="text-xs text-[#A6AEBC]" data-i18n="chartMaturitySub">Распределение по годам на 30.09.2026 (включая начатую аренду)</p>
+            </div>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-[#1E2128] text-[#A6AEBC]">Note 7 & 13</span>
+          </div>
+          <div class="relative w-full h-[310px]">
+            <canvas id="chartMaturitySchedule"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legal, Regulatory & Geopolitical Risk Matrix -->
+      <div class="ng-card p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="text-base font-semibold text-[#F3F5F8]" data-i18n="riskMatrixTitle">Матрица регуляторных, судебных и операционных рисков (Notes 13, 15, 16)</h3>
+            <p class="text-xs text-[#A6AEBC]" data-i18n="riskMatrixSub">Ключевые судебные процессы и правительственные решения по состоянию на ноябрь 2026 г.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Risk 1: USG Supply Chain Designation -->
+          <div class="ng-panel p-4 border-l-4 border-l-[#F87171] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 text-[10px] font-mono uppercase rounded bg-[#F87171]/15 text-[#F87171]" data-i18n="risk1Tag">ВЫСОКИЙ РИСК • ГОССЕКТОР США</span>
+              <span class="text-[11px] font-mono text-[#6E7787]">27.02.2026</span>
+            </div>
+            <h4 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="risk1Title">Статус «Угрозы цепочке поставок нацбезопасности»</h4>
+            <p class="text-xs text-[#A6AEBC] leading-relaxed" data-i18n="risk1Desc">
+              27 февраля 2026 г. Президент США распорядился прекратить использование моделей Anthropic федеральными ведомствами, а Военное министерство (Dept. of War) присвоило компании статус Supply-Chain Risk (10 U.S.C. § 3252 / FASCSA § 4713). Окружной суд Сев. округа Калифорнии вынес решение в пользу Anthropic (нарушение 1-й и 5-й поправок и APA; подана апелляция), однако Апелляционный суд округа Колумбия (2–1) отклонил петицию компании.
+            </p>
+          </div>
+
+          <!-- Risk 2: Copyright & Content Litigation -->
+          <div class="ng-panel p-4 border-l-4 border-l-[#FBBF24] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 text-[10px] font-mono uppercase rounded bg-[#FBBF24]/15 text-[#FBBF24]" data-i18n="risk2Tag">СУДЕБНЫЕ СПОРЫ • ИС И ДАННЫЕ</span>
+              <span class="text-[11px] font-mono text-[#6E7787]">$1.5B Bartz</span>
+            </div>
+            <h4 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="risk2Title">Мировое соглашение Bartz ($1.5B) и иски правообладателей</h4>
+            <p class="text-xs text-[#A6AEBC] leading-relaxed" data-i18n="risk2Desc">
+              Утверждённое судом в июле 2026 г. мировое соглашение по делу <em>Bartz et al.</em> на <strong>$1,500M</strong> ($300M выплачено в 2025 г., остаток $450M на балансе на 30.09.2026; ряд авторов подали индивидуальные opt-out иски). Продолжаются процессы с музыкальными издателями (<em>Concord Music, Universal, Sony, Warner</em> в N.D. Cal.), иск <em>Reddit</em> в Калифорнии и 4 коллективных иска в Канаде (<em>MacKinnon, Grescoe, La Presse</em>).
+            </p>
+          </div>
+
+          <!-- Risk 3: Guarantees, VIEs & M&A -->
+          <div class="ng-panel p-4 border-l-4 border-l-[#34D399] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 text-[10px] font-mono uppercase rounded bg-[#34D399]/15 text-[#34D399]" data-i18n="risk3Tag">ГАРАНТИИ И M&A ИНТЕГРАЦИЯ</span>
+              <span class="text-[11px] font-mono text-[#6E7787]">Notes 7, 13, 15</span>
+            </div>
+            <h4 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="risk3Title">Возмещение затрат девелоперам ЦОД и сделки M&A</h4>
+            <p class="text-xs text-[#A6AEBC] leading-relaxed" data-i18n="risk3Desc">
+              Максимальные выплаты по соглашениям возмещения затрат девелоперам ЦОД составляют до <strong>$4.2B</strong>, плюс гарантия по энергоконтракту до <strong>$500M</strong> (до 2038 г.) и возможное резервирование кэша до $10.0B. Завершены стратегические поглощения <strong>Bun</strong> ($171M, дек. 2025), <strong>Coefficient Bio</strong> (15.4M акций Class A, апр. 2026) и <strong>Stainless Software</strong> ($306M / 11.6M акций Class A, май 2026).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 6: CAP TABLE & GOVERNANCE (LTBT) / КАПИТАЛ И УПРАВЛЕНИЕ           -->
+    <!-- ===================================================================== -->
+    <section id="panel-captable" class="tab-panel space-y-6">
+      <!-- Share Classes & Governance Architecture -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="ng-card p-5">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono uppercase text-[#E2E8F0]">Class A Common Stock</span>
+            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-[#E2E8F0]/15 text-[#E2E8F0]" data-i18n="vote1">1 ГОЛОС / АКЦИЯ</span>
+          </div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#F3F5F8]">2,168.8M</div>
+          <p class="text-xs text-[#A6AEBC] mt-1" data-i18n="classADesc">Выпущено и в обращении на 30.09.2026 (разрешено 10,906.1M). В апреле 2026 г. проведён тендерный выкуп 179.9M акций по цене $25.9136 ($4.66B ликвидности сотрудникам).</p>
+        </div>
+
+        <div class="ng-card p-5">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono uppercase text-[#FBBF24]">Class N Common Stock</span>
+            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-[#FBBF24]/15 text-[#FBBF24]" data-i18n="vote0">БЕЗ ПРАВА ГОЛОСА</span>
+          </div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#F3F5F8]">30.6M</div>
+          <p class="text-xs text-[#A6AEBC] mt-1" data-i18n="classNDesc">В обращении на 30.09.2026 (лимит увеличен до 7,975.7M в окт. 2026; 846.8M одобрено для дочерней структуры PBC). В этот класс конвертируются бумаги стратегических партнёров (Google, Amazon, AMD).</p>
+        </div>
+
+        <div class="ng-card p-5 border border-[#D97757]/40">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono uppercase text-[#D97757]">Class T & Long-Term Benefit Trust</span>
+            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-[#D97757]/20 text-[#D97757]">GOVERNANCE VIE</span>
+          </div>
+          <div class="text-2xl font-bold font-mono tabular-nums text-[#D97757]" data-i18n="classTVal">1 акция (LTBT)</div>
+          <p class="text-xs text-[#A6AEBC] mt-1" data-i18n="classTDesc">Принадлежит исключительно независимому трасту Long-Term Benefit Trust (LTBT), наделённому правом назначать и отзывать определённых директоров Совета для соблюдения миссии безопасного ИИ.</p>
+        </div>
+      </div>
+
+      <!-- Employee Equity & Dilution Overview -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="ng-card p-5 lg:col-span-5 space-y-4">
+          <h3 class="text-base font-semibold text-[#F3F5F8]" data-i18n="empEqTitle">Опционы, RSU и программа Donation Matching (Note 10)</h3>
+          <div class="space-y-3 text-xs">
+            <div class="ng-panel p-3">
+              <div class="flex justify-between font-mono">
+                <span class="text-[#A6AEBC]" data-i18n="optLabel">Опционы в обращении (Stock Options)</span>
+                <span class="text-[#F3F5F8] font-semibold tabular-nums">1,774.3M</span>
+              </div>
+              <div class="text-[#6E7787] mt-1 font-mono" data-i18n="optSub">Средняя цена исполнения: $2.91 | Внутренняя стоимость: $119.1B (FMV акций выросла с $0.51 в 2023 до $68.54 в 9M'26)</div>
+            </div>
+
+            <div class="ng-panel p-3">
+              <div class="flex justify-between font-mono">
+                <span class="text-[#A6AEBC]" data-i18n="rsuLabel">RSU (двойной триггер с условием IPO)</span>
+                <span class="text-[#F3F5F8] font-semibold tabular-nums">1,128.0M</span>
+              </div>
+              <div class="text-[#6E7787] mt-1 font-mono" data-i18n="rsuSub">Ср. grant-date FV: $28.47 | Оценка накопленного SBC при IPO после октябрьских модификаций: ~$14.2B; прочий непризнанный расход раскрыт отдельно</div>
+            </div>
+
+            <div class="ng-panel p-3">
+              <div class="flex justify-between font-mono">
+                <span class="text-[#A6AEBC]" data-i18n="donLabel">Резерв Donation Matching Plan</span>
+                <span class="text-[#F3F5F8] font-semibold tabular-nums">933.7M</span>
+              </div>
+              <div class="text-[#6E7787] mt-1 font-mono" data-i18n="donSub">Обязательство на балансе: $1,960M (30.6M акций Class N выпущено в Q1'26 + 28.0M в окт. 2026)</div>
+            </div>
+
+            <div class="ng-panel p-3 border-l-2 border-l-[#34D399]">
+              <div class="flex justify-between font-mono">
+                <span class="text-[#34D399]" data-i18n="ipoPlanLabel">Новые планы к IPO (Октябрь 2026)</span>
+                <span class="text-[#F3F5F8] font-semibold tabular-nums">3,110.0M</span>
+              </div>
+              <div class="text-[#6E7787] mt-1 font-mono" data-i18n="ipoPlanSub">2026 Equity Incentive Plan (2,950M Class A) + 2026 ESPP (160M Class A)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preferred Stock Ladder Table -->
+        <div class="ng-card overflow-hidden lg:col-span-7">
+          <div class="p-4 border-b border-[rgba(210,216,228,0.12)] flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-semibold text-[#F3F5F8]" data-i18n="prefTableTitle">Лестница привилегированных акций (Series A – Series H, 30.09.2026)</h3>
+              <p class="text-xs text-[#A6AEBC]" data-i18n="prefTableSub">853.4M акций конвертируются в 8,558.9M обыкновенных акций при IPO (коэф. 10:1; 10.4–10.6:1 для Series D)</p>
+            </div>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-[#D97757]/15 text-[#D97757]">Note 10 (F-47)</span>
+          </div>
+          <div class="overflow-x-auto max-h-[380px]">
+            <table class="fin-table" id="preferred-table">
+              <!-- Populated by JS -->
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 7: INTERACTIVE IPO VALUATION SIMULATOR / СИМУЛЯТОР ОЦЕНКИ IPO     -->
+    <!-- ===================================================================== -->
+    <section id="panel-simulator" class="tab-panel space-y-6">
+      <!-- Header & Scenario Presets -->
+      <div class="ng-card p-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#34D399]"></span>
+            <h2 class="text-lg font-semibold text-[#F3F5F8]" data-i18n="simHeaderTitle">Интерактивный симулятор оценки IPO и сценариев капитализации</h2>
+          </div>
+          <p class="text-xs text-[#A6AEBC] mt-0.5" data-i18n="simHeaderSub">Иллюстративная модель EV/Revenue, привязанная к диапазону IPO $70–78; это не прогноз и не рекомендация</p>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[11px] font-mono uppercase text-[#6E7787] mr-1" data-i18n="simPresetsLabel">Сценарии:</span>
+          <button onclick="applyPreset('base')" class="px-3 py-1.5 rounded-lg text-xs font-mono bg-[#1E2128] hover:bg-[#282C36] text-[#E2E8F0] border border-[rgba(210,216,228,0.18)] transition" data-i18n="presetBase">
+            Проспект / $74 midpoint
+          </button>
+          <button onclick="applyPreset('consensus')" class="px-3 py-1.5 rounded-lg text-xs font-mono bg-[#D97757]/15 hover:bg-[#D97757]/25 text-[#D97757] border border-[#D97757]/40 transition" data-i18n="presetConsensus">
+            Сценарий роста ($95B)
+          </button>
+          <button onclick="applyPreset('bull')" class="px-3 py-1.5 rounded-lg text-xs font-mono bg-[#34D399]/15 hover:bg-[#34D399]/25 text-[#34D399] border border-[#34D399]/40 transition" data-i18n="presetBull">
+            Сценарий bull ($135B)
+          </button>
+        </div>
+      </div>
+
+      <div class="ng-card p-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+        <div class="ng-panel p-3 border-l-2 border-l-[#D97757]">
+          <div class="font-mono text-[#D97757] uppercase text-[10px]" data-i18n="simStep1Title">Шаг 1 • Стоимость бизнеса</div>
+          <div class="text-[#F3F5F8] font-medium mt-1" data-i18n="simStep1Text">Enterprise Value = форвардная выручка × мультипликатор</div>
+        </div>
+        <div class="ng-panel p-3 border-l-2 border-l-[#34D399]">
+          <div class="font-mono text-[#34D399] uppercase text-[10px]" data-i18n="simStep2Title">Шаг 2 • Стоимость капитала</div>
+          <div class="text-[#F3F5F8] font-medium mt-1" data-i18n="simStep2Text">Equity Value = EV + сценарный чистый кэш после IPO и PP</div>
+        </div>
+        <div class="ng-panel p-3 border-l-2 border-l-[#E2E8F0]">
+          <div class="font-mono text-[#E2E8F0] uppercase text-[10px]" data-i18n="simStep3Title">Шаг 3 • Цена акции</div>
+          <div class="text-[#F3F5F8] font-medium mt-1" data-i18n="simStep3Text">Цена = Equity Value ÷ выбранное число акций; результат зависит от допущений</div>
+        </div>
+      </div>
+
+      <!-- Main Simulator Grid: Left Radio-Dial Controls (5) | Right Real-Time Outputs & Sensitivity -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left Column: 5 Radio-Dial Precision Sliders -->
+        <div class="ng-card p-5 lg:col-span-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-[rgba(210,216,228,0.1)] pb-2.5">
+            <span class="text-xs font-mono uppercase tracking-wider text-[#A6AEBC]" data-i18n="simParamsHeader">ПАРАМЕТРЫ МОДЕЛИ ОЦЕНКИ</span>
+            <span class="text-[11px] font-mono text-[#D97757]" data-i18n="dialTuner">ТОЧНАЯ НАСТРОЙКА</span>
+          </div>
+
+          <!-- Slider 1: Forward Annualized Revenue Run-Rate ($B) -->
+          <div class="dial-wrapper">
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="slider-rev" class="text-xs font-medium text-[#F3F5F8]" data-i18n="s1Label">1. Форвардная годовая выручка ($B)</label>
+              <span id="val-rev" class="px-2 py-0.5 rounded bg-[#D97757]/20 text-[#D97757] font-mono text-xs font-bold tabular-nums">$68.0B</span>
+            </div>
+            <input type="range" id="slider-rev" class="neon-range" min="50" max="160" step="1" value="68" oninput="updateSimulator()" />
+            <div class="dial-scale">
+              <div id="needle-rev" class="dial-needle terracotta" style="left: 16.36%;"></div>
+              <div class="flex justify-between text-[10px] font-mono text-[#6E7787] pt-3">
+                <span>$50B</span>
+                <span>$85B</span>
+                <span>$120B</span>
+                <span>$160B</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slider 2: EV / Forward Revenue Multiple (x) -->
+          <div class="dial-wrapper">
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="slider-mult" class="text-xs font-medium text-[#F3F5F8]" data-i18n="s2Label">2. Мультипликатор EV / Forward Revenue</label>
+              <span id="val-mult" class="px-2 py-0.5 rounded bg-[#D97757]/20 text-[#D97757] font-mono text-xs font-bold tabular-nums">11.1x</span>
+            </div>
+            <input type="range" id="slider-mult" class="neon-range" min="5.0" max="25.0" step="0.1" value="11.1" oninput="updateSimulator()" />
+            <div class="dial-scale">
+              <div id="needle-mult" class="dial-needle terracotta" style="left: 30.5%;"></div>
+              <div class="flex justify-between text-[10px] font-mono text-[#6E7787] pt-3">
+                <span>5.0x</span>
+                <span>11.5x</span>
+                <span>18.0x</span>
+                <span>25.0x</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slider 3: Target Adjusted Operating Margin (%) -->
+          <div class="dial-wrapper">
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="slider-margin" class="text-xs font-medium text-[#F3F5F8]" data-i18n="s3Label">3. Целевая скорр. операционная маржа (%)</label>
+              <span id="val-margin" class="px-2 py-0.5 rounded bg-[#34D399]/20 text-[#34D399] font-mono text-xs font-bold tabular-nums">15.0%</span>
+            </div>
+            <input type="range" id="slider-margin" class="neon-range mint-thumb" min="5" max="40" step="1" value="15" oninput="updateSimulator()" />
+            <div class="dial-scale">
+              <div id="needle-margin" class="dial-needle mint" style="left: 28.57%;"></div>
+              <div class="flex justify-between text-[10px] font-mono text-[#6E7787] pt-3">
+                <span>5%</span>
+                <span>16%</span>
+                <span>28%</span>
+                <span>40%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slider 4: IPO Primary Capital Raise ($B) -->
+          <div class="dial-wrapper">
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="slider-ipo" class="text-xs font-medium text-[#F3F5F8]" data-i18n="s4Label">4. Чистые поступления от публичного IPO ($B)</label>
+              <span id="val-ipo" class="px-2 py-0.5 rounded bg-[#34D399]/20 text-[#34D399] font-mono text-xs font-bold tabular-nums">$58.6B</span>
+            </div>
+            <input type="range" id="slider-ipo" class="neon-range mint-thumb" min="40" max="75" step="0.5" value="58.6" oninput="updateSimulator()" />
+            <div class="dial-scale">
+              <div id="needle-ipo" class="dial-needle mint" style="left: 53.14%;"></div>
+              <div class="flex justify-between text-[10px] font-mono text-[#6E7787] pt-3">
+                <span>$40B</span>
+                <span>$52B</span>
+                <span>$63B</span>
+                <span>$75B</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slider 5: Fully Diluted Share Count (Billions) -->
+          <div class="dial-wrapper">
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="slider-shares" class="text-xs font-medium text-[#F3F5F8]" data-i18n="s5Label">5. Акции после IPO: базовые / сценарные (млрд)</label>
+              <span id="val-shares" class="px-2 py-0.5 rounded bg-[#E2E8F0]/20 text-[#F3F5F8] font-mono text-xs font-bold tabular-nums">13.09B</span>
+            </div>
+            <input type="range" id="slider-shares" class="neon-range" min="13.0" max="16.5" step="0.01" value="13.09" oninput="updateSimulator()" />
+            <div class="dial-scale">
+              <div id="needle-shares" class="dial-needle terracotta" style="left: 2.57%;"></div>
+              <div class="flex justify-between text-[10px] font-mono text-[#6E7787] pt-3">
+                <span>13.0B</span>
+                <span>14.2B</span>
+                <span>15.3B</span>
+                <span>16.5B</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Dynamic Outputs, Benchmark Bars & 5x5 Sensitivity Matrix -->
+        <div class="lg:col-span-7 space-y-6">
+          <!-- 4 Dynamic Valuation KPI Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+            <div class="ng-card p-4">
+              <div class="text-[10px] font-mono uppercase text-[#A6AEBC]" data-i18n="outEvTitle">Enterprise Value</div>
+              <div id="out-ev" class="text-xl sm:text-2xl font-bold font-mono tabular-nums text-[#F3F5F8] mt-1">$754.8B</div>
+              <div class="text-[11px] font-mono text-[#6E7787] mt-1" data-i18n="outEvSub">Rev × EV/Sales</div>
+            </div>
+
+            <div class="ng-card p-4">
+              <div class="text-[10px] font-mono uppercase text-[#A6AEBC]" data-i18n="outEqTitle">Equity Value (Post-IPO)</div>
+              <div id="out-eq" class="text-xl sm:text-2xl font-bold font-mono tabular-nums text-[#34D399] mt-1">$967.4B</div>
+              <div class="text-[11px] font-mono text-[#6E7787] mt-1" data-i18n="outEqSub">+ чистый кэш после IPO/PP</div>
+            </div>
+
+            <div class="ng-card p-4 border border-[#D97757]/50 bg-[#D97757]/5">
+              <div class="text-[10px] font-mono uppercase text-[#D97757]" data-i18n="outPriceTitle">Цена акции IPO</div>
+              <div id="out-price" class="text-xl sm:text-2xl font-bold font-mono tabular-nums text-[#D97757] mt-1">$73.90</div>
+              <div id="out-vs-serh" class="text-[11px] font-mono text-[#34D399] mt-1">+25.5% к Series H • −0.1% к $74 midpoint</div>
+            </div>
+
+            <div class="ng-card p-4">
+              <div class="text-[10px] font-mono uppercase text-[#A6AEBC]" data-i18n="outOpTitle">Скорр. опер. прибыль</div>
+              <div id="out-op" class="text-xl sm:text-2xl font-bold font-mono tabular-nums text-[#F3F5F8] mt-1">$10.2B</div>
+              <div id="out-ev-op" class="text-[11px] font-mono text-[#FBBF24] mt-1">EV/EBIT: 74.0x</div>
+            </div>
+          </div>
+
+          <!-- Historical Share Price Benchmark Comparison Bars -->
+          <div class="ng-card p-5 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="benchTitle">Сравнение расчётной цены IPO с историческими раундами (после сплита 10:1)</h3>
+              <span id="out-liquidity-post" class="text-xs font-mono text-[#34D399]">Post-IPO Net Cash: $212.6B</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs font-mono">
+              <!-- Benchmark 1: April 2026 Tender Offer -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-[#A6AEBC]" data-i18n="b1Label">Тендерный выкуп (Апр 2026)</span>
+                  <span class="text-[#F3F5F8] tabular-nums">$25.91</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-[#1E2128] overflow-hidden">
+                  <div id="bar-b1" class="h-full bg-[#6E7787] rounded-full" style="width: 3.5%"></div>
+                </div>
+              </div>
+
+              <!-- Benchmark 2: Sep 2026 Common FMV High -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-[#A6AEBC]" data-i18n="b2Label">Оценка 409A Common Stock (Q3 2026 High)</span>
+                  <span class="text-[#F3F5F8] tabular-nums">$68.54</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-[#1E2128] overflow-hidden">
+                  <div id="bar-b2" class="h-full bg-[#A6AEBC] rounded-full" style="width: 9.1%"></div>
+                </div>
+              </div>
+
+              <!-- Benchmark 3: Series G-1 / G-2 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-[#A6AEBC]" data-i18n="b3Label">Раунд Series G-1 / G-2 (Q1–Q2 2026)</span>
+                  <span class="text-[#F3F5F8] tabular-nums">$25.91</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-[#1E2128] overflow-hidden">
+                  <div id="bar-b3" class="h-full bg-[#FBBF24] rounded-full" style="width: 34.5%"></div>
+                </div>
+              </div>
+
+              <!-- Benchmark 4: Series H-1 / H-2 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-[#A6AEBC]" data-i18n="b4Label">Раунд Series H-1 / H-2 (Май 2026 Benchmark)</span>
+                  <span class="text-[#F3F5F8] tabular-nums">$58.90</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-[#1E2128] overflow-hidden">
+                  <div id="bar-b4" class="h-full bg-[#E2E8F0] rounded-full" style="width: 78.5%"></div>
+                </div>
+              </div>
+
+              <!-- Dynamic Simulated IPO Price Bar -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-[#D97757] font-bold" data-i18n="b5Label">Расчётная цена IPO (Текущий сценарий)</span>
+                  <span id="bar-b5-val" class="text-[#D97757] font-bold tabular-nums">$73.90</span>
+                </div>
+                <div class="w-full h-2.5 rounded-full bg-[#1E2128] overflow-hidden">
+                  <div id="bar-b5" class="h-full bg-gradient-to-r from-[#D97757] to-[#34D399] rounded-full transition-all duration-150" style="width: 91%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Commitment Coverage Indicator -->
+            <div class="pt-2 border-t border-[rgba(210,216,228,0.1)] flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <span class="text-[#A6AEBC]" data-i18n="covLabel">Покрытие фикс. обязательств 2027–2028 ($73.6B) ликвидностью + 2Y EBIT:</span>
+              <span id="out-coverage" class="px-2 py-0.5 rounded bg-[#34D399]/15 text-[#34D399] font-semibold tabular-nums">3.17x</span>
+            </div>
+          </div>
+
+          <!-- Dynamic 5x5 Valuation Sensitivity Matrix -->
+          <div class="ng-card overflow-hidden">
+            <div class="p-4 border-b border-[rgba(210,216,228,0.12)] flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="text-sm font-semibold text-[#F3F5F8]" data-i18n="sensTitle">Матрица чувствительности цены акции IPO ($/акция)</h3>
+                <p class="text-[11px] text-[#A6AEBC]" data-i18n="sensSub">EV / Forward Revenue × выручка; зелёным — выше Series H common-equivalent ($58.90)</p>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="fin-table text-center" id="sensitivity-table">
+                <!-- Populated dynamically by JS -->
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-[rgba(210,216,228,0.12)] bg-[#0D0E11]/95 py-5 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#6E7787] font-mono">
+      <div data-i18n="footerLeft">Источник: Anthropic, PBC — Form S-1 Registration Statement & Consolidated Financial Statements (F-1 – F-68).</div>
+      <div data-i18n="footerRight">Все данные на акцию отражают сплит 10:1 (17 сентября 2026 г.).</div>
+    </div>
+  </footer>
+
+  <!-- ======================================================================= -->
+  <!-- JAVASCRIPT DATA, LOCALIZATION, CHARTS & VALUATION ENGINE                -->
+  <!-- ======================================================================= -->
+  <script>
+    // Current state
+    let currentLang = 'ru';
+    let currentTab = 'overview';
+    let currentPnlView = 'nature';
+    const charts = {};
+
+    // Bilingual Dictionary
+    const i18n = {
+      ru: {
+        headerSubtitle: 'PBC • ДОСЬЕ FORM S-1 & АУДИТ F-1..F-68',
+        headerPeriodBadge: '9M 2026 + СОБЫТИЯ ДО 10 НОЯ 2026',
+        splitNote: 'Сплит 10:1 (17 сен 2026)',
+        headerSerH: 'Series H Common-экв.: <strong class="text-[#F3F5F8]">$58.90</strong>',
+        navOverview: 'Обзор и IPO-профиль',
+        navPnl: 'Отчёт о прибылях и убытках',
+        navBalance: 'Бухгалтерский баланс',
+        navCashflow: 'Денежные потоки и раунды',
+        navInfra: 'Инфраструктура и риски',
+        navCaptable: 'Капитал и управление (LTBT)',
+        navSimulator: 'Симулятор оценки IPO',
+        evidenceEyebrow: 'ПРОВЕРЕНО ПО S-1 И MD&A • 10 НОЯБРЯ 2026',
+        evidenceTitle: 'Как читать дашборд: факт, расчёт и сценарий — это разные уровни данных',
+        evidenceText: 'Все исходные финансовые показатели сверены с проспектом. Расчётные коэффициенты явно помечены, а симулятор не является прогнозом Anthropic или инвестиционной рекомендацией.',
+        evidenceFiled: 'Раскрыто компанией',
+        evidenceDerived: 'Рассчитано',
+        evidenceScenario: 'Сценарий',
+
+        // Tab 1 KPIs
+        kpiRevTitle: 'Выручка 9M 2026',
+        kpiRevDelta: '+1,206% г/г',
+        kpiRevSub: "Q3'26 Run-Rate: $67.8B/год",
+        kpiRevFoot: "против $2,545M за 9M'25",
+        kpiMarginTitle: 'Скорр. опер. маржа',
+        kpiMarginDelta: '+236 п.п.',
+        kpiMarginSub: "Пик +19% в Q2'26",
+        kpiMarginFoot: "против -221% в Q1'25",
+        kpiLiqTitle: 'Общая ликвидность',
+        kpiLiqSub: '$95.6B кэш + $36.3B инвестиции + $14.8B RCF',
+        kpiLiqFoot: 'Ограниченный кэш $2.54B не включён',
+        kpiOcfTitle: 'Опер. денежный поток',
+        kpiOcfBadge: 'ПЕРЕЛОМ',
+        kpiOcfSub: 'Впервые положительный',
+        kpiOcfFoot: "против -$2,024M за 9M'25",
+        kpiRpoTitle: 'Бэклог (RPO)',
+        kpiRpoSub: 'Неотменяемые контракты',
+        kpiRpoFoot: 'Отлож. выручка: $1,971M',
+        kpiSerHTitle: 'Series H: эквивалент Common',
+        kpiSerHSub: 'OIP $589.01 ÷ конвертация 10:1',
+        kpiSerHFoot: 'Series G: $25.91 за Common-экв.',
+
+        chartQtrRevTitle: "Поквартальная динамика выручки и скорр. маржи (Q1'25 – Q3'26)",
+        chartQtrRevSub: 'Выручка выросла в 45 раз; положительной стала скорректированная, а не GAAP-маржа',
+        chartMixTitle: 'Структура выручки (9M 2026: $33,242M)',
+        chartMixSub: 'Монетизация, география и доля облачных маркетплейсов',
+        mixConsLabel: 'Consumption / API (Токены)',
+        mixSubLabel: 'Подписки (Claude Pro/Team/Enterprise)',
+        geoUsLabel: 'США / Междунар.',
+        cspShareLabel: 'CSP Маркетплейсы',
+        cspTrend: '44% (11% в FY23)',
+
+        entCard1Title: 'Проникновение в Fortune 500',
+        entCard1Main: '>50% компаний Fortune 500 и >30% Global 2000 платят ≥$100K/год',
+        entCard1Desc: 'При этом расходы на Claude у Топ-10 клиентов из Fortune 500 всё ещё составляют <1% их общих операционных затрат — огромный потенциал масштабирования.',
+        entCard2Title: 'Траектория масштабирования',
+        entCard2Main: "FY23: $41M → FY24: $386M → FY25: $4,585M → 9M'26: $33,242M",
+        entCard2Desc: "Рост в 9.4x в 2024 г., в 11.9x в 2025 г. и в 13.1x за 9 месяцев 2026 г. год-к-году. Выручка за 9M'26 в 7.25 раза превысила весь 2025 год.",
+        entCard3Title: 'Комплаенс и качество выручки',
+        entCard3Main: "5–7% выручки 9M'26 приходилось на аккаунты с нарушениями политик",
+        entCard3Desc: 'В августе–сентябре 2026 г. внедрены усиленные механизмы контроля использования и фильтрации нарушающих аккаунтов перед выходом на IPO.',
+
+        // Tab 2 P&L
+        pnlHeaderTitle: 'Консолидированный отчёт о прибылях и убытках (GAAP & Non-GAAP)',
+        pnlHeaderSub: 'Переключение между классификацией по характеру затрат (F-7), функциональной (Note 8) и поквартальной динамикой',
+        pnlBtnNature: 'По характеру затрат (F-7)',
+        pnlBtnFunction: 'По функциям (Note 8)',
+        pnlBtnQuarterly: "Поквартально (Q1'25–Q3'26)",
+        pnlCalloutTag: 'КЛЮЧЕВОЙ ИНСАЙТ АУДИТА (GAAP vs ОПЕРАЦИОННАЯ ПРИБЫЛЬ)',
+        pnlCalloutText: 'Из чистого убытка по GAAP за 9M 2026 в размере <strong>$(104,039)M</strong> более <strong>99% ($104,601M)</strong> составляют исключаемые при расчёте Adjusted Net Income неденежные переоценки: <strong>$(94,324)M</strong> по конвертируемым нотам и <strong>$(10,277)M</strong> по mark-to-market инструментам. Операционный убыток по GAAP сократился до <strong>$(1,260)M (-3.8%)</strong>; скорректированная маржа составила <strong>+19%</strong> во II кв. и <strong>+15%</strong> в III кв. 2026 г.',
+        chartCompEffTitle: 'Эффективность вычислений (Revenue / Compute Ratio)',
+        chartCompEffSub: 'Авторский расчёт: квартальная выручка ÷ расходы на compute; 0.40x → 2.08x → 1.72x',
+        chartFuncExpTitle: "Функциональная структура расходов и валовая маржа (9M'26)",
+        chartFuncExpSub: 'Cost of Revenue $4,812M → подразумеваемая валовая маржа 85.5%',
+
+        // Tab 3 Balance Sheet
+        bsKpi1Title: 'Совокупные активы',
+        bsGrowth: '+525.8% к FY25 ($24,661M)',
+        bsKpi2Title: 'Денежные средства и казн. бумаги',
+        bsKpi2Sub: '$95,562M кэш + $36,283M ST инв.',
+        bsKpi3Title: 'Конвертируемые ноты (Level 3)',
+        bsKpi3Sub: 'Переоценка MTM (vs $41,677M в FY25)',
+        bsKpi4Title: 'Кредитная линия Morgan Stanley',
+        bsKpi4Sub: '$0 выбрано • $14.8B свободно',
+        bsTableTitle: 'Консолидированный бухгалтерский баланс (F-5 – F-6)',
+        bsTableSub: 'В миллионах долларов США ($M) • Аудировано за 2024–2025 гг., неаудировано на 30.09.2026',
+        bsChartTitle: 'Динамика структуры активов ($B)',
+        bsChartSub: '91.4% активов на 30.09.2026 — оборотные активы ($141.0B)',
+        rcfBadge: 'A&R CREDIT AGREEMENT • СЕН 2026',
+        rcfStatus: 'КОМПЛАЕНС ОК',
+        rcfTitle: 'Револьверная кредитная линия Morgan Stanley Senior Funding',
+        rcfLine1: 'Лимит кредитной линии:',
+        rcfLine2: 'Выбрано / Аккредитивы:',
+        rcfLine3: 'Ковенант мин. ликвидности:',
+        rcfLine4: 'Срок погашения:',
+        rcfVal1: '$15,000M (расширен с $2.5B)',
+        rcfVal3: '$5,000M (с Q4 2026)',
+        rcfVal4: 'Сентябрь 2031',
+
+        // Tab 4 Cash Flows
+        cfChartTitle: "Денежные потоки: OCF, Investing и Financing (FY23 – 9M'26)",
+        cfChartSub: "Перелом операционного денежного потока (+$6,569M за 9M'26) и рекордные привлечения ($110.7B)",
+        cfBridgeTitle: 'Мост денежных средств за 9M 2026 ($M)',
+        cfBridgeSub: 'Кэш, эквиваленты и restricted cash выросли с $17,401M до $98,152M',
+        cfBStart: 'Остаток на 31.12.2025',
+        cfBOcf: 'Операционный поток (OCF)',
+        cfBInv: 'Инвестиционный поток (CapEx + T-Bills)',
+        cfBFin: 'Финансовый поток (выпуск Preferred)',
+        cfBFx: 'Курсовые разницы',
+        cfBEnd: 'Кэш + restricted cash на 30.09.2026',
+        partnersTitle: 'Стратегическое партнёрское финансирование и кредитные линии NPA (Note 9 & Note 17)',
+        partnersSub: 'Структура инвестиций Google, Amazon, AMD и инфраструктурных кредитных линий под аренду ЦОД',
+        infraNpaTitle: 'Лизинговые линии NPA',
+        amdPeriodBadge: 'Июл & ноя 2026',
+        infraNpaBadge: 'Лимит $52.0B',
+        cfTableTitle: 'Сводная таблица движения денежных средств ($M)',
+
+        // Tab 5 Infrastructure & Risks
+        infKpi1Title: 'Совокупный портфель обязательств',
+        infKpi1Sub: 'Контракты на облака, чипы и ЦОД',
+        infKpi2Title: 'Фикс. обязательства (30.09.2026)',
+        infKpi2Sub: 'Рост в 5.75x vs $54.6B на 31.12.25',
+        infKpi3Title: 'Неначатая аренда ЦОД (Note 7)',
+        infKpi3Sub: 'Запуск в 2026–2028 гг. (до 20 лет)',
+        infKpi4Title: 'Контракты после 30.09.2026',
+        infKpi4Sub: '$105.7B долгоср. + $6.6B краткоср.',
+        chartCounterpartyTitle: 'Выбранные инфраструктурные соглашения ($B)',
+        chartCounterpartySub: 'Смешаны минимумы, верхние пределы и оценки — значения нельзя складывать',
+        chartMaturityTitle: 'График фиксированных платежей ($320.0B)',
+        chartMaturitySub: 'Распределение по годам на 30.09.2026 (включая начатую аренду)',
+        riskMatrixTitle: 'Матрица регуляторных, судебных и операционных рисков (Notes 13, 15, 16)',
+        riskMatrixSub: 'Ключевые судебные процессы и правительственные решения по состоянию на ноябрь 2026 г.',
+        risk1Tag: 'ВЫСОКИЙ РИСК • ГОССЕКТОР США',
+        risk1Title: 'Статус «Угрозы цепочке поставок нацбезопасности»',
+        risk1Desc: '27 февраля 2026 г. Президент США распорядился прекратить использование моделей Anthropic федеральными ведомствами, а Военное министерство (Dept. of War) присвоило компании статус Supply-Chain Risk (10 U.S.C. § 3252 / FASCSA § 4713). Окружной суд Сев. округа Калифорнии вынес решение в пользу Anthropic (нарушение 1-й и 5-й поправок и APA; подана апелляция), однако Апелляционный суд округа Колумбия (2–1) отклонил петицию компании.',
+        risk2Tag: 'СУДЕБНЫЕ СПОРЫ • ИС И ДАННЫЕ',
+        risk2Title: 'Мировое соглашение Bartz ($1.5B) и иски правообладателей',
+        risk2Desc: 'Утверждённое судом в июле 2026 г. мировое соглашение по делу <em>Bartz et al.</em> на <strong>$1,500M</strong> ($300M выплачено в 2025 г., остаток $450M на балансе на 30.09.2026; ряд авторов подали индивидуальные opt-out иски). Продолжаются процессы с музыкальными издателями (<em>Concord Music, Universal, Sony, Warner</em> в N.D. Cal.), иск <em>Reddit</em> в Калифорнии и 4 коллективных иска в Канаде (<em>MacKinnon, Grescoe, La Presse</em>).',
+        risk3Tag: 'ГАРАНТИИ И M&A ИНТЕГРАЦИЯ',
+        risk3Title: 'Возмещение затрат девелоперам ЦОД и сделки M&A',
+        risk3Desc: 'Максимальные выплаты по соглашениям возмещения затрат девелоперам ЦОД составляют до <strong>$4.2B</strong>, плюс гарантия по энергоконтракту до <strong>$500M</strong> (до 2038 г.) и возможное резервирование кэша до $10.0B. Завершены стратегические поглощения <strong>Bun</strong> ($171M, дек. 2025), <strong>Coefficient Bio</strong> (15.4M акций Class A, апр. 2026) и <strong>Stainless Software</strong> ($306M / 11.6M акций Class A, май 2026).',
+
+        // Tab 6 Cap Table
+        vote1: '1 ГОЛОС / АКЦИЯ',
+        vote0: 'БЕЗ ПРАВА ГОЛОСА',
+        classADesc: 'Выпущено и в обращении на 30.09.2026 (разрешено 10,906.1M). В апреле 2026 г. проведён тендерный выкуп 179.9M акций по цене $25.9136 ($4.66B ликвидности сотрудникам).',
+        classNDesc: 'В обращении на 30.09.2026 (лимит увеличен до 7,975.7M в окт. 2026; 846.8M одобрено для дочерней структуры PBC). В этот класс конвертируются бумаги стратегических партнёров (Google, Amazon, AMD).',
+        classTVal: '1 акция (LTBT)',
+        classTDesc: 'Принадлежит исключительно независимому трасту Long-Term Benefit Trust (LTBT), наделённому правом назначать и отзывать определённых директоров Совета для соблюдения миссии безопасного ИИ.',
+        empEqTitle: 'Опционы, RSU и программа Donation Matching (Note 10)',
+        optLabel: 'Опционы в обращении (Stock Options)',
+        optSub: "Средняя цена исполнения: $2.91 | Внутренняя стоимость: $119.1B (FMV акций выросла с $0.51 в 2023 до $68.54 в 9M'26)",
+        rsuLabel: 'RSU (двойной триггер с условием IPO)',
+        rsuSub: 'Ср. grant-date FV: $28.47 | Оценка накопленного SBC при IPO после октябрьских модификаций: ~$14.2B; прочий непризнанный расход раскрыт отдельно',
+        donLabel: 'Резерв Donation Matching Plan',
+        donSub: "Обязательство на балансе: $1,960M (30.6M акций Class N выпущено в Q1'26 + 28.0M в окт. 2026)",
+        ipoPlanLabel: 'Новые планы к IPO (Октябрь 2026)',
+        ipoPlanSub: '2026 Equity Incentive Plan (2,950M Class A) + 2026 ESPP (160M Class A)',
+        prefTableTitle: 'Лестница привилегированных акций (Series A – Series H, 30.09.2026)',
+        prefTableSub: '853.4M акций конвертируются в 8,558.9M обыкновенных акций при IPO (коэф. 10:1; 10.4–10.6:1 для Series D)',
+
+        // Tab 7 Simulator
+        simHeaderTitle: 'Интерактивный симулятор оценки IPO и сценариев капитализации',
+        simHeaderSub: 'Иллюстративная модель EV/Revenue, привязанная к диапазону IPO $70–78; это не прогноз и не рекомендация',
+        simPresetsLabel: 'Сценарии:',
+        presetBase: 'Проспект / $74 midpoint',
+        presetConsensus: 'Сценарий роста ($95B)',
+        presetBull: 'Сценарий bull ($135B)',
+        simStep1Title: 'Шаг 1 • Стоимость бизнеса',
+        simStep1Text: 'Enterprise Value = форвардная выручка × мультипликатор',
+        simStep2Title: 'Шаг 2 • Стоимость капитала',
+        simStep2Text: 'Equity Value = EV + сценарный чистый кэш после IPO и PP',
+        simStep3Title: 'Шаг 3 • Цена акции',
+        simStep3Text: 'Цена = Equity Value ÷ выбранное число акций; результат зависит от допущений',
+        simParamsHeader: 'ПАРАМЕТРЫ МОДЕЛИ ОЦЕНКИ',
+        dialTuner: 'ТОЧНАЯ НАСТРОЙКА',
+        s1Label: '1. Форвардная годовая выручка ($B)',
+        s2Label: '2. Мультипликатор EV / Forward Revenue',
+        s3Label: '3. Целевая скорр. операционная маржа (%)',
+        s4Label: '4. Чистые поступления от публичного IPO ($B)',
+        s5Label: '5. Акции после IPO: базовые / сценарные (млрд)',
+        outEvTitle: 'Enterprise Value',
+        outEvSub: 'Rev × EV/Sales',
+        outEqTitle: 'Equity Value (Post-IPO)',
+        outEqSub: '+ чистый кэш после IPO/PP',
+        outPriceTitle: 'Цена акции IPO',
+        outOpTitle: 'Скорр. опер. прибыль',
+        benchTitle: 'Сравнение расчётной цены IPO с историческими раундами (после сплита 10:1)',
+        b1Label: 'Тендерный выкуп (Апр 2026)',
+        b2Label: 'Оценка 409A Common Stock (Q3 2026 High)',
+        b3Label: 'Series G: Common-эквивалент (Q1–Q2 2026)',
+        b4Label: 'Series H: Common-эквивалент (Май 2026)',
+        b5Label: 'Расчётная цена IPO (Текущий сценарий)',
+        covLabel: 'Покрытие фикс. обязательств 2027–2028 ($73.6B) ликвидностью + 2Y EBIT:',
+        sensTitle: 'Матрица чувствительности цены акции IPO ($/акция)',
+        sensSub: 'EV / Forward Revenue × выручка; зелёным — выше Series H common-equivalent ($58.90)',
+        footerLeft: 'Источник: Anthropic, PBC — Form S-1 Registration Statement & Consolidated Financial Statements (F-1 – F-68).',
+        footerRight: 'Для сравнения с Common цены Preferred приведены к эквиваленту с учётом конвертации 10:1.',
+      },
+      en: {
+        headerSubtitle: 'PBC • FORM S-1 REGISTRATION & F-1..F-68 AUDIT',
+        headerPeriodBadge: '9M 2026 + SUBSEQUENT EVENTS NOV 10, 2026',
+        splitNote: '10-for-1 Split (Sep 17, 2026)',
+        headerSerH: 'Series H Common-equivalent: <strong class="text-[#F3F5F8]">$58.90</strong>',
+        navOverview: 'Executive Overview',
+        navPnl: 'Statements of Operations',
+        navBalance: 'Balance Sheet',
+        navCashflow: 'Cash Flows & Rounds',
+        navInfra: 'Compute & Risk Matrix',
+        navCaptable: 'Cap Table & LTBT',
+        navSimulator: 'IPO Valuation Simulator',
+        evidenceEyebrow: 'VERIFIED TO S-1 & MD&A • NOVEMBER 10, 2026',
+        evidenceTitle: 'How to read this dashboard: filed facts, derived metrics, and scenarios are different',
+        evidenceText: 'Underlying financial figures were cross-checked to the prospectus. Derived ratios are identified, and the simulator is neither Anthropic guidance nor investment advice.',
+        evidenceFiled: 'Company-filed',
+        evidenceDerived: 'Derived',
+        evidenceScenario: 'Scenario',
+
+        kpiRevTitle: '9M 2026 Revenue',
+        kpiRevDelta: '+1,206% YoY',
+        kpiRevSub: "Q3'26 Run-Rate: $67.8B/yr",
+        kpiRevFoot: "vs $2,545M in 9M'25",
+        kpiMarginTitle: 'Adj. Operating Margin',
+        kpiMarginDelta: '+236 pp',
+        kpiMarginSub: "Peak +19% in Q2'26",
+        kpiMarginFoot: "vs -221% in Q1'25",
+        kpiLiqTitle: 'Total Liquidity',
+        kpiLiqSub: '$95.6B cash + $36.3B ST inv. + $14.8B RCF',
+        kpiLiqFoot: '$2.54B restricted cash excluded',
+        kpiOcfTitle: 'Operating Cash Flow',
+        kpiOcfBadge: 'INFLECTION',
+        kpiOcfSub: 'First positive OCF period',
+        kpiOcfFoot: "vs -$2,024M in 9M'25",
+        kpiRpoTitle: 'Remaining Perf. Oblig.',
+        kpiRpoSub: 'Non-cancelable backlog',
+        kpiRpoFoot: 'Deferred rev: $1,971M',
+        kpiSerHTitle: 'Series H Common-Equivalent',
+        kpiSerHSub: '$589.01 preferred OIP ÷ 10:1 conversion',
+        kpiSerHFoot: 'Series G common-equivalent: $25.91',
+
+        chartQtrRevTitle: "Quarterly Revenue & Adj. Operating Margin Trajectory (Q1'25 – Q3'26)",
+        chartQtrRevSub: 'Revenue expanded 45x; adjusted margin turned positive, while Q3 GAAP margin remained negative',
+        chartMixTitle: 'Revenue Disaggregation (9M 2026: $33,242M)',
+        chartMixSub: 'Monetization model, geography & CSP marketplace distribution',
+        mixConsLabel: 'Consumption-Based / API (Tokens)',
+        mixSubLabel: 'Subscription-Based (Claude Pro/Team/Ent.)',
+        geoUsLabel: 'United States / Int’l',
+        cspShareLabel: 'CSP Marketplaces',
+        cspTrend: '44% (11% in FY23)',
+
+        entCard1Title: 'Fortune 500 Penetration',
+        entCard1Main: '>50% of Fortune 500 & >30% of Global 2000 spend ≥$100K/yr',
+        entCard1Desc: 'Top-10 Fortune 500 customers still spend <1% of their total budgets on Claude, leaving substantial expansion runway.',
+        entCard2Title: 'Hyper-Scale Revenue Trajectory',
+        entCard2Main: "FY23: $41M → FY24: $386M → FY25: $4,585M → 9M'26: $33,242M",
+        entCard2Desc: "9.4x YoY growth in 2024, 11.9x in 2025, and 13.1x YoY in 9M 2026. 9M'26 revenue exceeded full-year 2025 by 7.25x.",
+        entCard3Title: 'Compliance & Revenue Quality',
+        entCard3Main: "5–7% of 9M'26 revenue came from policy-violating accounts",
+        entCard3Desc: 'Enhanced usage enforcement and automated filtering were deployed in Aug–Sep 2026 prior to the IPO filing.',
+
+        pnlHeaderTitle: 'Consolidated Statements of Operations (GAAP & Non-GAAP)',
+        pnlHeaderSub: 'Switch between Nature of Expense (Primary F-7), Functional Classification (Note 8), and Quarterly Inflection',
+        pnlBtnNature: 'By Nature of Expense (F-7)',
+        pnlBtnFunction: 'By Function (Note 8)',
+        pnlBtnQuarterly: "Quarterly (Q1'25–Q3'26)",
+        pnlCalloutTag: 'KEY AUDIT INSIGHT (GAAP NET LOSS vs OPERATING PROFITABILITY)',
+        pnlCalloutText: 'Of the <strong>$(104,039)M</strong> 9M 2026 GAAP net loss, more than <strong>99% ($104,601M)</strong> consists of non-cash remeasurements excluded from Adjusted Net Income: <strong>$(94,324)M</strong> for convertible notes and <strong>$(10,277)M</strong> for mark-to-market instruments. GAAP operating loss narrowed to <strong>$(1,260)M (-3.8%)</strong>; adjusted margin was <strong>+19%</strong> in Q2 and <strong>+15%</strong> in Q3 2026.',
+        chartCompEffTitle: 'Compute Efficiency Ratio (Revenue / Compute)',
+        chartCompEffSub: 'Analyst-derived: quarterly revenue ÷ compute expense; 0.40x → 2.08x → 1.72x',
+        chartFuncExpTitle: "Functional Expense Breakdown & Implied Gross Margin (9M'26)",
+        chartFuncExpSub: 'Cost of Revenue $4,812M → implied gross margin of 85.5%',
+
+        bsKpi1Title: 'Total Assets',
+        bsGrowth: '+525.8% vs FY25 ($24,661M)',
+        bsKpi2Title: 'Cash & Short-Term Investments',
+        bsKpi2Sub: '$95,562M cash + $36,283M ST inv.',
+        bsKpi3Title: 'Convertible Notes (Level 3 FV)',
+        bsKpi3Sub: 'MTM remeasurement (vs $41,677M FY25)',
+        bsKpi4Title: 'Morgan Stanley Revolving Facility',
+        bsKpi4Sub: '$0 drawn • $14.8B available',
+        bsTableTitle: 'Consolidated Balance Sheets (F-5 – F-6)',
+        bsTableSub: 'In $ millions ($M) • Audited as of Dec 31, 2024 & 2025; Unaudited as of Sep 30, 2026',
+        bsChartTitle: 'Asset Composition Trajectory ($B)',
+        bsChartSub: '91.4% of total assets at Sep 30, 2026 are current assets ($141.0B)',
+        rcfBadge: 'A&R CREDIT AGREEMENT • SEP 2026',
+        rcfStatus: 'IN COMPLIANCE',
+        rcfTitle: 'Morgan Stanley Senior Funding Revolving Credit Facility',
+        rcfLine1: 'Total Revolving Commitments:',
+        rcfLine2: 'Drawn / Standby LCs:',
+        rcfLine3: 'Minimum Liquidity Covenant:',
+        rcfLine4: 'Maturity Date:',
+        rcfVal1: '$15,000M (expanded from $2.5B)',
+        rcfVal3: '$5,000M (from Q4 2026)',
+        rcfVal4: 'September 2031',
+
+        cfChartTitle: "Cash Flow Trajectory: OCF, Investing & Financing (FY23 – 9M'26)",
+        cfChartSub: "Operating cash flow inflection (+$6,569M in 9M'26) & $110.7B financing inflows",
+        cfBridgeTitle: '9M 2026 Cash & Restricted Cash Bridge ($M)',
+        cfBridgeSub: 'Cash, equivalents & restricted cash grew from $17,401M to $98,152M (+$80,751M)',
+        cfBStart: 'Beginning Balance (Dec 31, 2025)',
+        cfBOcf: 'Operating Cash Flow (OCF)',
+        cfBInv: 'Investing Cash Flow (CapEx + T-Bills)',
+        cfBFin: 'Financing Cash Flow (Preferred Issuance)',
+        cfBFx: 'FX Translation Effect',
+        cfBEnd: 'Cash + restricted cash at Sep 30, 2026',
+        partnersTitle: 'Strategic Partner Financing & Note Purchase Agreements (Note 9 & Note 17)',
+        partnersSub: 'Google, Amazon, AMD capital facilities & infrastructure lease convertible note commitments',
+        infraNpaTitle: 'Lease Finance NPAs',
+        amdPeriodBadge: 'Jul & Nov 2026',
+        infraNpaBadge: '$52.0B Limit',
+        cfTableTitle: 'Consolidated Statements of Cash Flows Summary ($M)',
+
+        infKpi1Title: 'Total Ecosystem Commitments',
+        infKpi1Sub: 'Cloud, silicon & data center contracts',
+        infKpi2Title: 'Fixed Commitments (Sep 30, 2026)',
+        infKpi2Sub: 'Up 5.75x vs $54.6B at Dec 31, 2025',
+        infKpi3Title: 'Uncommenced Leases (Note 7)',
+        infKpi3Sub: 'Commencing 2026–2028 (up to 20 yrs)',
+        infKpi4Title: 'Post-Sep 30, 2026 Commitments',
+        infKpi4Sub: '$105.7B long-term + $6.6B short-term',
+        chartCounterpartyTitle: 'Selected Infrastructure Arrangements ($B)',
+        chartCounterpartySub: 'Mixes minimums, caps, and estimates — values are not additive',
+        chartMaturityTitle: 'Fixed Payment Maturity Schedule ($320.0B)',
+        chartMaturitySub: 'Annual schedule as of Sep 30, 2026 (incl. commenced leases)',
+        riskMatrixTitle: 'Legal, Regulatory & Operational Risk Matrix (Notes 13, 15, 16)',
+        riskMatrixSub: 'Key litigation matters and U.S. government determinations through November 2026',
+        risk1Tag: 'HIGH RISK • U.S. GOVERNMENT',
+        risk1Title: 'USG Supply-Chain Risk Designation (Feb 27, 2026)',
+        risk1Desc: 'On Feb 27, 2026, the U.S. President ordered federal agencies to cease using Anthropic models and the Dept. of War designated Anthropic a Supply-Chain Risk (10 U.S.C. § 3252 / FASCSA § 4713). N.D. Cal. granted summary judgment for Anthropic on First/Fifth Amendment & APA grounds (under appeal), while the D.C. Circuit denied review in a 2–1 split decision.',
+        risk2Tag: 'IP & CONTENT LITIGATION',
+        risk2Title: '$1.5B Bartz Settlement & Publisher Lawsuits',
+        risk2Desc: 'Court-approved July 2026 settlement in <em>Bartz et al.</em> for <strong>$1,500M</strong> ($300M paid in 2025, $450M accrued current liability at Sep 30, 2026; opt-out suits ongoing). Active copyright suits include music publishers (<em>Concord Music, Universal, Sony, Warner</em> in N.D. Cal.), <em>Reddit</em> in California state court, and 4 Canadian actions (<em>MacKinnon, Grescoe, La Presse</em>).',
+        risk3Tag: 'GUARANTEES & M&A INTEGRATION',
+        risk3Title: 'Data Center Developer Reimbursements & M&A',
+        risk3Desc: 'Maximum potential payments under data center developer cost-reimbursement deals total up to <strong>$4.2B</strong>, plus a <strong>$500M</strong> power contract guaranty (through 2038) and up to $10.0B contingent cash restriction. Completed strategic acquisitions of <strong>Bun</strong> ($171M, Dec 2025), <strong>Coefficient Bio</strong> (15.4M Class A shares, Apr 2026), and <strong>Stainless Software</strong> ($306M / 11.6M Class A shares, May 2026).',
+
+        vote1: '1 VOTE / SHARE',
+        vote0: 'NON-VOTING',
+        classADesc: 'Issued & outstanding at Sep 30, 2026 (10,906.1M authorized). In Apr 2026, third-party buyers completed a tender offer for 179.9M shares at $25.9136/sh ($4.66B employee liquidity).',
+        classNDesc: 'Issued & outstanding at Sep 30, 2026 (authorized increased to 7,975.7M in Oct 2026; 846.8M approved for public benefit subsidiary). Strategic partner shares (Google, Amazon, AMD) convert into Class N.',
+        classTVal: '1 Share (LTBT)',
+        classTDesc: 'Held exclusively by the independent Long-Term Benefit Trust (LTBT), vested with authority to elect and remove designated directors to safeguard Anthropic’s public benefit mission.',
+        empEqTitle: 'Stock Options, RSUs & Donation Matching Plan (Note 10)',
+        optLabel: 'Stock Options Outstanding',
+        optSub: "WAEP: $2.91 | Aggregate intrinsic value: $119.1B (Common FMV rose from $0.51 in 2023 to $68.54 in 9M'26)",
+        rsuLabel: 'RSUs (Double-Trigger IPO Vesting)',
+        rsuSub: 'Wtd. avg. grant-date FV: $28.47 | Estimated cumulative IPO SBC after October modifications: ~$14.2B; other unrecognized expense is disclosed separately',
+        donLabel: 'Donation Matching Plan Reserve',
+        donSub: "Accrued liability: $1,960M (30.6M Class N shares issued in Q1'26 + 28.0M issued in Oct 2026)",
+        ipoPlanLabel: 'New IPO Equity Plans (Oct 2026)',
+        ipoPlanSub: '2026 Equity Incentive Plan (2,950M Class A) + 2026 ESPP (160M Class A)',
+        prefTableTitle: 'Redeemable Convertible Preferred Stock Ladder (Series A – Series H, Sep 30, 2026)',
+        prefTableSub: '853.4M preferred shares convert into 8,558.9M common shares upon IPO (10:1 ratio; 10.4–10.6:1 for Series D)',
+
+        simHeaderTitle: 'Interactive IPO Valuation & Capitalization Scenario Simulator',
+        simHeaderSub: 'Illustrative EV/Revenue model anchored to the $70–78 IPO range; not company guidance or investment advice',
+        simPresetsLabel: 'Presets:',
+        presetBase: 'Prospectus / $74 midpoint',
+        presetConsensus: 'Growth scenario ($95B)',
+        presetBull: 'Bull scenario ($135B)',
+        simStep1Title: 'Step 1 • Business value',
+        simStep1Text: 'Enterprise Value = forward revenue × selected multiple',
+        simStep2Title: 'Step 2 • Equity value',
+        simStep2Text: 'Equity Value = EV + scenario post-IPO and private-placement net cash',
+        simStep3Title: 'Step 3 • Per-share value',
+        simStep3Text: 'Price = Equity Value ÷ selected share count; the output depends on assumptions',
+        simParamsHeader: 'VALUATION MODEL INPUTS',
+        dialTuner: 'PRECISION TUNER',
+        s1Label: '1. Forward Annualized Revenue Run-Rate ($B)',
+        s2Label: '2. EV / Forward Revenue Multiple (x)',
+        s3Label: '3. Target Adjusted Operating Margin (%)',
+        s4Label: '4. Net Public IPO Proceeds ($B)',
+        s5Label: '5. Post-IPO Basic / Scenario Shares (Billions)',
+        outEvTitle: 'Enterprise Value',
+        outEvSub: 'Rev × EV/Sales',
+        outEqTitle: 'Equity Value (Post-IPO)',
+        outEqSub: '+ post-IPO/PP net cash',
+        outPriceTitle: 'Implied IPO Share Price',
+        outOpTitle: 'Adj. Operating Profit',
+        benchTitle: 'Implied IPO Share Price vs. Historical Financing Benchmarks (10:1 Split-Adjusted)',
+        b1Label: 'Employee Tender Offer (Apr 2026)',
+        b2Label: '409A Common Stock Valuation (Q3 2026 High)',
+        b3Label: 'Series G Common-Equivalent (Q1–Q2 2026)',
+        b4Label: 'Series H Common-Equivalent (May 2026)',
+        b5Label: 'Implied IPO Price (Current Scenario)',
+        covLabel: '2027–2028 Fixed Commitments ($73.6B) Coverage (Post-IPO Cash + 2Y EBIT):',
+        sensTitle: 'IPO Share Price Sensitivity Matrix ($/share)',
+        sensSub: 'EV / Forward Revenue × revenue; green cells exceed the $58.90 Series H common-equivalent',
+        footerLeft: 'Source: Anthropic, PBC — Form S-1 Registration Statement & Consolidated Financial Statements (F-1 – F-68).',
+        footerRight: 'Preferred financing prices are converted to a 10:1 common-share equivalent when used as benchmarks.',
+      }
+    };
+
+    // Partner Lists localized HTML
+    const partnerLists = {
+      ru: {
+        googleList: [
+          '• <strong class="text-[#F3F5F8]">2023 NPA ($2.0B) & 2024 NPA ($1.3B):</strong> полностью конвертированы в Series E-3, E-4, E-5 и G-4.',
+          '• <strong class="text-[#F3F5F8]">Март 2026 NPA ($30.0B):</strong> ставка 9.0%, до 31.12.2030.',
+          '• <strong class="text-[#34D399]">Май 2026:</strong> вложено $10.0B в Series H.',
+          '• <strong class="text-[#FBBF24]">Ноя 2026 (IPO):</strong> обяз. выкуп Class N на $10.0B по цене IPO (остаток линии: $10.0B).'
+        ],
+        amazonList: [
+          '• <strong class="text-[#F3F5F8]">2023 NPA ($4.0B осн. / $4.6B ном.):</strong> часть конвертирована по $20.93 в E-2/F-2/G-3; остаток беспроцентной rollover-ноты <strong>$2.2B</strong> (погашение март 2034).',
+          '• <strong class="text-[#F3F5F8]">2024 NPA ($4.0B):</strong> все 3 транша в обращении (погашение 2034–2035).',
+          '• <strong class="text-[#34D399]">Апр–Май 2026 NPA ($20.0B):</strong> $5.0B вложено в Series H; остаток доступной линии — <strong>$15.0B</strong>.'
+        ],
+        amdList: [
+          '• <strong class="text-[#F3F5F8]">Июль 2026:</strong> соглашение на поставку ускорителей AMD Instinct MI450 (&gt;$20.0B).',
+          '• <strong class="text-[#F3F5F8]">Purchased Put Option ($5.0B):</strong> право Anthropic продать AMD акции Class N на сумму до $5.0B.',
+          '• <strong class="text-[#FBBF24]">Ноя 2026 (IPO):</strong> AMD подписалась на выкуп Class N на <strong>$2.5B</strong> при закрытии IPO (остаток опциона: $2.5B).'
+        ],
+        infraNpaList: [
+          '• <strong class="text-[#F3F5F8]">Август 2025 NPA ($10.0B):</strong> выпуск конвертируемых нот исключительно для оплаты аренды вычислительного оборудования (до IPO).',
+          '• <strong class="text-[#F3F5F8]">Март 2026 NPA ($42.0B):</strong> ставка 9.0% PIK для финансирования лизинга инфраструктуры (5 лет с запуска).',
+          '• <strong class="text-[#34D399]">На 30.09.2026:</strong> выбрано $0 по обеим линиям.'
+        ]
+      },
+      en: {
+        googleList: [
+          '• <strong class="text-[#F3F5F8]">2023 NPA ($2.0B) & 2024 NPA ($1.3B):</strong> fully converted into Series E-3, E-4, E-5, and G-4 preferred stock.',
+          '• <strong class="text-[#F3F5F8]">March 2026 NPA ($30.0B):</strong> 9.0% interest rate, available through Dec 31, 2030.',
+          '• <strong class="text-[#34D399]">May 2026:</strong> $10.0B invested in Series H.',
+          '• <strong class="text-[#FBBF24]">Nov 2026 (IPO):</strong> committed $10.0B Class N private placement at IPO price ($10.0B facility remaining).'
+        ],
+        amazonList: [
+          '• <strong class="text-[#F3F5F8]">2023 NPA ($4.0B principal / $4.6B face):</strong> partially converted at $20.93 into E-2/F-2/G-3; <strong>$2.2B</strong> non-interest rollover note remaining (due Mar 2034).',
+          '• <strong class="text-[#F3F5F8]">2024 NPA ($4.0B):</strong> all 3 tranches outstanding (maturing 2034–2035).',
+          '• <strong class="text-[#34D399]">Apr–May 2026 NPA ($20.0B):</strong> $5.0B invested in Series H; <strong>$15.0B</strong> facility remaining.'
+        ],
+        amdList: [
+          '• <strong class="text-[#F3F5F8]">July 2026:</strong> Hardware Supply Agreement for AMD Instinct MI450 accelerators (&gt;$20.0B).',
+          '• <strong class="text-[#F3F5F8]">Purchased Put Option ($5.0B):</strong> right to sell up to $5.0B of Class N common stock to AMD.',
+          '• <strong class="text-[#FBBF24]">Nov 2026 (IPO):</strong> AMD committed to purchase <strong>$2.5B</strong> of Class N at IPO closing ($2.5B put option remaining).'
+        ],
+        infraNpaList: [
+          '• <strong class="text-[#F3F5F8]">August 2025 NPA ($10.0B):</strong> convertible notes exclusively to finance compute equipment lease rent (terminates at IPO).',
+          '• <strong class="text-[#F3F5F8]">March 2026 NPA ($42.0B):</strong> 9.0% PIK notes to finance compute & infrastructure lease rent (5-yr draw period).',
+          '• <strong class="text-[#34D399]">As of Sep 30, 2026:</strong> $0 drawn under both facilities.'
+        ]
+      }
+    };
+
+    // Plain-language, bilingual explanations for every chart.
+    const chartExplainers = {
+      chartQuarterlyTrajectory: {
+        ru: {
+          title: 'Выручка растёт быстрее расходов — но GAAP-прибыль ещё не закрепилась',
+          what: 'Столбцы показывают квартальную выручку, линия — скорректированную операционную маржу, из которой исключены SBC, неденежные пожертвования и Bartz settlement.',
+          how: 'Рост линии выше нуля означает прибыльность только по скорректированной метрике. В Q3 2026 она была +15%, тогда как GAAP-маржа оставалась около -3%.',
+          watch: 'Квартал нельзя автоматически умножать на четыре как прогноз: руководство ожидает колебания маржи при вводе новых вычислительных мощностей.',
+          source: 'MD&A pp. 138–142, 163–167; квартальные данные неаудированы.'
+        },
+        en: {
+          title: 'Revenue is outgrowing expense, but GAAP profitability is not yet established',
+          what: 'Bars show quarterly revenue; the line shows adjusted operating margin, which excludes SBC, non-cash charitable contributions, and the Bartz settlement.',
+          how: 'A line above zero means profitability only on the adjusted measure. Q3 2026 was +15% adjusted while GAAP margin remained approximately -3%.',
+          watch: 'Do not annualize one quarter as a forecast: management expects margin volatility as new compute capacity comes online.',
+          source: 'MD&A pp. 138–142 and 163–167; quarterly figures are unaudited.'
+        }
+      },
+      chartRevenueMix: {
+        ru: {
+          title: 'Основная монетизация — оплата потребления, а США дают 70.6% выручки',
+          what: 'Кольцо показывает только раскрытую структуру по модели монетизации: $26.306B consumption-based и $6.936B subscription-based.',
+          how: 'Отдельные карточки под графиком показывают географию и долю CSP-маркетплейсов. Это три самостоятельных разреза одной выручки.',
+          watch: 'Проспект не раскрывает пересечение «география × тип монетизации», поэтому оно намеренно не моделируется и не изображается.',
+          source: 'Note 2, F-25: revenue disaggregation; MD&A pp. 143–144.'
+        },
+        en: {
+          title: 'Consumption is the main monetization model; the U.S. contributes 70.6% of revenue',
+          what: 'The ring uses only the filed monetization split: $26.306B consumption-based and $6.936B subscription-based.',
+          how: 'Cards below separately show geography and CSP marketplace share. These are three independent views of the same revenue.',
+          watch: 'The prospectus does not disclose a geography-by-monetization cross-tab, so this dashboard does not manufacture one.',
+          source: 'Note 2, F-25: revenue disaggregation; MD&A pp. 143–144.'
+        }
+      },
+      chartComputeEfficiency: {
+        ru: {
+          title: 'На каждый доллар расходов на compute приходится больше выручки, чем год назад',
+          what: 'Это авторский коэффициент: квартальная выручка делится на квартальные расходы Compute & Infrastructure из таблицы MD&A.',
+          how: '1.72x в Q3 2026 означает $1.72 выручки на $1 раскрытых расходов на compute и инфраструктуру в этом квартале.',
+          watch: 'Это не официальный KPI Anthropic и не валовая маржа. В Q3 коэффициент снизился из-за $5B дорогих краткосрочных мощностей.',
+          source: 'Расчёт по MD&A pp. 164–166: Revenue ÷ Compute & Infrastructure expense.'
+        },
+        en: {
+          title: 'Each dollar of compute expense now supports more revenue than a year ago',
+          what: 'This is analyst-derived: quarterly revenue divided by quarterly Compute & Infrastructure expense from the MD&A table.',
+          how: '1.72x in Q3 2026 means $1.72 of revenue per $1 of disclosed compute and infrastructure expense in that quarter.',
+          watch: 'It is not an Anthropic-reported KPI or gross margin. Q3 declined after $5B of higher-cost short-term compute came online.',
+          source: 'Derived from MD&A pp. 164–166: Revenue ÷ Compute & Infrastructure expense.'
+        }
+      },
+      chartFunctionalExpenses: {
+        ru: {
+          title: 'Расходы выросли, но выручка росла ещё быстрее',
+          what: 'Стек показывает функциональную классификацию: себестоимость, R&D, продажи и маркетинг, а также G&A вместе с Bartz settlement.',
+          how: 'В 9M 2026 себестоимость была $4.812B при выручке $33.242B, что даёт расчётную валовую маржу 85.5%.',
+          watch: 'Внутри R&D и других функций также есть compute. Нельзя прибавлять этот график к таблице расходов «по характеру» — это другой разрез тех же затрат.',
+          source: 'Note 8, F-39; implied gross margin is Revenue minus Cost of Revenue.'
+        },
+        en: {
+          title: 'Expense increased sharply, but revenue increased faster',
+          what: 'The stack shows functional classification: cost of revenue, R&D, sales and marketing, and G&A plus the Bartz settlement.',
+          how: '9M 2026 cost of revenue was $4.812B on $33.242B revenue, implying an 85.5% gross margin.',
+          watch: 'R&D and other functions also contain compute. Do not add this chart to the nature-of-expense table; it is another view of the same costs.',
+          source: 'Note 8, F-39; implied gross margin equals Revenue less Cost of Revenue.'
+        }
+      },
+      chartBalanceAssets: {
+        ru: {
+          title: 'Баланс стал ликвидным после крупных раундов, но это не свободные деньги на всё',
+          what: 'График разделяет активы на cash + short-term investments, прочие оборотные активы и внеоборотные активы вместе с restricted cash.',
+          how: 'На 30.09.2026 cash и краткосрочные инвестиции составляли $131.845B, или большую часть активов.',
+          watch: '$2.540B restricted cash ограничен, а доступные $14.795B по револьверу являются кредитной ёмкостью, а не активом баланса.',
+          source: 'Consolidated Balance Sheets, F-5–F-6; MD&A liquidity discussion.'
+        },
+        en: {
+          title: 'Large financing rounds made the balance sheet liquid, but not all liquidity is unrestricted cash',
+          what: 'The chart separates cash plus short-term investments, other current assets, and noncurrent assets plus restricted cash.',
+          how: 'At Sep. 30, 2026, cash and short-term investments totaled $131.845B and represented most assets.',
+          watch: '$2.540B is restricted; the $14.795B available revolver is borrowing capacity, not a balance-sheet asset.',
+          source: 'Consolidated Balance Sheets, F-5–F-6; MD&A liquidity discussion.'
+        }
+      },
+      chartCashFlows: {
+        ru: {
+          title: 'Операционный поток стал положительным, а рост кэша обеспечили прежде всего раунды',
+          what: 'Три ряда показывают деньги от основной деятельности, инвестиционные траты и привлечение капитала.',
+          how: 'В 9M 2026 OCF составил +$6.569B, но финансирование принесло +$110.735B, а инвестиционный поток был -$36.546B.',
+          watch: 'Покупка краткосрочных бумаг входит в investing cash flow, поэтому большой отток не равен «сжиганию» всей этой суммы.',
+          source: 'Consolidated Statements of Cash Flows, F-12–F-13; MD&A pp. 175–177.'
+        },
+        en: {
+          title: 'Operating cash flow turned positive, but financing rounds drove most cash growth',
+          what: 'The three series show cash from operations, investing uses, and capital raised.',
+          how: '9M 2026 OCF was +$6.569B, financing inflow was +$110.735B, and investing cash flow was -$36.546B.',
+          watch: 'Purchases of short-term securities sit in investing cash flow, so the large outflow is not all economic cash burn.',
+          source: 'Consolidated Statements of Cash Flows, F-12–F-13; MD&A pp. 175–177.'
+        }
+      },
+      chartCounterparties: {
+        ru: {
+          title: 'Портфель диверсифицирован, но столбцы имеют разную юридическую природу',
+          what: 'Показаны выбранные соглашения: минимальные обязательства, верхние пределы, арендные платежи и оценки будущих трат.',
+          how: 'Подсказка каждого столбца указывает тип суммы. Например, Google 2028–31 — оценочный диапазон $125–150B, здесь показана середина.',
+          watch: 'Столбцы нельзя складывать: часть оценок исключена из $900.9B, а условия, сроки и права расторжения различаются.',
+          source: 'MD&A pp. 177–180; Contractual Obligations and Infrastructure Service Arrangements.'
+        },
+        en: {
+          title: 'The portfolio is diversified, but the bars represent different legal and economic concepts',
+          what: 'Selected arrangements mix minimum commitments, caps, lease rent, and estimates of future spending.',
+          how: 'Each tooltip identifies the amount type. Google 2028–31, for example, is a $125–150B estimate and the midpoint is plotted.',
+          watch: 'Do not add the bars: some estimates are excluded from $900.9B, and conditions, timing, and termination rights differ.',
+          source: 'MD&A pp. 177–180; Contractual Obligations and Infrastructure Service Arrangements.'
+        }
+      },
+      chartMaturitySchedule: {
+        ru: {
+          title: 'Раскрытый фиксированный график — $320.0B, но общий портфель намного больше',
+          what: 'График суммирует operating leases, finance leases и неотменяемые purchase commitments со сроком более года на 30.09.2026.',
+          how: 'Почти половина раскрытого фиксированного графика — $148.418B — приходится на период после 2030 года.',
+          watch: 'Здесь нет $17.4B краткосрочных договоров, $451.2B неначатой аренды, $112.3B последующих договоров и иных нефиксированных оценок.',
+          source: 'MD&A Contractual Obligations, p. 178; Notes 7 and 13.'
+        },
+        en: {
+          title: 'The disclosed fixed schedule is $320.0B, while the broader commitment portfolio is much larger',
+          what: 'This schedule combines operating leases, finance leases, and non-cancelable purchase commitments longer than one year at Sep. 30, 2026.',
+          how: 'Nearly half of the fixed schedule — $148.418B — falls after 2030.',
+          watch: 'It excludes $17.4B of short-term contracts, $451.2B of uncommenced leases, $112.3B of subsequent contracts, and other non-fixed estimates.',
+          source: 'MD&A Contractual Obligations, p. 178; Notes 7 and 13.'
+        }
+      }
+    };
+
+    function renderChartExplainers() {
+      document.querySelectorAll('.chart-card').forEach(card => {
+        const key = card.dataset.explainerKey;
+        const copy = chartExplainers[key] && chartExplainers[key][currentLang];
+        if (!copy) return;
+        const labels = currentLang === 'ru'
+          ? { open: 'Пояснить график', close: 'К графику', what: 'Что показывает', how: 'Как читать', watch: 'Важно', source: 'Источник' }
+          : { open: 'Explain chart', close: 'Back to chart', what: 'What it shows', how: 'How to read', watch: 'Watch out', source: 'Source' };
+        card.querySelector('.chart-open-label').textContent = labels.open;
+        card.querySelector('.chart-close-label').textContent = labels.close;
+        card.querySelector('.chart-back-title').textContent = copy.title;
+        card.querySelector('.chart-what-title').textContent = labels.what;
+        card.querySelector('.chart-how-title').textContent = labels.how;
+        card.querySelector('.chart-watch-title').textContent = labels.watch;
+        card.querySelector('.chart-what-text').textContent = copy.what;
+        card.querySelector('.chart-how-text').textContent = copy.how;
+        card.querySelector('.chart-watch-text').textContent = copy.watch;
+        card.querySelector('.chart-back-source').textContent = `${labels.source}: ${copy.source}`;
+        card.querySelector('.chart-open').setAttribute('aria-label', labels.open);
+        card.querySelector('.chart-close').setAttribute('aria-label', labels.close);
+      });
+    }
+
+    function installChartExplainers() {
+      Object.keys(chartExplainers).forEach(key => {
+        const canvas = document.getElementById(key);
+        const card = canvas && canvas.closest('.ng-card');
+        if (!card || card.classList.contains('chart-card')) return;
+
+        card.classList.add('chart-card');
+        card.dataset.explainerKey = key;
+        const front = document.createElement('div');
+        front.className = 'chart-face chart-front';
+        while (card.firstChild) front.appendChild(card.firstChild);
+
+        const open = document.createElement('button');
+        open.type = 'button';
+        open.className = 'explain-btn chart-open';
+        open.innerHTML = '<span aria-hidden="true">◎</span><span class="chart-open-label"></span>';
+        open.addEventListener('click', () => {
+          card.classList.add('is-flipped');
+          open.setAttribute('aria-expanded', 'true');
+          card.querySelector('.chart-close').focus();
+        });
+        front.appendChild(open);
+
+        const back = document.createElement('div');
+        back.className = 'chart-face chart-back';
+        back.innerHTML = `
+          <button type="button" class="explain-btn chart-close"><span aria-hidden="true">↩</span><span class="chart-close-label"></span></button>
+          <div class="pr-28">
+            <div class="text-[10px] font-mono uppercase tracking-[0.12em] text-[#34D399]">DATA LENS</div>
+            <h3 class="chart-back-title text-base sm:text-lg font-semibold text-[#F3F5F8] mt-1"></h3>
+          </div>
+          <div class="chart-back-grid">
+            <div class="chart-back-block"><h4 class="chart-what-title"></h4><p class="chart-what-text"></p></div>
+            <div class="chart-back-block"><h4 class="chart-how-title"></h4><p class="chart-how-text"></p></div>
+            <div class="chart-back-block"><h4 class="chart-watch-title"></h4><p class="chart-watch-text"></p></div>
+          </div>
+          <div class="chart-back-source"></div>`;
+        back.querySelector('.chart-close').addEventListener('click', () => {
+          card.classList.remove('is-flipped');
+          open.setAttribute('aria-expanded', 'false');
+          open.focus();
+        });
+        card.append(front, back);
+      });
+      renderChartExplainers();
+    }
+
+    // Helper for formatting numbers
+    function fmtNum(val, isNegParen = true) {
+      if (val === null || val === undefined || val === 0) return '—';
+      const abs = Math.abs(val).toLocaleString('en-US');
+      if (val < 0) return isNegParen ? `$(${abs})` : `-$${abs}`;
+      return `$${abs}`;
+    }
+
+    // Tab switching
+    function switchTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.tab-panel').forEach(p => {
+        p.classList.remove('active');
+        p.setAttribute('aria-hidden', 'true');
+      });
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.getElementById(`panel-${tabId}`).classList.add('active');
+      document.getElementById(`panel-${tabId}`).setAttribute('aria-hidden', 'false');
+      document.getElementById(`tab-btn-${tabId}`).classList.add('active');
+      document.getElementById(`tab-btn-${tabId}`).setAttribute('aria-selected', 'true');
+
+      // Resize charts when tab becomes visible
+      setTimeout(() => {
+        Object.values(charts).forEach(c => {
+          if (c && typeof c.resize === 'function') c.resize();
+        });
+      }, 40);
+    }
+
+    // P&L View Switcher
+    function setPnlView(view) {
+      currentPnlView = view;
+      ['nature', 'function', 'quarterly'].forEach(v => {
+        const btn = document.getElementById(`pnl-view-${v}`);
+        if (v === view) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+      renderPnlTable();
+    }
+
+    // Language Switcher
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      const btnRu = document.getElementById('btn-lang-ru');
+      const btnEn = document.getElementById('btn-lang-en');
+
+      if (lang === 'ru') {
+        btnRu.className = 'px-3 py-1 rounded-full text-xs font-mono font-semibold transition-all bg-[#F3F5F8] text-[#0D0E11] shadow';
+        btnEn.className = 'px-3 py-1 rounded-full text-xs font-mono font-semibold transition-all text-[#A6AEBC] hover:text-[#F3F5F8]';
+      } else {
+        btnEn.className = 'px-3 py-1 rounded-full text-xs font-mono font-semibold transition-all bg-[#F3F5F8] text-[#0D0E11] shadow';
+        btnRu.className = 'px-3 py-1 rounded-full text-xs font-mono font-semibold transition-all text-[#A6AEBC] hover:text-[#F3F5F8]';
+      }
+      btnRu.setAttribute('aria-pressed', lang === 'ru' ? 'true' : 'false');
+      btnEn.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+
+      // Translate static elements
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[lang][key]) {
+          el.innerHTML = i18n[lang][key];
+        }
+      });
+
+      // Translate partner lists
+      document.querySelectorAll('[data-i18n-list]').forEach(el => {
+        const key = el.getAttribute('data-i18n-list');
+        if (partnerLists[lang][key]) {
+          el.innerHTML = partnerLists[lang][key].join('');
+        }
+      });
+
+      // Re-render dynamic tables & charts
+      renderPnlTable();
+      renderBalanceTable();
+      renderCashFlowTable();
+      renderPreferredTable();
+      updateAllCharts();
+      renderChartExplainers();
+      updateSimulator();
+    }
+
+    // =========================================================================
+    // RENDER TABLES
+    // =========================================================================
+    function renderPnlTable() {
+      const table = document.getElementById('pnl-table');
+      const isRu = currentLang === 'ru';
+
+      if (currentPnlView === 'nature') {
+        const headers = isRu
+          ? ['Статья отчёта ($M)', 'FY 2023', 'FY 2024', 'FY 2025', "9M 2025", "9M 2026"]
+          : ['Line Item ($M)', 'FY 2023', 'FY 2024', 'FY 2025', "9M 2025", "9M 2026"];
+
+        const rows = [
+          { label: isRu ? 'Выручка (Revenue)' : 'Revenue', vals: [41, 386, 4585, 2545, 33242], total: true },
+          { section: isRu ? 'Операционные расходы (по характеру затрат)' : 'Operating Expenses (By Nature)' },
+          { label: isRu ? 'Вычисления и инфраструктура (Compute & infra)' : 'Compute and infrastructure', vals: [433, 2522, 7326, 4381, 18808] },
+          { label: isRu ? 'Персонал (вкл. SBC: $29M, $192M, $1,165M, $591M, $3,255M)' : 'Personnel (incl. SBC: $29M, $192M, $1,165M, $591M, $3,255M)', vals: [95, 454, 1839, 1027, 4863] },
+          { label: isRu ? 'Мировое соглашение Bartz (авторские права)' : 'Bartz copyright settlement', vals: [0, 0, 1500, 1500, 0] },
+          { label: isRu ? 'Продажи, маркетинг и партнёрства' : 'Sales, marketing, and partnerships', vals: [2, 43, 568, 322, 5529] },
+          { label: isRu ? 'Прочие операционные и административные расходы' : 'Other operating and administrative', vals: [62, 347, 1412, 539, 5302] },
+          { label: isRu ? 'Итого операционные расходы' : 'Total operating expenses', vals: [592, 3366, 12645, 7769, 34502], total: true },
+          { label: isRu ? 'Операционный убыток (GAAP Operating Loss)' : 'GAAP Operating loss', vals: [-551, -2980, -8060, -5224, -1260], total: true, colorNeg: true },
+          { label: isRu ? 'Операционная маржа по GAAP (%)' : 'GAAP Operating Margin (%)', pcts: ['-1,343.9%', '-772.0%', '-175.8%', '-205.3%', '-3.8%'] },
+          { section: isRu ? 'Прочие доходы и расходы (Non-Operating MTM)' : 'Other Income (Expense), Net (Non-Operating MTM)' },
+          { label: isRu ? 'Процентный доход (Interest income)' : 'Interest income', vals: [69, 106, 431, 239, 2359], colorPos: true },
+          { label: isRu ? 'Переоценка конвертируемых нот, деривативов и SAFEs' : 'Change in fair value of convertible notes, derivatives & SAFEs', vals: [-1045, -5434, -34308, -20107, -94324], colorNeg: true },
+          { label: isRu ? 'Прочие доходы (расходы), нетто' : 'Other income (expense), net', vals: [-2, 0, -8, -3, -10397], colorNeg: true },
+          { label: isRu ? 'Налог на прибыль (Provision for income taxes)' : 'Provision for income taxes', vals: [2, 1, 20, 12, 417] },
+          { label: isRu ? 'Чистый убыток по GAAP (Net Loss)' : 'GAAP Net loss', vals: [-1531, -8309, -41965, -25107, -104039], total: true, colorNeg: true },
+          { label: isRu ? 'Базовый и разводнённый убыток на акцию ($/акция)' : 'Net loss per share, basic & diluted ($/sh)', pcts: ['$(1.42)', '$(5.43)', '$(23.04)', '$(13.90)', '$(50.10)'] }
+        ];
+
+        table.innerHTML = buildTableHtml(headers, rows);
+      } else if (currentPnlView === 'function') {
+        const headers = isRu
+          ? ['Функциональная статья — Note 8 ($M)', 'FY 2023', 'FY 2024', 'FY 2025', '9M 2025', '9M 2026']
+          : ['Functional Expense Line — Note 8 ($M)', 'FY 2023', 'FY 2024', 'FY 2025', '9M 2025', '9M 2026'];
+
+        const rows = [
+          { label: isRu ? 'Выручка (Revenue)' : 'Revenue', vals: [41, 386, 4585, 2545, 33242], total: true },
+          { label: isRu ? 'Себестоимость выручки (Cost of revenue)' : 'Cost of revenue (customer-serving compute)', vals: [26, 752, 2773, 1796, 4812] },
+          { label: isRu ? 'Подразумеваемая валовая прибыль (Implied Gross Profit)' : 'Implied Gross Profit', vals: [15, -366, 1812, 749, 28430], total: true, colorPos: true },
+          { label: isRu ? 'Подразумеваемая валовая маржа (%)' : 'Implied Gross Margin (%)', pcts: ['36.6%', '-94.8%', '39.5%', '29.4%', '85.5%'] },
+          { section: isRu ? 'Операционные расходы по функциям' : 'Functional Operating Expenses' },
+          { label: isRu ? 'Исследования и разработки (R&D)' : 'Research and development (R&D)', vals: [422, 2275, 6338, 3594, 19240] },
+          { label: isRu ? 'Продажи и маркетинг (Sales & Marketing)' : 'Sales and marketing (S&M)', vals: [76, 163, 911, 530, 6619] },
+          { label: isRu ? 'Мировое соглашение Bartz' : 'Bartz settlement', vals: [0, 0, 1500, 1500, 0] },
+          { label: isRu ? 'Общие и административные (G&A)' : 'General and administrative (G&A)', vals: [68, 176, 1123, 349, 3831] },
+          { label: isRu ? 'Итого операционные расходы' : 'Total operating expenses', vals: [592, 3366, 12645, 7769, 34502], total: true },
+          { label: isRu ? 'Операционный убыток (GAAP Operating Loss)' : 'GAAP Operating loss', vals: [-551, -2980, -8060, -5224, -1260], total: true, colorNeg: true }
+        ];
+
+        table.innerHTML = buildTableHtml(headers, rows);
+      } else {
+        const headers = isRu
+          ? ['Поквартальные показатели ($M)', "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26", "Q3'26"]
+          : ['Quarterly Trajectory ($M)', "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26", "Q3'26"];
+
+        const rows = [
+          { label: isRu ? 'Выручка (Quarterly Revenue)' : 'Quarterly Revenue', vals: [376, 787, 1382, 2040, 4731, 11555, 16956], total: true },
+          { label: isRu ? 'Рост выручки кв/кв (QoQ %)' : 'Sequential QoQ Growth (%)', pcts: ['—', '+109.3%', '+75.6%', '+47.6%', '+131.9%', '+144.2%', '+46.7%'] },
+          { label: isRu ? 'Аннуализированный Run-Rate ($B)' : 'Annualized Revenue Run-Rate ($B)', pcts: ['$1.5B', '$3.1B', '$5.5B', '$8.2B', '$18.9B', '$46.2B', '$67.8B'] },
+          { label: isRu ? 'Скорр. операционная маржа (Adj. Operating Margin)' : 'Adjusted Operating Margin (%)', pcts: ['-221%', '-129%', '-93%', '-84%', '-13%', '+19%', '+15%'] },
+          { label: isRu ? 'Расчёт: выручка / расходы на compute' : 'Derived: revenue / compute expense', pcts: ['0.40x', '0.57x', '0.68x', '0.69x', '1.40x', '2.08x', '1.72x'] },
+          { label: isRu ? 'Скорр. чистая прибыль (Adj. Net Income)' : 'Adjusted Net Income ($M)', pcts: ['$(786)', '$(957)', '$(1,168)', '$(1,544)', '$(312)', '$2,736', '$3,167'] }
+        ];
+
+        table.innerHTML = buildTableHtml(headers, rows);
+      }
+    }
+
+    function renderBalanceTable() {
+      const table = document.getElementById('balance-table');
+      const isRu = currentLang === 'ru';
+      const headers = isRu
+        ? ['Статья баланса ($M)', '31.12.2024', '31.12.2025', '30.09.2026']
+        : ['Balance Sheet Line Item ($M)', 'Dec 31, 2024', 'Dec 31, 2025', 'Sep 30, 2026'];
+
+      const rows = [
+        { section: isRu ? 'Активы (Assets)' : 'Assets' },
+        { label: isRu ? 'Денежные средства и эквиваленты' : 'Cash and cash equivalents', vals: [3141, 17388, 95562], colorPos: true },
+        { label: isRu ? 'Краткосрочные инвестиции (US Treasuries и др.)' : 'Short-term investments', vals: [0, 2889, 36283], colorPos: true },
+        { label: isRu ? 'Дебиторская задолженность, нетто' : 'Accounts receivable, net', vals: [95, 909, 7892] },
+        { label: isRu ? 'Расходы будущих периодов и прочие оборотные активы' : 'Prepaid expenses and other current assets', vals: [2076, 2560, 1283] },
+        { label: isRu ? 'Итого оборотные активы (Total Current Assets)' : 'Total current assets', vals: [5312, 23746, 141020], total: true },
+        { label: isRu ? 'Денежные средства с ограничением (Restricted cash)' : 'Restricted cash', vals: [13, 13, 2540] },
+        { label: isRu ? 'Основные средства, нетто (серверы, сети, CIP)' : 'Property and equipment, net', vals: [19, 146, 3061] },
+        { label: isRu ? 'Активы в форме права пользования (Operating lease ROU)' : 'Operating lease right-of-use assets', vals: [35, 126, 2839] },
+        { label: isRu ? 'Гудвил (Goodwill)' : 'Goodwill', vals: [0, 154, 595] },
+        { label: isRu ? 'Прочие внеоборотные активы' : 'Other assets, noncurrent', vals: [2373, 476, 4265] },
+        { label: isRu ? 'Итого активы (Total Assets)' : 'Total assets', vals: [7752, 24661, 154320], total: true },
+        { section: isRu ? 'Обязательства, мезонинный и акционерный капитал' : 'Liabilities, Preferred Stock & Stockholders’ Deficit' },
+        { label: isRu ? 'Кредиторская задолженность и начисленные расходы' : 'Accounts payable, accrued expenses & other current', vals: [333, 2511, 9426] },
+        { label: isRu ? 'Краткосрочные обязательства по аренде' : 'Operating lease liabilities, current', vals: [13, 37, 274] },
+        { label: isRu ? 'Отложенная выручка (Deferred revenue)' : 'Deferred revenue', vals: [28, 269, 1971] },
+        { label: isRu ? 'Итого краткосрочные обязательства' : 'Total current liabilities', vals: [374, 2817, 11671], total: true },
+        { label: isRu ? 'Долгосрочные обязательства по аренде' : 'Operating lease liabilities, noncurrent', vals: [39, 80, 2536] },
+        { label: isRu ? 'Конвертируемые векселя (Convertible notes, Level 3 FV)' : 'Convertible notes payable (Level 3 FV)', vals: [14116, 41677, 130502], colorNeg: true },
+        { label: isRu ? 'Прочие долгосрочные обязательства' : 'Other noncurrent liabilities', vals: [150, 823, 1974] },
+        { label: isRu ? 'Итого обязательства (Total Liabilities)' : 'Total liabilities', vals: [14679, 45397, 146683], total: true },
+        { label: isRu ? 'Выкупаемые конверт. привилегированные акции (Mezzanine)' : 'Redeemable convertible preferred stock', vals: [2874, 29769, 157510], total: true },
+        { label: isRu ? 'Добавочный капитал (Additional paid-in capital)' : 'Additional paid-in capital', vals: [239, 1644, 6481] },
+        { label: isRu ? 'Накопленный прочий совокупный доход (убыток)' : 'Accumulated other comprehensive income (loss)', vals: [0, 5, -161] },
+        { label: isRu ? 'Накопленный дефицит (Accumulated deficit)' : 'Accumulated deficit', vals: [-10040, -52154, -156193], colorNeg: true },
+        { label: isRu ? 'Итого дефицит акционерного капитала' : 'Total stockholders’ deficit', vals: [-9801, -50505, -149873], total: true, colorNeg: true }
+      ];
+
+      table.innerHTML = buildTableHtml(headers, rows);
+    }
+
+    function renderCashFlowTable() {
+      const table = document.getElementById('cashflow-table');
+      const isRu = currentLang === 'ru';
+      const headers = isRu
+        ? ['Статья отчёта о движении ДС ($M)', 'FY 2023', 'FY 2024', 'FY 2025', '9M 2025', '9M 2026']
+        : ['Cash Flow Statement Line ($M)', 'FY 2023', 'FY 2024', 'FY 2025', '9M 2025', '9M 2026'];
+
+      const rows = [
+        { label: isRu ? 'Чистый убыток по GAAP' : 'GAAP Net loss', vals: [-1531, -8309, -41965, -25107, -104039], colorNeg: true },
+        { label: isRu ? 'Неденежная переоценка конвертируемых нот и SAFEs' : 'Non-cash fair value change: convertible notes & SAFEs', vals: [1045, 5434, 34308, 20107, 94324] },
+        { label: isRu ? 'Переоценка партнёрских фин. соглашений (Partner MTM)' : 'Recognition & FV change of partner financing', vals: [0, 0, 0, 0, 10277] },
+        { label: isRu ? 'Расходы на вознаграждение акциями (SBC)' : 'Stock-based compensation expense (SBC)', vals: [29, 192, 1158, 584, 3255] },
+        { label: isRu ? 'Операционный денежный поток (OCF)' : 'Net cash provided by (used in) operating activities', vals: [-1627, -5692, -2637, -2024, 6569], total: true, colorPos: true },
+        { label: isRu ? 'Капитальные затраты (CapEx — покупки ОС)' : 'Purchases of property and equipment (CapEx)', vals: [-2, -15, -131, -111, -925] },
+        { label: isRu ? 'Авансы за арендуемое оборудование ЦОД' : 'Prepayments for leased assets & equipment', vals: [0, 0, -54, -51, -1955] },
+        { label: isRu ? 'Чистая покупка краткосрочных казначейских бумаг' : 'Net purchases of short-term investments', vals: [0, 0, -2869, -1822, -33418] },
+        { label: isRu ? 'Инвестиционный денежный поток (Investing CF)' : 'Net cash used in investing activities', vals: [-2, -22, -3077, -2007, -36546], total: true },
+        { label: isRu ? 'Выпуск привилегированных акций (нетто)' : 'Proceeds from issuance of preferred stock, net', vals: [445, 1188, 16548, 16548, 110432] },
+        { label: isRu ? 'Выпуск конвертируемых нот за денежные средства' : 'Issuance of convertible notes for cash', vals: [1750, 6050, 3450, 2050, 0] },
+        { label: isRu ? 'Финансовый денежный поток (Financing CF)' : 'Net cash provided by financing activities', vals: [2320, 7248, 19960, 18508, 110735], total: true, colorPos: true },
+        { label: isRu ? 'Денежные средства и ограниченный кэш на конец периода' : 'Cash, equivalents & restricted cash at end of period', vals: [1620, 3154, 17401, 17632, 98152], total: true }
+      ];
+
+      table.innerHTML = buildTableHtml(headers, rows);
+    }
+
+    function renderPreferredTable() {
+      const table = document.getElementById('preferred-table');
+      const isRu = currentLang === 'ru';
+      const headers = isRu
+        ? ['Серия', 'Акций (тыс.)', 'Цена OIP', 'Баланс. ст-ть ($M)', 'Ликв. преф. ($M)', 'Класс при IPO']
+        : ['Series', 'Shares (k)', 'OIP / Share', 'Carrying Val ($M)', 'Liq. Pref ($M)', 'IPO Class'];
+
+      const seriesData = [
+        ['Series A', '48,574', '$2.57', '$125', '$125', 'Class A (Voting)'],
+        ['Series B', '87,430', '$11.23', '$982', '$982', 'Class N (Non-Voting)'],
+        ['Series C-1 / C-2', '39,759', '$11.23', '$446', '$446', 'Class A / Class N'],
+        ['Series D-1 / D-2 / D-3', '44,456', '$27.00–$30.00', '$1,321', '$1,321', 'Class A / N (~10.5x)'],
+        ['Series E-1 (Cash)', '63,610', '$56.09', '$3,549', '$3,568', 'Class A (Voting)'],
+        ['Series E-2..E-5 (Notes)', '147,533', '$20.93–$56.09', '$8,168', '$4,770', 'Class N (Non-Voting)'],
+        ['Series F-1 / F-2', '112,960', '$140.97 / $20.93', '$15,178', '$13,434', 'Class A / Class N'],
+        ['Series G-1 (Q1 2026)', '90,510', '$259.14', '$23,454', '$23,455', 'Class A (Voting)'],
+        ['Series G-2..G-4', '107,814', '$20.93–$259.14', '$39,057', '$22,954', 'Class N (Non-Voting)'],
+        ['Series H-1 (Q2 2026)', '77,638', '$589.01', '$45,728', '$45,729', 'Class A (Voting)'],
+        ['Series H-2 (Q2 2026)', '33,110', '$589.01', '$19,502', '$19,502', 'Class N (Non-Voting)'],
+      ];
+
+      let html = '<thead><tr>';
+      headers.forEach((h, idx) => {
+        html += `<th class="${idx === 0 ? 'sticky-col text-left' : 'text-right'}">${h}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      seriesData.forEach(r => {
+        html += '<tr>';
+        r.forEach((cell, idx) => {
+          const isHighlight = r[0].includes('Series H');
+          const cls = idx === 0
+            ? `sticky-col text-left font-medium ${isHighlight ? 'text-[#D97757]' : 'text-[#F3F5F8]'}`
+            : `text-right font-mono tabular-nums ${isHighlight ? 'text-[#F3F5F8] font-semibold' : 'text-[#A6AEBC]'}`;
+          html += `<td class="${cls}">${cell}</td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += `<tr class="row-total">
+        <td class="sticky-col text-left">${isRu ? 'Итого Preferred Stock' : 'Total Preferred Stock'}</td>
+        <td class="text-right font-mono tabular-nums">853,394</td>
+        <td class="text-right font-mono">—</td>
+        <td class="text-right font-mono tabular-nums text-[#34D399]">$157,510</td>
+        <td class="text-right font-mono tabular-nums">$136,286</td>
+        <td class="text-right font-mono">8,558.9M Common</td>
+      </tr></tbody>`;
+
+      table.innerHTML = html;
+    }
+
+    function buildTableHtml(headers, rows) {
+      let html = '<thead><tr>';
+      headers.forEach((h, i) => {
+        html += `<th class="${i === 0 ? 'sticky-col text-left' : 'text-right'}">${h}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      rows.forEach(row => {
+        if (row.section) {
+          html += `<tr class="row-section"><td colspan="${headers.length}" class="sticky-col text-left">${row.section}</td></tr>`;
+          return;
+        }
+        const trClass = row.total ? 'row-total' : '';
+        html += `<tr class="${trClass}">`;
+        html += `<td class="sticky-col text-left ${row.total ? 'text-[#F3F5F8]' : 'text-[#A6AEBC]'}">${row.label}</td>`;
+
+        if (row.pcts) {
+          row.pcts.forEach(p => {
+            let pColor = 'text-[#E2E8F0]';
+            if (p.startsWith('+')) pColor = 'text-[#34D399]';
+            else if (p.startsWith('-') || p.startsWith('$(')) pColor = 'text-[#F87171]';
+            html += `<td class="text-right font-mono tabular-nums ${pColor}">${p}</td>`;
+          });
+        } else if (row.vals) {
+          row.vals.forEach(v => {
+            let vColor = row.total ? 'text-[#F3F5F8]' : 'text-[#E2E8F0]';
+            if (row.colorPos && v > 0) vColor = 'text-[#34D399]';
+            if (row.colorNeg && v < 0) vColor = 'text-[#F87171]';
+            html += `<td class="text-right font-mono tabular-nums ${vColor}">${fmtNum(v)}</td>`;
+          });
+        }
+        html += '</tr>';
+      });
+
+      html += '</tbody>';
+      return html;
+    }
+
+    // =========================================================================
+    // CHART.JS CONFIGURATIONS & RENDERING
+    // =========================================================================
+    Chart.defaults.color = '#A6AEBC';
+    Chart.defaults.font.family = "'JetBrains Mono', 'Inter', sans-serif";
+    Chart.defaults.font.size = 11;
+
+    function initCharts() {
+      // 1. Quarterly Revenue & Adj Operating Margin (Tab 1)
+      const ctxQtr = document.getElementById('chartQuarterlyTrajectory').getContext('2d');
+      charts.qtr = new Chart(ctxQtr, {
+        type: 'bar',
+        data: {
+          labels: ["Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26", "Q3'26"],
+          datasets: [
+            {
+              type: 'bar',
+              label: currentLang === 'ru' ? 'Выручка ($M)' : 'Revenue ($M)',
+              data: [376, 787, 1382, 2040, 4731, 11555, 16956],
+              backgroundColor: [
+                'rgba(226, 232, 240, 0.25)',
+                'rgba(226, 232, 240, 0.32)',
+                'rgba(226, 232, 240, 0.40)',
+                'rgba(226, 232, 240, 0.48)',
+                'rgba(217, 119, 87, 0.65)',
+                'rgba(217, 119, 87, 0.82)',
+                'rgba(217, 119, 87, 0.96)'
+              ],
+              borderColor: '#D97757',
+              borderWidth: 1,
+              borderRadius: 6,
+              yAxisID: 'y',
+            },
+            {
+              type: 'line',
+              label: currentLang === 'ru' ? 'Скорр. опер. маржа (%)' : 'Adj. Operating Margin (%)',
+              data: [-221, -129, -93, -84, -13, 19, 15],
+              borderColor: '#34D399',
+              backgroundColor: '#34D399',
+              borderWidth: 2.5,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              tension: 0.3,
+              yAxisID: 'y1',
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+            tooltip: {
+              backgroundColor: '#16181D',
+              borderColor: 'rgba(226,232,240,0.25)',
+              borderWidth: 1,
+              padding: 10
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(210,216,228,0.06)' } },
+            y: {
+              position: 'left',
+              grid: { color: 'rgba(210,216,228,0.06)' },
+              ticks: { callback: v => '$' + (v >= 1000 ? (v / 1000) + 'B' : v + 'M') }
+            },
+            y1: {
+              position: 'right',
+              grid: { drawOnChartArea: false },
+              ticks: { callback: v => v + '%' }
+            }
+          }
+        }
+      });
+
+      // 2. Revenue Mix Doughnut (Tab 1)
+      const ctxMix = document.getElementById('chartRevenueMix').getContext('2d');
+      charts.mix = new Chart(ctxMix, {
+        type: 'doughnut',
+        data: {
+          labels: currentLang === 'ru'
+            ? ['Consumption / API', 'Подписки']
+            : ['Consumption / API', 'Subscriptions'],
+          datasets: [{
+            data: [26306, 6936],
+            backgroundColor: ['#D97757', '#E2E8F0'],
+            borderColor: '#16181D',
+            borderWidth: 3,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '66%',
+          plugins: {
+            legend: { position: 'right', labels: { boxWidth: 10, padding: 10, font: { size: 10.5 } } },
+            tooltip: {
+              backgroundColor: '#16181D',
+              borderColor: 'rgba(226,232,240,0.25)',
+              borderWidth: 1,
+              callbacks: {
+                label: ctx => ` $${ctx.parsed.toLocaleString()}M (${((ctx.parsed / 33242) * 100).toFixed(1)}%)`
+              }
+            }
+          }
+        }
+      });
+
+      // 3. Compute Efficiency Trend (Tab 2)
+      const ctxComp = document.getElementById('chartComputeEfficiency').getContext('2d');
+      charts.comp = new Chart(ctxComp, {
+        type: 'line',
+        data: {
+          labels: ["Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26", "Q3'26"],
+          datasets: [{
+            label: currentLang === 'ru' ? 'Выручка / расходы на compute (x)' : 'Revenue / compute expense (x)',
+            data: [0.40, 0.57, 0.68, 0.69, 1.40, 2.08, 1.72],
+            borderColor: '#D97757',
+            backgroundColor: 'rgba(217, 119, 87, 0.16)',
+            fill: true,
+            borderWidth: 2.5,
+            pointBackgroundColor: '#F3F5F8',
+            pointBorderColor: '#D97757',
+            pointRadius: 4.5,
+            tension: 0.32
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#16181D',
+              borderColor: 'rgba(226,232,240,0.25)',
+              borderWidth: 1,
+              callbacks: { label: ctx => currentLang === 'ru' ? ` ${ctx.parsed.y.toFixed(2)}x выручка / compute` : ` ${ctx.parsed.y.toFixed(2)}x revenue / compute` }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(210,216,228,0.06)' } },
+            y: {
+              min: 0,
+              max: 2.4,
+              grid: { color: 'rgba(210,216,228,0.06)' },
+              ticks: { callback: v => v.toFixed(1) + 'x' }
+            }
+          }
+        }
+      });
+
+      // 4. Functional Expense Breakdown (Tab 2)
+      const ctxFunc = document.getElementById('chartFunctionalExpenses').getContext('2d');
+      charts.func = new Chart(ctxFunc, {
+        type: 'bar',
+        data: {
+          labels: ['FY 2024', 'FY 2025', "9M 2025", "9M 2026"],
+          datasets: [
+            {
+              label: 'Cost of Revenue',
+              data: [752, 2773, 1796, 4812],
+              backgroundColor: '#34D399',
+              borderRadius: 4
+            },
+            {
+              label: 'R&D',
+              data: [2275, 6338, 3594, 19240],
+              backgroundColor: '#D97757',
+              borderRadius: 4
+            },
+            {
+              label: 'Sales & Marketing',
+              data: [163, 911, 530, 6619],
+              backgroundColor: '#FBBF24',
+              borderRadius: 4
+            },
+            {
+              label: 'G&A + Bartz',
+              data: [176, 2623, 1849, 3831],
+              backgroundColor: '#94A3B8',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10.5 } } },
+            tooltip: { backgroundColor: '#16181D', borderColor: 'rgba(226,232,240,0.25)', borderWidth: 1 }
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: {
+              stacked: true,
+              grid: { color: 'rgba(210,216,228,0.06)' },
+              ticks: { callback: v => '$' + (v / 1000).toFixed(0) + 'B' }
+            }
+          }
+        }
+      });
+
+      // 5. Balance Sheet Assets Stacked Bar (Tab 3)
+      const ctxBs = document.getElementById('chartBalanceAssets').getContext('2d');
+      charts.bs = new Chart(ctxBs, {
+        type: 'bar',
+        data: {
+          labels: ['31.12.2024', '31.12.2025', '30.09.2026'],
+          datasets: [
+            {
+              label: currentLang === 'ru' ? 'Кэш и ST инвестиции ($B)' : 'Cash & ST Investments ($B)',
+              data: [3.14, 20.28, 131.85],
+              backgroundColor: '#34D399',
+              borderRadius: 4
+            },
+            {
+              label: currentLang === 'ru' ? 'Дебиторская задолж. и проч. оборот. ($B)' : 'AR & Other Current ($B)',
+              data: [2.17, 3.47, 9.18],
+              backgroundColor: '#E2E8F0',
+              borderRadius: 4
+            },
+            {
+              label: currentLang === 'ru' ? 'Внеоборотные активы и Restr. Cash ($B)' : 'Noncurrent & Restricted Cash ($B)',
+              data: [2.44, 0.92, 13.30],
+              backgroundColor: '#D97757',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
+            tooltip: { backgroundColor: '#16181D', borderColor: 'rgba(226,232,240,0.25)', borderWidth: 1 }
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: {
+              stacked: true,
+              grid: { color: 'rgba(210,216,228,0.06)' },
+              ticks: { callback: v => '$' + v + 'B' }
+            }
+          }
+        }
+      });
+
+      // 6. Cash Flow Multi-Bar (Tab 4)
+      const ctxCf = document.getElementById('chartCashFlows').getContext('2d');
+      charts.cf = new Chart(ctxCf, {
+        type: 'bar',
+        data: {
+          labels: ['FY 2023', 'FY 2024', 'FY 2025', "9M 2025", "9M 2026"],
+          datasets: [
+            {
+              label: 'Operating CF ($B)',
+              data: [-1.63, -5.69, -2.64, -2.02, 6.57],
+              backgroundColor: '#34D399',
+              borderRadius: 4
+            },
+            {
+              label: 'Investing CF ($B)',
+              data: [-0.002, -0.02, -3.08, -2.01, -36.55],
+              backgroundColor: '#F87171',
+              borderRadius: 4
+            },
+            {
+              label: 'Financing CF ($B)',
+              data: [2.32, 7.25, 19.96, 18.51, 110.74],
+              backgroundColor: '#D97757',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 10 } },
+            tooltip: { backgroundColor: '#16181D', borderColor: 'rgba(226,232,240,0.25)', borderWidth: 1 }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              grid: { color: 'rgba(210,216,228,0.06)' },
+              ticks: { callback: v => '$' + v + 'B' }
+            }
+          }
+        }
+      });
+
+      // 7. Infrastructure Counterparties Horizontal Bar (Tab 5)
+      const ctxCp = document.getElementById('chartCounterparties').getContext('2d');
+      charts.cp = new Chart(ctxCp, {
+        type: 'bar',
+        data: {
+          labels: [
+            'Broadcom (TPU Lease)',
+            'Google (Base Cloud/TPU)',
+            'Google (2028–31 Option)',
+            'SpaceX.AI (NVIDIA GPU)',
+            'Amazon (AWS)',
+            'Microsoft (up to / до)',
+            'Nscale',
+            'Lambda',
+            'AMD (Instinct MI450)'
+          ],
+          datasets: [{
+            label: currentLang === 'ru' ? 'Объём обязательств ($B)' : 'Commitment ($B)',
+            data: [161.2, 121.3, 137.5, 120.5, 110.0, 49.2, 44.6, 41.3, 20.0],
+            backgroundColor: [
+              '#D97757',
+              '#E2E8F0',
+              'rgba(226, 232, 240, 0.45)',
+              '#34D399',
+              '#FBBF24',
+              '#60A5FA',
+              '#A78BFA',
+              '#F472B6',
+              '#FB923C'
+            ],
+            borderRadius: 5
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#16181D',
+              borderColor: 'rgba(226,232,240,0.25)',
+              borderWidth: 1,
+              callbacks: {
+                label: ctx => {
+                  const qualifiers = currentLang === 'ru'
+                    ? ['арендные платежи без процентов', 'минимум', 'оценка $125–150B; показана середина', 'до', 'минимум', 'до; минимум $47.2B', 'до', 'примерно', 'более $20B']
+                    : ['lease rent excluding interest', 'minimum', '$125–150B estimate; midpoint shown', 'up to', 'minimum', 'up to; $47.2B minimum', 'up to', 'approximately', 'more than $20B'];
+                  return ` $${ctx.parsed.x.toFixed(1)}B • ${qualifiers[ctx.dataIndex]}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(210,216,228,0.06)' },
+              ticks: { callback: v => '$' + v + 'B' }
+            },
+            y: { grid: { display: false }, ticks: { font: { size: 10.5 } } }
+          }
+        }
+      });
+
+      // 8. Maturity Schedule Bar (Tab 5)
+      const ctxMat = document.getElementById('chartMaturitySchedule').getContext('2d');
+      charts.mat = new Chart(ctxMat, {
+        type: 'bar',
+        data: {
+          labels: ['Q4 2026', '2027', '2028', '2029', '2030', 'Thereafter'],
+          datasets: [{
+            label: currentLang === 'ru' ? 'Фикс. платежи ($B)' : 'Fixed Payments ($B)',
+            data: [5.231, 29.165, 44.357, 47.752, 45.070, 148.418],
+            backgroundColor: ['#94A3B8', '#FBBF24', '#D97757', '#D97757', '#E2E8F0', '#34D399'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#16181D',
+              borderColor: 'rgba(226,232,240,0.25)',
+              borderWidth: 1,
+              callbacks: { label: ctx => ` $${ctx.parsed.y.toFixed(1)}B` }
+            }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              grid: { color: 'rgba(210,216,228,0.06)' },
+              ticks: { callback: v => '$' + v + 'B' }
+            }
+          }
+        }
+      });
+    }
+
+    function updateAllCharts() {
+      if (!charts.qtr) return;
+      const isRu = currentLang === 'ru';
+      charts.qtr.data.datasets[0].label = isRu ? 'Выручка ($M)' : 'Revenue ($M)';
+      charts.qtr.data.datasets[1].label = isRu ? 'Скорр. опер. маржа (%)' : 'Adj. Operating Margin (%)';
+      charts.qtr.update();
+
+      charts.mix.data.labels = isRu
+        ? ['Consumption / API', 'Подписки']
+        : ['Consumption / API', 'Subscriptions'];
+      charts.mix.update();
+
+      charts.comp.data.datasets[0].label = isRu ? 'Выручка / расходы на compute (x)' : 'Revenue / compute expense (x)';
+      charts.comp.update();
+
+      charts.func.data.datasets[0].label = isRu ? 'Себестоимость выручки' : 'Cost of Revenue';
+      charts.func.data.datasets[1].label = isRu ? 'Исследования и разработки' : 'R&D';
+      charts.func.data.datasets[2].label = isRu ? 'Продажи и маркетинг' : 'Sales & Marketing';
+      charts.func.data.datasets[3].label = isRu ? 'G&A + Bartz' : 'G&A + Bartz';
+      charts.func.update();
+
+      charts.bs.data.datasets[0].label = isRu ? 'Кэш и ST инвестиции ($B)' : 'Cash & ST Investments ($B)';
+      charts.bs.data.datasets[1].label = isRu ? 'Дебиторская задолж. и проч. оборот. ($B)' : 'AR & Other Current ($B)';
+      charts.bs.data.datasets[2].label = isRu ? 'Внеоборотные активы и Restr. Cash ($B)' : 'Noncurrent & Restricted Cash ($B)';
+      charts.bs.update();
+
+      charts.cf.data.datasets[0].label = isRu ? 'Операционный поток ($B)' : 'Operating CF ($B)';
+      charts.cf.data.datasets[1].label = isRu ? 'Инвестиционный поток ($B)' : 'Investing CF ($B)';
+      charts.cf.data.datasets[2].label = isRu ? 'Финансовый поток ($B)' : 'Financing CF ($B)';
+      charts.cf.update();
+
+      charts.cp.data.datasets[0].label = isRu ? 'Объём обязательств ($B)' : 'Commitment ($B)';
+      charts.cp.data.labels = isRu
+        ? ['Broadcom (TPU-лизинг)', 'Google (базовый TPU/cloud)', 'Google (оценка 2028–31)', 'SpaceX.AI (NVIDIA)', 'Amazon (AWS)', 'Microsoft (до)', 'Nscale (до)', 'Lambda (примерно)', 'AMD (более)']
+        : ['Broadcom (TPU lease)', 'Google (base cloud/TPU)', 'Google (2028–31 estimate)', 'SpaceX.AI (NVIDIA)', 'Amazon (AWS)', 'Microsoft (up to)', 'Nscale (up to)', 'Lambda (approx.)', 'AMD (more than)'];
+      charts.cp.update();
+
+      charts.mat.data.datasets[0].label = isRu ? 'Фикс. платежи ($B)' : 'Fixed Payments ($B)';
+      charts.mat.data.labels = isRu ? ['Q4 2026', '2027', '2028', '2029', '2030', 'После 2030'] : ['Q4 2026', '2027', '2028', '2029', '2030', 'Thereafter'];
+      charts.mat.update();
+    }
+
+    // =========================================================================
+    // INTERACTIVE IPO VALUATION SIMULATOR (TAB 7)
+    // =========================================================================
+    function applyPreset(preset) {
+      const sRev = document.getElementById('slider-rev');
+      const sMult = document.getElementById('slider-mult');
+      const sMargin = document.getElementById('slider-margin');
+      const sIpo = document.getElementById('slider-ipo');
+      const sShares = document.getElementById('slider-shares');
+
+      if (preset === 'base') {
+        sRev.value = 68;
+        sMult.value = 11.1;
+        sMargin.value = 15;
+        sIpo.value = 58.6;
+        sShares.value = 13.09;
+      } else if (preset === 'consensus') {
+        sRev.value = 95;
+        sMult.value = 13.5;
+        sMargin.value = 22;
+        sIpo.value = 60;
+        sShares.value = 14.2;
+      } else if (preset === 'bull') {
+        sRev.value = 135;
+        sMult.value = 15.0;
+        sMargin.value = 28;
+        sIpo.value = 65;
+        sShares.value = 15.0;
+      }
+      updateSimulator();
+    }
+
+    function updateDialNeedle(sliderId, needleId) {
+      const slider = document.getElementById(sliderId);
+      const needle = document.getElementById(needleId);
+      const min = parseFloat(slider.min);
+      const max = parseFloat(slider.max);
+      const val = parseFloat(slider.value);
+      const pct = ((val - min) / (max - min)) * 100;
+      needle.style.left = `${Math.max(1, Math.min(99, pct))}%`;
+    }
+
+    function updateSimulator() {
+      const rev = parseFloat(document.getElementById('slider-rev').value);
+      const mult = parseFloat(document.getElementById('slider-mult').value);
+      const margin = parseFloat(document.getElementById('slider-margin').value);
+      const ipoRaise = parseFloat(document.getElementById('slider-ipo').value);
+      const shares = parseFloat(document.getElementById('slider-shares').value);
+
+      // Update dial readouts & needle positions
+      document.getElementById('val-rev').textContent = `$${rev.toFixed(1)}B`;
+      document.getElementById('val-mult').textContent = `${mult.toFixed(1)}x`;
+      document.getElementById('val-margin').textContent = `${margin.toFixed(1)}%`;
+      document.getElementById('val-ipo').textContent = `$${ipoRaise.toFixed(1)}B`;
+      document.getElementById('val-shares').textContent = `${shares.toFixed(2)}B`;
+
+      updateDialNeedle('slider-rev', 'needle-rev');
+      updateDialNeedle('slider-mult', 'needle-mult');
+      updateDialNeedle('slider-margin', 'needle-margin');
+      updateDialNeedle('slider-ipo', 'needle-ipo');
+      updateDialNeedle('slider-shares', 'needle-shares');
+
+      // Core calculations. The public-offering slider represents net proceeds.
+      // Starting cash + short-term investments: $131.845B. Concurrent PP: $26.0B.
+      // Estimated RSU tax withholding/remittance: $3.8B at the $74 midpoint.
+      const existingCash = 131.845;
+      const concurrentPP = 26.0;
+      const rsuTaxWithholding = 3.8;
+      const totalPostIpoLiquidity = existingCash + ipoRaise + concurrentPP - rsuTaxWithholding;
+
+      const ev = rev * mult;
+      const eqVal = ev + totalPostIpoLiquidity;
+      const impliedPrice = eqVal / shares;
+
+      const adjOpProfit = rev * (margin / 100);
+      const evToOpProfit = adjOpProfit > 0 ? (ev / adjOpProfit) : 0;
+
+      // Series H preferred OIP of $589.0095 converts 10:1 into common: $58.90095 per common-equivalent share.
+      const serHPrice = 58.90095;
+      const diffPct = ((impliedPrice - serHPrice) / serHPrice) * 100;
+      const ipoMidpoint = 74.00;
+      const midpointDiffPct = ((impliedPrice - ipoMidpoint) / ipoMidpoint) * 100;
+
+      // Update KPI cards
+      document.getElementById('out-ev').textContent = `$${ev.toFixed(1)}B`;
+      document.getElementById('out-eq').textContent = `$${eqVal.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}B`;
+      document.getElementById('out-price').textContent = `$${impliedPrice.toFixed(2)}`;
+
+      const vsEl = document.getElementById('out-vs-serh');
+      const sign = diffPct >= 0 ? '+' : '';
+      const midSign = midpointDiffPct >= 0 ? '+' : '';
+      vsEl.textContent = currentLang === 'ru'
+        ? `${sign}${diffPct.toFixed(1)}% к Series H • ${midSign}${midpointDiffPct.toFixed(1)}% к $74 midpoint`
+        : `${sign}${diffPct.toFixed(1)}% vs Series H • ${midSign}${midpointDiffPct.toFixed(1)}% vs $74 midpoint`;
+      vsEl.className = `text-[11px] font-mono mt-1 ${diffPct >= 0 ? 'text-[#34D399]' : 'text-[#F87171]'}`;
+
+      document.getElementById('out-op').textContent = `$${adjOpProfit.toFixed(1)}B`;
+      document.getElementById('out-ev-op').textContent = `EV/EBIT: ${evToOpProfit.toFixed(1)}x`;
+      document.getElementById('out-liquidity-post').textContent = currentLang === 'ru'
+        ? `Чистый кэш после IPO: $${totalPostIpoLiquidity.toFixed(1)}B`
+        : `Post-IPO Net Cash: $${totalPostIpoLiquidity.toFixed(1)}B`;
+
+      // Common-share-equivalent benchmark bars.
+      const maxBarScale = Math.max(82, impliedPrice * 1.12);
+      document.getElementById('bar-b1').style.width = `${(25.91 / maxBarScale) * 100}%`;
+      document.getElementById('bar-b2').style.width = `${(68.54 / maxBarScale) * 100}%`;
+      document.getElementById('bar-b3').style.width = `${(25.91364 / maxBarScale) * 100}%`;
+      document.getElementById('bar-b4').style.width = `${(58.90095 / maxBarScale) * 100}%`;
+      document.getElementById('bar-b5').style.width = `${Math.min(100, (impliedPrice / maxBarScale) * 100)}%`;
+      document.getElementById('bar-b5-val').textContent = `$${impliedPrice.toFixed(2)}`;
+
+      // Illustrative only: fixed payments due in 2027 and 2028, excluding ordinary operating uses and taxes.
+      const coverage = (totalPostIpoLiquidity + adjOpProfit * 2) / 73.522;
+      document.getElementById('out-coverage').textContent = `${coverage.toFixed(2)}x`;
+
+      // Render 5x5 Sensitivity Matrix
+      renderSensitivityMatrix(rev, mult, totalPostIpoLiquidity, shares);
+    }
+
+    function renderSensitivityMatrix(baseRev, baseMult, totalCash, shares) {
+      const table = document.getElementById('sensitivity-table');
+      const revSteps = [
+        Math.max(40, Math.round(baseRev * 0.75)),
+        Math.max(45, Math.round(baseRev * 0.88)),
+        Math.round(baseRev),
+        Math.round(baseRev * 1.15),
+        Math.round(baseRev * 1.30)
+      ];
+
+      const multSteps = [
+        Math.max(4.0, +(baseMult - 4.0).toFixed(1)),
+        Math.max(5.0, +(baseMult - 2.0).toFixed(1)),
+        +baseMult.toFixed(1),
+        +(baseMult + 2.5).toFixed(1),
+        +(baseMult + 5.0).toFixed(1)
+      ];
+
+      const cornerLabel = currentLang === 'ru' ? 'EV/Rev \\ Выручка' : 'EV/Rev \\ Rev';
+      let html = `<thead><tr><th class="sticky-col text-left">${cornerLabel}</th>`;
+      revSteps.forEach((r, idx) => {
+        const isCenter = idx === 2;
+        html += `<th class="text-center ${isCenter ? 'text-[#D97757]' : ''}">$${r}B</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      multSteps.forEach((m, rIdx) => {
+        const isRowCenter = rIdx === 2;
+        html += `<tr><td class="sticky-col text-left font-mono font-semibold ${isRowCenter ? 'text-[#D97757]' : 'text-[#A6AEBC]'}">${m.toFixed(1)}x</td>`;
+        revSteps.forEach((r, cIdx) => {
+          const cellPrice = ((r * m) + totalCash) / shares;
+          const aboveSerH = cellPrice >= 58.90095;
+          const isExactCenter = isRowCenter && cIdx === 2;
+
+          let cellStyle = aboveSerH
+            ? 'text-[#34D399] bg-[#34D399]/10'
+            : 'text-[#A6AEBC]';
+          if (isExactCenter) {
+            cellStyle = 'text-[#F3F5F8] font-bold bg-[#D97757]/25 border border-[#D97757]';
+          }
+
+          html += `<td class="text-center font-mono tabular-nums ${cellStyle}">$${cellPrice.toFixed(0)}</td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody>';
+      table.innerHTML = html;
+    }
+
+    // =========================================================================
+    // INITIALIZE ON WINDOW LOAD
+    // =========================================================================
+    window.onload = function () {
+      renderPnlTable();
+      renderBalanceTable();
+      renderCashFlowTable();
+      renderPreferredTable();
+      initCharts();
+      installChartExplainers();
+      setLanguage('ru');
+    };
+  </script>
+</body>
+</html>
