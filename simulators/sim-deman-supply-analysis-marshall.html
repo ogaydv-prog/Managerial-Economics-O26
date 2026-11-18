@@ -663,16 +663,24 @@
             `;
             svgMarketGraph.appendChild(defs);
 
-            // 1. DRAW CONSUMER SURPLUS (CS) - LIGHT GREEN POLYGON
+           // 1. DRAW CONSUMER SURPLUS (CS) - LIGHT GREEN POLYGON
             if (showCs && actualQty > 0 && chokePriceD > retailPrice) {
                 const csPoly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
                 const p1 = `${gx(0)},${gy(retailPrice)}`;
                 const p2 = `${gx(actualQty)},${gy(retailPrice)}`;
                 const p3 = `${gx(actualQty)},${gy(Math.min(maxPriceY, pD_at_actual))}`;
-                const p4 = `${gx(0)},${gy(Math.min(maxPriceY, chokePriceD))}`;
+
+                let pointsStr = `${p1} ${p2} ${p3}`;
+                if (chokePriceD > maxPriceY) {
+                    // Кривая D уходит выше потолка графика (1600 ₸) — добавляем точку пересечения с потолком
+                    const qAtMaxP = Math.max(0, (baseQ + shiftD) - slopeD * maxPriceY);
+                    pointsStr += ` ${gx(qAtMaxP)},${gy(maxPriceY)} ${gx(0)},${gy(maxPriceY)}`;
+                } else {
+                    pointsStr += ` ${gx(0)},${gy(chokePriceD)}`;
+                }
                 
-                csPoly.setAttribute("points", `${p1} ${p2} ${p3} ${p4}`);
-                csPoly.setAttribute("fill", "rgba(16, 185, 129, 0.12)"); // transparent emerald
+                csPoly.setAttribute("points", pointsStr);
+                csPoly.setAttribute("fill", "rgba(16, 185, 129, 0.12)");
                 csPoly.setAttribute("stroke", "#10b981");
                 csPoly.setAttribute("stroke-width", "1");
                 csPoly.setAttribute("stroke-dasharray", "2,2");
@@ -680,8 +688,9 @@
 
                 // CS text overlay
                 const csText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                const visibleTopP = Math.min(maxPriceY, chokePriceD);
                 const labelX = gx(actualQty * 0.28);
-                const labelY = gy(retailPrice + (chokePriceD - retailPrice) * 0.35);
+                const labelY = gy(retailPrice + (visibleTopP - retailPrice) * 0.38);
                 csText.setAttribute("x", labelX);
                 csText.setAttribute("y", labelY);
                 csText.setAttribute("fill", "#059669");
@@ -691,7 +700,6 @@
                 csText.textContent = "Излишек CS";
                 svgMarketGraph.appendChild(csText);
             }
-
             // 2. DRAW PRODUCER SURPLUS (PS) - LIGHT RED POLYGON
             if (showPs && actualQty > 0 && retailPrice > sStartP) {
                 const psPoly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
