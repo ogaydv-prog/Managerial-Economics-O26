@@ -83,6 +83,10 @@
             perspective: 1000px;
             height: 260px;
         }
+        .flip-card-case {
+            perspective: 1000px;
+            height: 215px;
+        }
         .flip-card-inner {
             position: relative;
             width: 100%;
@@ -90,7 +94,8 @@
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
         }
-        .flip-card.flipped .flip-card-inner {
+        .flip-card.flipped .flip-card-inner,
+        .flip-card-case.flipped .flip-card-inner {
             transform: rotateY(180deg);
         }
         .flip-card-front, .flip-card-back {
@@ -141,37 +146,68 @@
         </button>
     </header>
 
-    <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
-        <div class="glass-card p-3.5 border-b-2 border-b-cyan-400">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Общие затраты</p>
-            <h3 class="text-lg sm:text-xl font-black text-cyan-300 mt-1 mono-font" id="kpiTotalCost">0 ₸</h3>
-            <p class="text-[9px] text-gray-500 mt-0.5">Фикс + Переменка + Штраф</p>
+    <!-- KPI Карточки -->
+    <section class="space-y-2.5">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+            <div onclick="showKpiExplanation('totalCost')" class="glass-card p-3.5 border-b-2 border-b-cyan-400 cursor-pointer hover:border-cyan-300/60 transition-all group">
+                <div class="flex items-center justify-between gap-1">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Общие затраты</p>
+                    <span class="text-[10px] text-cyan-400/80 group-hover:text-cyan-300 font-mono">?</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black text-cyan-300 mt-1 mono-font" id="kpiTotalCost">0 ₸</h3>
+                <p class="text-[9px] text-gray-500 mt-0.5">FC + Пробег + Штраф за невывоз</p>
+            </div>
+
+            <div onclick="showKpiExplanation('vehicles')" class="glass-card p-3.5 border-b-2 border-b-purple-400 cursor-pointer hover:border-purple-300/60 transition-all group">
+                <div class="flex items-center justify-between gap-1">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Активный парк машин</p>
+                    <span class="text-[10px] text-purple-400/80 group-hover:text-purple-300 font-mono">?</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black text-purple-300 mt-1 mono-font" id="kpiVehicles">0 шт</h3>
+                <p class="text-[9px] text-gray-500 mt-0.5">Задействованных рейсов</p>
+            </div>
+
+            <div onclick="showKpiExplanation('utilization')" class="glass-card p-3.5 border-b-2 border-b-emerald-400 cursor-pointer hover:border-emerald-300/60 transition-all group">
+                <div class="flex items-center justify-between gap-1">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Утилизация кузова</p>
+                    <span class="text-[10px] text-emerald-400/80 group-hover:text-emerald-300 font-mono">?</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black text-emerald-300 mt-1 mono-font" id="kpiUtilization">0%</h3>
+                <p class="text-[9px] text-gray-500 mt-0.5">Средняя загрузка кузова</p>
+            </div>
+
+            <div onclick="showKpiExplanation('avgDist')" class="glass-card p-3.5 border-b-2 border-b-amber-400 cursor-pointer hover:border-amber-300/60 transition-all group">
+                <div class="flex items-center justify-between gap-1">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Ср. плечо доставки</p>
+                    <span class="text-[10px] text-amber-400/80 group-hover:text-amber-300 font-mono">?</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black text-amber-300 mt-1 mono-font" id="kpiAvgDist">0 км</h3>
+                <p class="text-[9px] text-gray-500 mt-0.5">Пробег на 1 точку</p>
+            </div>
+
+            <div onclick="showKpiExplanation('shadowPrice')" class="glass-card p-3.5 border-b-2 border-b-rose-500 col-span-2 sm:col-span-1 cursor-pointer hover:border-rose-400/70 transition-all group">
+                <div class="flex items-center justify-between gap-1">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Теневая цена ёмкости</p>
+                    <span class="text-[10px] text-rose-400 font-bold font-mono">?</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black text-rose-400 mt-1 mono-font" id="kpiShadowPrice">0 ₸/кг</h3>
+                <p class="text-[9px] text-gray-500 mt-0.5">Ценность +25 кг к кузову</p>
+            </div>
         </div>
-        <div class="glass-card p-3.5 border-b-2 border-b-purple-400">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Активный флот</p>
-            <h3 class="text-lg sm:text-xl font-black text-purple-300 mt-1 mono-font" id="kpiVehicles">0 шт</h3>
-            <p class="text-[9px] text-gray-500 mt-0.5">Оптимальных рейсов</p>
-        </div>
-        <div class="glass-card p-3.5 border-b-2 border-b-emerald-400">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Утилизация кузова</p>
-            <h3 class="text-lg sm:text-xl font-black text-emerald-300 mt-1 mono-font" id="kpiUtilization">0%</h3>
-            <p class="text-[9px] text-gray-500 mt-0.5">Средняя загрузка кузова</p>
-        </div>
-        <div class="glass-card p-3.5 border-b-2 border-b-amber-400">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Ср. плечо доставки</p>
-            <h3 class="text-lg sm:text-xl font-black text-amber-300 mt-1 mono-font" id="kpiAvgDist">0 км</h3>
-            <p class="text-[9px] text-gray-500 mt-0.5">Пробег на 1 точку</p>
-        </div>
-        <div class="glass-card p-3.5 border-b-2 border-b-rose-500 col-span-2 sm:col-span-1">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Теневая цена емкости</p>
-            <h3 class="text-lg sm:text-xl font-black text-rose-400 mt-1 mono-font" id="kpiShadowPrice">0 ₸/кг</h3>
-            <p class="text-[9px] text-gray-500 mt-0.5">Ценность +10% к кузову</p>
+
+        <div id="kpiExplanationPanel" class="glass-card p-3.5 border border-cyan-500/30 bg-slate-900/90 text-xs text-gray-300 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div id="kpiExplanationContent" class="space-y-1 leading-relaxed">
+                <span class="font-bold text-cyan-300">Пояснение к показателям:</span> Нажмите на любую из пяти карточек выше, чтобы увидеть формулу, смысл и расчёт на текущих цифрах.
+            </div>
+            <button onclick="resetKpiExplanation()" class="shrink-0 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-gray-700 text-gray-300 text-[11px] font-semibold transition-colors">
+                Сбросить
+            </button>
         </div>
     </section>
 
     <div class="glass-card p-4 border-l-4 border-l-amber-500 text-xs leading-relaxed text-gray-300 space-y-1">
         <span class="font-bold text-amber-400 uppercase tracking-wider block">Суть оптимизационной задачи (Входной контекст):</span>
-        <p>У вас есть Центральный Депо и клиенты в разных точках города с разным спросом (кг). За каждый выезд машины вы платите фиксированную сумму <strong>F</strong> (зарплата, аренда), а за каждый пройденный километр — <strong>c</strong> (топливо). Задача алгоритма — найти идеальное число машин и построить замкнутые маршруты так, чтобы развезти весь груз с <strong>минимальными совокупными затратами</strong>.</p>
+        <p>У вас есть Центральный Депо и клиенты в разных точках города с разным спросом (кг). За каждый выезд машины вы платите фиксированную сумму <strong>FC</strong> (зарплата, аренда, подача), а за каждый пройденный километр — <strong>c</strong> (топливо). Задача алгоритма — найти оптимальное число машин и построить замкнутые маршруты так, чтобы развезти весь груз с <strong>минимальными совокупными затратами</strong>.</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
@@ -182,52 +218,86 @@
                         <i data-lucide="sliders" class="w-4 h-4 text-cyan-400"></i>
                         Параметры задачи
                     </h2>
-                    <span class="text-[9px] bg-slate-800 text-gray-300 px-2 py-0.5 rounded border border-gray-700 mono-font">Управление</span>
                 </div>
 
+                <!-- FC -->
                 <div class="space-y-1 bg-slate-950/60 p-2.5 rounded border border-gray-800">
                     <div class="flex justify-between items-center text-xs">
-                        <label for="sliderF" class="text-gray-300 font-medium text-[11px]">Фикс выезда машины (F):</label>
+                        <label for="sliderF" class="text-gray-300 font-medium text-[11px] flex items-center gap-1.5">
+                            <span>FC (фикс выезда машины):</span>
+                            <button type="button" onclick="toggleParamNote('noteF')" class="w-4 h-4 rounded-full bg-slate-800 hover:bg-cyan-500/20 text-cyan-400 text-[10px] font-bold border border-gray-700">?</button>
+                        </label>
                         <span class="font-bold text-cyan-300 mono-font text-[12px]" id="valF">18,000 ₸</span>
                     </div>
                     <input type="range" id="sliderF" min="5000" max="50000" step="1000" value="18000" class="vintage-slider">
+                    <div id="noteF" class="hidden text-[10px] text-cyan-200/90 bg-cyan-950/30 border border-cyan-500/20 rounded p-2 mt-1 leading-snug">
+                        <strong>FC (Fixed Cost)</strong> — постоянная плата за выход машины в рейс (оклад/смена, подача, оформление), не зависит от километров. Чем выше FC, тем выгоднее меньше рейсов и плотнее загрузка кузова.
+                    </div>
                 </div>
 
+                <!-- c -->
                 <div class="space-y-1 bg-slate-950/60 p-2.5 rounded border border-gray-800">
                     <div class="flex justify-between items-center text-xs">
-                        <label for="sliderC" class="text-gray-300 font-medium text-[11px]">Затраты на 1 км (c):</label>
+                        <label for="sliderC" class="text-gray-300 font-medium text-[11px] flex items-center gap-1.5">
+                            <span>Затраты на 1 км (c):</span>
+                            <button type="button" onclick="toggleParamNote('noteC')" class="w-4 h-4 rounded-full bg-slate-800 hover:bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-gray-700">?</button>
+                        </label>
                         <span class="font-bold text-emerald-300 mono-font text-[12px]" id="valC">450 ₸/км</span>
                     </div>
                     <input type="range" id="sliderC" min="200" max="2000" step="50" value="450" class="vintage-slider">
+                    <div id="noteC" class="hidden text-[10px] text-emerald-200/90 bg-emerald-950/30 border border-emerald-500/20 rounded p-2 mt-1 leading-snug">
+                        <strong>Затраты на 1 км (c)</strong> — переменные затраты на каждый пройденный километр (топливо, износ шин и агрегатов). Чем выше c, тем важнее короткие маршруты без лишних петель.
+                    </div>
                 </div>
 
+                <!-- Q -->
                 <div class="space-y-1 bg-slate-950/60 p-2.5 rounded border border-gray-800">
                     <div class="flex justify-between items-center text-xs">
-                        <label for="sliderQ" class="text-gray-300 font-medium text-[11px]">Емкость кузова (Q):</label>
+                        <label for="sliderQ" class="text-gray-300 font-medium text-[11px] flex items-center gap-1.5">
+                            <span>Ёмкость кузова (Q):</span>
+                            <button type="button" onclick="toggleParamNote('noteQ')" class="w-4 h-4 rounded-full bg-slate-800 hover:bg-purple-500/20 text-purple-400 text-[10px] font-bold border border-gray-700">?</button>
+                        </label>
                         <span class="font-bold text-purple-300 mono-font text-[12px]" id="valQ">350 кг</span>
                     </div>
                     <input type="range" id="sliderQ" min="50" max="1000" step="25" value="350" class="vintage-slider">
+                    <div id="noteQ" class="hidden text-[10px] text-purple-200/90 bg-purple-950/30 border border-purple-500/20 rounded p-2 mt-1 leading-snug">
+                        <strong>Ёмкость кузова (Q)</strong> — лимит веса/объёма груза, который помещается в одну машину за один рейс. Если заказ клиента превышает Q, часть груза остаётся невывезенной и облагается штрафом P.
+                    </div>
                 </div>
 
+                <!-- N -->
                 <div class="space-y-1 bg-slate-950/60 p-2.5 rounded border border-gray-800">
                     <div class="flex justify-between items-center text-xs">
-                        <label for="sliderN" class="text-gray-300 font-medium text-[11px]">Число точек (N):</label>
+                        <label for="sliderN" class="text-gray-300 font-medium text-[11px] flex items-center gap-1.5">
+                            <span>Число точек (N):</span>
+                            <button type="button" onclick="toggleParamNote('noteN')" class="w-4 h-4 rounded-full bg-slate-800 hover:bg-amber-500/20 text-amber-400 text-[10px] font-bold border border-gray-700">?</button>
+                        </label>
                         <span class="font-bold text-amber-300 mono-font text-[12px]" id="valN">14 точек</span>
                     </div>
                     <input type="range" id="sliderN" min="8" max="25" step="1" value="14" class="vintage-slider">
+                    <div id="noteN" class="hidden text-[10px] text-amber-200/90 bg-amber-950/30 border border-amber-500/20 rounded p-2 mt-1 leading-snug">
+                        <strong>Число точек (N)</strong> — количество клиентов на карте развоза вокруг Депо. Больше точек — выше суммарный спрос и сложнее построение маршрутов.
+                    </div>
                 </div>
 
+                <!-- P -->
                 <div class="space-y-1 bg-slate-950/60 p-2.5 rounded border border-gray-800">
                     <div class="flex justify-between items-center text-xs">
-                        <label for="sliderP" class="text-gray-300 font-medium text-[11px]">Штраф за дефицит (P):</label>
+                        <label for="sliderP" class="text-gray-300 font-medium text-[11px] flex items-center gap-1.5">
+                            <span>Штраф за невывезенный груз (P):</span>
+                            <button type="button" onclick="toggleParamNote('noteP')" class="w-4 h-4 rounded-full bg-slate-800 hover:bg-rose-500/20 text-rose-400 text-[10px] font-bold border border-gray-700">?</button>
+                        </label>
                         <span class="font-bold text-rose-400 mono-font text-[12px]" id="valP">1,200 ₸/кг</span>
                     </div>
                     <input type="range" id="sliderP" min="500" max="5000" step="100" value="1200" class="vintage-slider">
+                    <div id="noteP" class="hidden text-[10px] text-rose-200/90 bg-rose-950/30 border border-rose-500/20 rounded p-2 mt-1 leading-snug">
+                        <strong>Штраф за невывезенный груз (P)</strong> — убыток или неустойка за каждый килограмм заказа, который не влез в кузова и остался недовезённым (уменьшите ёмкость кузова Q до 50–100 кг, чтобы увидеть эффект невывоза).
+                    </div>
                 </div>
 
                 <div class="p-3 rounded bg-slate-950/90 border border-gray-800 text-xs space-y-1.5 mono-font">
                     <div class="flex justify-between"><span class="text-gray-400">Суммарный спрос:</span><span class="text-amber-300 font-bold" id="totalDemand">0 кг</span></div>
-                    <div class="flex justify-between"><span class="text-gray-400">Емкость флота:</span><span class="text-cyan-300 font-bold" id="totalCapacity">0 кг</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Вывезено / Ёмкость парка:</span><span class="text-cyan-300 font-bold" id="totalCapacity">0 / 0 кг</span></div>
                     <div class="flex justify-between pt-1 border-t border-gray-800"><span class="text-gray-400">Статус:</span><span id="capacityBalanceTag" class="font-bold text-emerald-400">100% Покрыто</span></div>
                 </div>
             </div>
@@ -260,7 +330,7 @@
                 </div>
 
                 <div class="p-2.5 rounded bg-slate-950/80 border border-gray-800/80 text-[11px] text-gray-400">
-                    <span class="text-cyan-300 font-bold block mb-0.5">Алгоритм Кларка-Райта:</span>
+                    <span class="text-cyan-300 font-bold block mb-0.5">Алгоритм Кларка — Райта:</span>
                     Объединяет клиентов в один рейс только если экономия на возврате в Депо больше, чем дополнительный пробег между ними.
                 </div>
             </div>
@@ -271,9 +341,8 @@
         <div class="flex justify-between items-center">
             <h2 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
                 <i data-lucide="bar-chart-2" class="w-4 h-4 text-cyan-400"></i>
-                Аналитические панели (Кликните на карточку, чтобы перевернуть)
+                Аналитические панели
             </h2>
-            <span class="text-[10px] text-gray-500">3D Flip Cards</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -282,7 +351,7 @@
                     <div class="flip-card-front glass-card p-4 space-y-2 border-b-2 border-b-cyan-400 flex flex-col justify-between">
                         <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                             <h4 class="text-[11px] font-bold text-gray-200">1. Структура затрат</h4>
-                            <span class="text-[9px] text-cyan-400 bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800">Инфо 🔄</span>
+                            <span class="text-[9px] text-cyan-400 bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800">Инфо</span>
                         </div>
                         <div class="h-44 relative">
                             <canvas id="chartCostBreakdown"></canvas>
@@ -291,14 +360,14 @@
                     <div class="flip-card-back p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-cyan-500/40 pb-1">
                             <h4 class="text-xs font-bold text-cyan-300">Экономический смысл графика 1</h4>
-                            <span class="text-[9px] text-gray-400">Назад 🔄</span>
+                            <span class="text-[9px] text-gray-400">Назад</span>
                         </div>
                         <p class="text-[11px] text-gray-300 leading-relaxed">
                             Иллюстрирует компромисс издержек (Trade-Off). 
-                            Голубой столбец — постоянные расходы на выезд автопарка (F). Зеленый — переменные расходы на километраж (c). 
-                            Розовый — штрафы за недостаток места в кузове (P).
+                            Голубой столбец — постоянные расходы на выезд машин (FC). Зелёный — переменные расходы на километраж (c). 
+                            Красный — штрафы за невывезенный груз (P).
                             <br/><br/>
-                            <em>Управленческий вывод:</em> Преобладание голубого столбца сигналом требует укрупнения кузова и сокращения рейсов.
+                            <em>Управленческий вывод:</em> Преобладание голубого столбца подсказывает подумать об укрупнении кузова и сокращении числа рейсов.
                         </p>
                     </div>
                 </div>
@@ -309,7 +378,7 @@
                     <div class="flip-card-front glass-card p-4 space-y-2 border-b-2 border-b-purple-400 flex flex-col justify-between">
                         <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                             <h4 class="text-[11px] font-bold text-gray-200">2. Загрузка кузовов</h4>
-                            <span class="text-[9px] text-purple-400 bg-purple-950 px-1.5 py-0.5 rounded border border-purple-800">Инфо 🔄</span>
+                            <span class="text-[9px] text-purple-400 bg-purple-950 px-1.5 py-0.5 rounded border border-purple-800">Инфо</span>
                         </div>
                         <div class="h-44 relative">
                             <canvas id="chartCapacityProfile"></canvas>
@@ -318,12 +387,12 @@
                     <div class="flip-card-back p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-purple-500/40 pb-1">
                             <h4 class="text-xs font-bold text-purple-300">Экономический смысл графика 2</h4>
-                            <span class="text-[9px] text-gray-400">Назад 🔄</span>
+                            <span class="text-[9px] text-gray-400">Назад</span>
                         </div>
                         <p class="text-[11px] text-gray-300 leading-relaxed">
-                            Показывает уровень использования полезного объема (Q) по каждому рейсу.
+                            Показывает уровень использования полезного объёма и грузоподъёмности (Q) по каждому рейсу.
                             <br/><br/>
-                            <em>Управленческий вывод:</em> Столбцы, достигнувшие 100%, указывают на наличие узкого места (Bottleneck). Дополнительная вместимость мгновенно сократит общие издержки.
+                            <em>Управленческий вывод:</em> Рейсы, упёршиеся в потолок ёмкости Q, указывают на узкое место (Bottleneck): дополнительный объём кузова сразу снизит затраты или невывоз.
                         </p>
                     </div>
                 </div>
@@ -333,8 +402,8 @@
                 <div class="flip-card-inner">
                     <div class="flip-card-front glass-card p-4 space-y-2 border-b-2 border-b-emerald-400 flex flex-col justify-between">
                         <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                            <h4 class="text-[11px] font-bold text-gray-200">3. Оптимизация флота</h4>
-                            <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-800">Инфо 🔄</span>
+                            <h4 class="text-[11px] font-bold text-gray-200">3. Оптимизация парка машин</h4>
+                            <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-800">Инфо</span>
                         </div>
                         <div class="h-44 relative">
                             <canvas id="chartFleetSensitivity"></canvas>
@@ -343,13 +412,13 @@
                     <div class="flip-card-back p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-emerald-500/40 pb-1">
                             <h4 class="text-xs font-bold text-emerald-300">Экономический смысл графика 3</h4>
-                            <span class="text-[9px] text-gray-400">Назад 🔄</span>
+                            <span class="text-[9px] text-gray-400">Назад</span>
                         </div>
                         <p class="text-[11px] text-gray-300 leading-relaxed">
-                            U-образная кривая совокупных затрат.
-                            Левая часть растет из-за гигантских пробегов малочисленного флота. Правая — из-за переплат за постоянный фикс (F).
+                            U-образная кривая совокупных затрат при разном числе машин.
+                            При нехватке машин растут перепробеги и штрафы за невывоз; при избытке машин — переплата за фиксированный выезд (FC).
                             <br/><br/>
-                            <em>Управленческий вывод:</em> Самая нижняя точка траектории определяет идеальное количество грузовиков.
+                            <em>Управленческий вывод:</em> Минимум кривой подсказывает баланс между числом рейсов, пробегом и вместимостью.
                         </p>
                     </div>
                 </div>
@@ -359,8 +428,8 @@
                 <div class="flip-card-inner">
                     <div class="flip-card-front glass-card p-4 space-y-2 border-b-2 border-b-amber-400 flex flex-col justify-between">
                         <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                            <h4 class="text-[11px] font-bold text-gray-200">4. Удельный кост доставки</h4>
-                            <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded border border-amber-800">Инфо 🔄</span>
+                            <h4 class="text-[11px] font-bold text-gray-200">4. Удельная стоимость доставки</h4>
+                            <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded border border-amber-800">Инфо</span>
                         </div>
                         <div class="h-44 relative">
                             <canvas id="chartCostEfficiency"></canvas>
@@ -368,13 +437,13 @@
                     </div>
                     <div class="flip-card-back p-4 space-y-2">
                         <div class="flex justify-between items-center border-b border-amber-500/40 pb-1">
-                            <h4 class="text-xs font-bold text-amber-300">Экономический смысл графика 4</h4>
-                            <span class="text-[9px] text-gray-400">Назад 🔄</span>
+                            <h4 class="text-xs font-bold text-amber-300">Что такое удельная стоимость доставки</h4>
+                            <span class="text-[9px] text-gray-400">Назад</span>
                         </div>
                         <p class="text-[11px] text-gray-300 leading-relaxed">
-                            Карта распределения клиентов по удельной стоимости единицы груза (тенге/кг) в зависимости от удаленности от Депо.
+                            Это расчётная стоимость доставки <strong>1 кг груза</strong> до конкретного клиента (ось Y, ₸/кг) в зависимости от расстояния от Депо (ось X, км); размер точки — вес заказа.
                             <br/><br/>
-                            <em>Управленческий вывод:</em> Выявляет нерентабельные отдаленные точки с небольшим спросом для обоснования минимального размера заказа.
+                            <em>Управленческий вывод:</em> Помогает увидеть далёких клиентов с маленьким заказом — у них самая высокая стоимость доставки 1 кг, поэтому для них часто вводят минимальный заказ или объединяют отгрузки.
                         </p>
                     </div>
                 </div>
@@ -382,46 +451,77 @@
         </div>
     </section>
 
+    <!-- Учебные MBA-кейсы -->
     <section class="glass-card p-5 border-l-4 border-l-indigo-500 space-y-4">
         <div class="flex items-center justify-between border-b border-gray-800 pb-3">
             <div class="flex items-center gap-2">
-                <i data-lucide="graduation-cap" id="secretAnswerToggle" onclick="toggleAnswersKey()" class="w-5 h-5 text-gray-700 hover:text-indigo-400 transition-colors cursor-pointer opacity-30"></i>
+                <i data-lucide="graduation-cap" id="secretAnswerToggle" onclick="toggleAnswersKey()" class="w-5 h-5 text-gray-700 hover:text-indigo-400 transition-colors cursor-pointer opacity-30" title="Открыть/скрыть все ответы"></i>
                 <h3 class="text-sm font-bold text-white uppercase tracking-wider">Учебные MBA-кейсы и контрольные задания</h3>
             </div>
-            <span class="text-xs text-indigo-300 bg-slate-800 px-2.5 py-1 rounded border border-gray-700 font-mono">PRACTICE MODULE</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            <div class="bg-slate-950/80 p-4 rounded-lg border border-gray-800 space-y-2 flex flex-col justify-between">
-                <div class="space-y-1.5">
-                    <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">Кейс 1: Шок переменной составляющей</span>
-                    <p class="text-gray-300 font-medium">Если стоимость топлива и амортизации на километр (c) подскочит в 3 раза, как эластичность маршрутов заставит алгоритм перестроить конфигурацию флота?</p>
-                </div>
-                <div class="answer-key hidden mt-2 p-2.5 bg-slate-900/90 rounded border border-cyan-500/40 text-gray-300 leading-relaxed text-[11px]">
-                    <span class="text-cyan-400 font-bold block mb-1">Разбор эксперта:</span>
-                    Количество задействованных машин вырастет. При дорогом пробеге длинные кольцевые маршруты становятся экономически катастрофическими. Алгоритм дробно разбивает карту на мелкие локальные секторов, высылая дополнительные единицы автотранспорта для сокращения совокупного километража.
-                </div>
-            </div>
-
-            <div class="bg-slate-950/80 p-4 rounded-lg border border-gray-800 space-y-2 flex flex-col justify-between">
-                <div class="space-y-1.5">
-                    <span class="text-[10px] font-bold text-purple-400 uppercase tracking-widest">Кейс 2: Оценка предельной ценности</span>
-                    <p class="text-gray-300 font-medium">Поставщик предлагает модификацию кузова, увеличивающую объем (Q) на 10%. Каков предельный размер дневного платежа за лизинг, при котором соглашение остается прибыльным?</p>
-                </div>
-                <div class="answer-key hidden mt-2 p-2.5 bg-slate-900/90 rounded border border-purple-500/40 text-gray-300 leading-relaxed text-[11px]">
-                    <span class="text-purple-400 font-bold block mb-1">Разбор эксперта:</span>
-                    Максимально допустимый платеж равен величине Теневой цены емкости, умноженной на прирост килограммов. Если суточная экономия общих издержек от расширения кузова превышает лизинговую ставку — проект создает положительную чистую приведенную ценность (NPV).
+            <!-- Кейс 1 -->
+            <div class="flip-card-case cursor-pointer" onclick="toggleFlip(this)">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front bg-slate-950/90 p-4 rounded-xl border border-gray-800 hover:border-cyan-500/40 flex flex-col justify-between transition-colors">
+                        <div class="space-y-1.5">
+                            <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-widest block">Кейс 1: Шок переменной составляющей</span>
+                            <p class="text-gray-300 font-medium leading-relaxed">Если стоимость топлива и амортизации на километр (c) вырастет в 3 раза, как алгоритм перестроит маршруты и парк машин?</p>
+                        </div>
+                    </div>
+                    <div class="flip-card-back p-4 space-y-1.5 border-cyan-500/60">
+                        <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1">
+                            <span class="text-[10px] font-bold text-cyan-400 uppercase">Разбор кейса 1</span>
+                        </div>
+                        <p class="text-[11px] text-gray-300 leading-relaxed">
+                            Число задействованных машин обычно растёт или меняются связки точек. При дорогом километре длинные общие петли между удалёнными точками становятся невыгодными: проще разбить карту на компактные локальные маршруты, чтобы сократить общий пробег в километрах, даже если придётся выпустить дополнительную машину.
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-slate-950/80 p-4 rounded-lg border border-gray-800 space-y-2 flex flex-col justify-between">
-                <div class="space-y-1.5">
-                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Кейс 3: Ловушка постоянного фикса</span>
-                    <p class="text-gray-300 font-medium">Почему стремление руководства минимизировать количество выехавших машин часто приводит к скрытому удорожанию логистики?</p>
+            <!-- Кейс 2 -->
+            <div class="flip-card-case cursor-pointer" onclick="toggleFlip(this)">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front bg-slate-950/90 p-4 rounded-xl border border-gray-800 hover:border-purple-500/40 flex flex-col justify-between transition-colors">
+                        <div class="space-y-1.5">
+                            <span class="text-[10px] font-bold text-purple-400 uppercase tracking-widest block">Кейс 2: Теневая цена ёмкости</span>
+                            <p class="text-gray-300 font-medium leading-relaxed">Поставщик предлагает увеличить кузов (Q) на 10%. Каков предельный размер платы за расширение кузова, при котором решение экономически оправдано?</p>
+                        </div>
+                    </div>
+                    <div class="flip-card-back p-4 space-y-1.5 border-purple-500/60">
+                        <div class="flex justify-between items-center border-b border-purple-500/30 pb-1">
+                            <span class="text-[10px] font-bold text-purple-400 uppercase">Разбор кейса 2</span>
+                        </div>
+                        <p class="text-[11px] text-gray-300 leading-relaxed">
+                            Предельная выгода определяется через <strong>теневую цену ёмкости</strong> — сколько тенге экономится на 1 кг прироста кузова:
+                            <br/>
+                            <strong class="text-purple-300">Максимальная выгода = Теневая цена × прирост кузова (кг).</strong>
+                            <br/>
+                            Если плата за увеличение кузова в пересчёте на рейс меньше этой экономии — решение выгодно; если больше — убыточно.
+                        </p>
+                    </div>
                 </div>
-                <div class="answer-key hidden mt-2 p-2.5 bg-slate-900/90 rounded border border-emerald-500/40 text-gray-300 leading-relaxed text-[11px]">
-                    <span class="text-emerald-400 font-bold block mb-1">Разбор эксперта:</span>
-                    При искусственном сокращении машин перепробег оставшихся единиц растет нелинейно. Если совокупный рос переменных затрат на километраж и штрафы за просрочку неперевезенного груза (P) превышают экономию на фиксированном выезде (F), компания несет прямой убыток.
+            </div>
+
+            <!-- Кейс 3 -->
+            <div class="flip-card-case cursor-pointer" onclick="toggleFlip(this)">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front bg-slate-950/90 p-4 rounded-xl border border-gray-800 hover:border-emerald-500/40 flex flex-col justify-between transition-colors">
+                        <div class="space-y-1.5">
+                            <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Кейс 3: Ловушка постоянного фикса FC</span>
+                            <p class="text-gray-300 font-medium leading-relaxed">Почему стремление минимизировать число выехавших машин часто приводит к скрытому удорожанию логистики?</p>
+                        </div>
+                    </div>
+                    <div class="flip-card-back p-4 space-y-1.5 border-emerald-500/60">
+                        <div class="flex justify-between items-center border-b border-emerald-500/30 pb-1">
+                            <span class="text-[10px] font-bold text-emerald-400 uppercase">Разбор кейса 3</span>
+                        </div>
+                        <p class="text-[11px] text-gray-300 leading-relaxed">
+                            При искусственном сокращении числа машин растут «крюки» в маршрутах (<strong>лишние км × ставка c</strong>) либо часть груза не помещается в кузова и даёт штраф за невывоз (<strong>невывезенные кг × штраф P</strong>). Когда эти потери превышают экономию на выезде FC, общие затраты растут.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -437,25 +537,74 @@
     }
 
     function toggleAnswersKey() {
-        document.querySelectorAll('.answer-key').forEach(ans => ans.classList.toggle('hidden'));
+        document.querySelectorAll('.flip-card-case').forEach(card => card.classList.toggle('flipped'));
+    }
+
+    function toggleParamNote(noteId) {
+        const el = document.getElementById(noteId);
+        if (el) el.classList.toggle('hidden');
     }
 
     const VEHICLE_COLORS = ['#00f2fe', '#a855f7', '#10b981', '#f59e0b', '#f43f5e', '#6366f1', '#ec4899'];
     const depot = { x: 400, y: 240, name: 'Депо' };
     let clients = [];
     let currentSolution = null;
+    let latestMetrics = { totalCost: 0, savings25: 0, shadowPrice: 0, deltaQ: 25, util: 0, vehicles: 0, avgDist: 0, q: 350 };
 
     let chart1 = null, chart2 = null, chart3 = null, chart4 = null;
+
+    function resetKpiExplanation() {
+        const box = document.getElementById('kpiExplanationContent');
+        box.innerHTML = `<span class="font-bold text-cyan-300">Пояснение к показателям:</span> Нажмите на любую из пяти карточек выше, чтобы увидеть формулу, смысл и расчёт на текущих цифрах.`;
+    }
+
+    function showKpiExplanation(key) {
+        const box = document.getElementById('kpiExplanationContent');
+        const m = latestMetrics;
+
+        if (key === 'shadowPrice') {
+            box.innerHTML = `
+                <span class="font-bold text-rose-400">Теневая цена ёмкости (${m.shadowPrice.toLocaleString('ru-RU')} ₸/кг):</span>
+                показывает, на сколько снизятся общие затраты при увеличении ёмкости кузова на <strong>1 кг</strong>.
+                Сейчас при шаге <strong>+${m.deltaQ} кг</strong> к кузову экономия составляет <strong>${Math.round(m.savings25).toLocaleString('ru-RU')} ₸</strong> → оценка ≈ <strong>${m.shadowPrice.toLocaleString('ru-RU')} ₸ за 1 кг</strong>.
+                Если расширение кузова на 1 кг в пересчёте на рейс обходится дешевле <strong>${m.shadowPrice.toLocaleString('ru-RU')} ₸</strong> — выгодно; если «0 ₸/кг» — прямо сейчас прибавка +25 кг не снижает затраты.
+            `;
+        } else if (key === 'totalCost') {
+            box.innerHTML = `
+                <span class="font-bold text-cyan-300">Общие затраты (${Math.round(m.totalCost).toLocaleString('ru-RU')} ₸):</span>
+                сумма всех издержек текущего плана развоза: <strong>FC × число рейсов</strong> + <strong>пробег (км) × затраты на 1 км (c)</strong> + <strong>невывезенный груз (кг) × штраф (P)</strong>.
+            `;
+        } else if (key === 'vehicles') {
+            box.innerHTML = `
+                <span class="font-bold text-purple-300">Активный парк машин (${m.vehicles} шт):</span>
+                количество замкнутых маршрутов/рейсов, которые выходят из Депо и возвращаются в него для развоза заказов всех клиентов.
+            `;
+        } else if (key === 'utilization') {
+            box.innerHTML = `
+                <span class="font-bold text-emerald-300">Утилизация кузова (${m.util}%):</span>
+                доля использованной вместимости всего вышедшего парка машин (<strong>${m.util}%</strong> означает, что фактически загружено ${m.util}% от суммарного объёма кузовов всех рейсов, а ${Math.max(0, 100 - m.util)}% остаётся свободным из-за «неделимости» заказов клиентов).
+            `;
+        } else if (key === 'avgDist') {
+            box.innerHTML = `
+                <span class="font-bold text-amber-300">Среднее плечо доставки (${m.avgDist} км):</span>
+                общий пробег всех маршрутов, делённый на число точек клиентов — показывает среднюю дорожную нагрузку на одну точку доставки.
+            `;
+        }
+    }
+
+    function createClientPoint(id) {
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 60 + Math.random() * 190;
+        const x = Math.min(760, Math.max(40, Math.round(depot.x + Math.cos(angle) * distance)));
+        const y = Math.min(440, Math.max(40, Math.round(depot.y + Math.sin(angle) * distance)));
+        return { id, x, y, demand: Math.round(25 + Math.random() * 115) };
+    }
 
     function generateRandomClients() {
         const count = parseInt(document.getElementById('sliderN').value);
         clients = [];
         for (let i = 1; i <= count; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 60 + Math.random() * 190;
-            const x = Math.min(760, Math.max(40, Math.round(depot.x + Math.cos(angle) * distance)));
-            const y = Math.min(440, Math.max(40, Math.round(depot.y + Math.sin(angle) * distance)));
-            clients.push({ id: i, x, y, demand: Math.round(25 + Math.random() * 115) });
+            clients.push(createClientPoint(i));
         }
         recalculateAll();
     }
@@ -469,11 +618,18 @@
     function solveVRP(F, c, Q, P) {
         if (clients.length === 0) return null;
 
-        let routes = clients.map(client => ({
-            clients: [client],
-            load: client.demand,
-            dist: getDistance(depot, client) * 2
-        }));
+        let unhandledDemand = 0;
+        let routes = clients.map(client => {
+            const carried = Math.min(client.demand, Q);
+            const deficit = Math.max(0, client.demand - Q);
+            unhandledDemand += deficit;
+            return {
+                clients: [client],
+                load: carried,
+                deficit: deficit,
+                dist: getDistance(depot, client) * 2
+            };
+        });
 
         const savings = [];
         for (let i = 0; i < clients.length; i++) {
@@ -490,7 +646,7 @@
             let r2 = routes.find(r => r.clients[0].id === pair.c2.id || r.clients[r.clients.length - 1].id === pair.c2.id);
 
             if (r1 && r2 && r1 !== r2) {
-                if (r1.load + r2.load <= Q) {
+                if (r1.load + r2.load <= Q && r1.deficit === 0 && r2.deficit === 0) {
                     const r1IsEnd = r1.clients[r1.clients.length - 1].id === pair.c1.id;
                     const r2IsStart = r2.clients[0].id === pair.c2.id;
                     const r1IsStart = r1.clients[0].id === pair.c1.id;
@@ -516,16 +672,12 @@
             }
         }
 
-        let unhandledDemand = 0;
-        routes.forEach(r => {
-            if (r.load > Q) {
-                unhandledDemand += (r.load - Q);
-                r.load = Q;
-            }
-        });
-
         let totalDist = 0;
-        routes.forEach(r => totalDist += r.dist);
+        let totalCarried = 0;
+        routes.forEach(r => {
+            totalDist += r.dist;
+            totalCarried += r.load;
+        });
         totalDist = Math.round(totalDist * 10) / 10;
 
         const fixedCosts = routes.length * F;
@@ -533,7 +685,17 @@
         const penaltyCosts = unhandledDemand * P;
         const totalCost = fixedCosts + variableCosts + penaltyCosts;
 
-        return { routes, totalDist, fixedCosts, variableCosts, penaltyCosts, totalCost, vehicleCount: routes.length, unhandledDemand };
+        return {
+            routes,
+            totalDist,
+            totalCarried,
+            fixedCosts,
+            variableCosts,
+            penaltyCosts,
+            totalCost,
+            vehicleCount: routes.length,
+            unhandledDemand
+        };
     }
 
     function recalculateAll() {
@@ -546,11 +708,7 @@
         if (clients.length !== N) {
             if (clients.length < N) {
                 for (let i = clients.length + 1; i <= N; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = 60 + Math.random() * 190;
-                    const x = Math.min(760, Math.max(40, Math.round(depot.x + Math.cos(angle) * distance)));
-                    const y = Math.min(440, Math.max(40, Math.round(depot.y + Math.sin(angle) * distance)));
-                    clients.push({ id: i, x, y, demand: Math.round(25 + Math.random() * 115) });
+                    clients.push(createClientPoint(i));
                 }
             } else {
                 clients = clients.slice(0, N);
@@ -565,37 +723,49 @@
 
         currentSolution = solveVRP(F, c, Q, P);
 
-        // ИСПРАВЛЕННЫЙ И ТЕХНИЧЕСКИ ТОЧНЫЙ РАСЧЕТ ТЕНЕВОЙ ЦЕНЫ
         const deltaQ = 25;
         const shadowSolution = solveVRP(F, c, Q + deltaQ, P);
         const costSavings = currentSolution.totalCost - shadowSolution.totalCost;
         const shadowPriceVal = costSavings > 0 ? Math.round(costSavings / deltaQ) : 0;
 
-        updateKPIs(currentSolution, Q, shadowPriceVal);
-        renderSVGMap(currentSolution);
+        updateKPIs(currentSolution, Q, shadowPriceVal, costSavings, deltaQ);
+        renderSVGMap(currentSolution, F, c, Q);
         renderCharts(currentSolution, F, c, Q, P);
     }
 
-    function updateKPIs(sol, Q, shadowPrice) {
+    function updateKPIs(sol, Q, shadowPrice, costSavings, deltaQ) {
         document.getElementById('kpiTotalCost').innerText = Math.round(sol.totalCost).toLocaleString('ru-RU') + ' ₸';
         document.getElementById('kpiVehicles').innerText = sol.vehicleCount + ' шт';
 
         const totalDemand = clients.reduce((s, cl) => s + cl.demand, 0);
         const totalCap = sol.vehicleCount * Q;
-        const util = totalCap > 0 ? Math.min(100, Math.round((totalDemand / totalCap) * 100)) : 0;
+        const util = totalCap > 0 ? Math.min(100, Math.round((sol.totalCarried / totalCap) * 100)) : 0;
+        const avgDist = clients.length > 0 ? Math.round((sol.totalDist / clients.length) * 10) / 10 : 0;
+        const coveragePct = totalDemand > 0 ? Math.round((sol.totalCarried / totalDemand) * 100) : 100;
+
+        latestMetrics = {
+            totalCost: sol.totalCost,
+            savings25: costSavings,
+            shadowPrice: shadowPrice,
+            deltaQ: deltaQ,
+            util: util,
+            vehicles: sol.vehicleCount,
+            avgDist: avgDist,
+            q: Q
+        };
 
         document.getElementById('kpiUtilization').innerText = util + '%';
-        document.getElementById('kpiAvgDist').innerText = (clients.length > 0 ? Math.round((sol.totalDist / clients.length) * 10) / 10 : 0) + ' км';
+        document.getElementById('kpiAvgDist').innerText = avgDist + ' км';
         document.getElementById('kpiShadowPrice').innerText = shadowPrice.toLocaleString('ru-RU') + ' ₸/кг';
 
         document.getElementById('totalDemand').innerText = totalDemand + ' кг';
-        document.getElementById('totalCapacity').innerText = totalCap + ' кг';
+        document.getElementById('totalCapacity').innerText = `${sol.totalCarried} / ${totalCap} кг`;
 
         const balanceTag = document.getElementById('capacityBalanceTag');
         if (sol.unhandledDemand > 0) {
-            balanceTag.innerText = `Дефицит ${sol.unhandledDemand} кг`;
+            balanceTag.innerText = `Невывоз ${sol.unhandledDemand} кг (покрыто ${coveragePct}%)`;
             balanceTag.className = 'font-bold text-rose-400';
-            document.getElementById('mapStatusBadge').innerText = 'ДЕФИЦИТ ЕМКОСТИ';
+            document.getElementById('mapStatusBadge').innerText = 'НЕХВАТКА ЁМКОСТИ';
             document.getElementById('mapStatusBadge').className = 'text-[10px] bg-rose-950 text-rose-300 border border-rose-800 px-2 py-0.5 rounded font-mono';
         } else {
             balanceTag.innerText = '100% Покрыто';
@@ -605,7 +775,7 @@
         }
     }
 
-    function renderSVGMap(sol) {
+    function renderSVGMap(sol, F, c, Q) {
         const svg = document.getElementById('vrpMap');
         const expBox = document.getElementById('routeExplanationText');
         let html = '';
@@ -618,21 +788,26 @@
         <rect width="100%" height="100%" fill="url(#grid)" />`;
 
         sol.routes.forEach((route, idx) => {
-            const color = VEHICLE_COLORS[idx % VEHICLE_COLORS.length];
+            const color = route.deficit > 0 ? '#f43f5e' : VEHICLE_COLORS[idx % VEHICLE_COLORS.length];
             const pts = [depot, ...route.clients, depot];
             let dStr = `M ${pts[0].x} ${pts[0].y}`;
             for (let i = 1; i < pts.length; i++) dStr += ` L ${pts[i].x} ${pts[i].y}`;
 
-            html += `<path d="${dStr}" fill="none" stroke="${color}" stroke-width="6" stroke-opacity="0.2" class="cursor-pointer route-line" data-route="${idx+1}" data-load="${route.load}" data-dist="${route.dist}" />`;
+            html += `<path d="${dStr}" fill="none" stroke="${color}" stroke-width="6" stroke-opacity="0.2" class="cursor-pointer route-line" data-route="${idx+1}" data-load="${route.load}" data-deficit="${route.deficit}" data-dist="${route.dist}" />`;
             html += `<path d="${dStr}" fill="none" stroke="${color}" stroke-width="2.5" class="route-flow pointer-events-none" />`;
         });
 
-        clients.forEach(c => {
+        clients.forEach(cItem => {
+            const hasDeficit = cItem.demand > Q;
+            const strokeColor = hasDeficit ? '#f43f5e' : '#f59e0b';
+            const fillColor = hasDeficit ? '#f43f5e' : '#f59e0b';
+            const labelColor = hasDeficit ? '#fda4af' : '#cbd5e1';
+
             html += `
-            <g class="cursor-pointer client-node" data-id="${c.id}" data-demand="${c.demand}">
-                <circle cx="${c.x}" cy="${c.y}" r="11" fill="#0b0e17" stroke="#f59e0b" stroke-width="2"/>
-                <circle cx="${c.x}" cy="${c.y}" r="3.5" fill="#f59e0b"/>
-                <text x="${c.x}" y="${c.y - 15}" text-anchor="middle" fill="#cbd5e1" font-size="9" font-weight="600">${c.demand}кг</text>
+            <g class="cursor-pointer client-node" data-id="${cItem.id}" data-demand="${cItem.demand}">
+                <circle cx="${cItem.x}" cy="${cItem.y}" r="11" fill="#0b0e17" stroke="${strokeColor}" stroke-width="2"/>
+                <circle cx="${cItem.x}" cy="${cItem.y}" r="3.5" fill="${fillColor}"/>
+                <text x="${cItem.x}" y="${cItem.y - 15}" text-anchor="middle" fill="${labelColor}" font-size="9" font-weight="600">${cItem.demand}кг</text>
             </g>`;
         });
 
@@ -648,16 +823,20 @@
         svg.querySelectorAll('.client-node').forEach(n => {
             n.addEventListener('mouseenter', () => {
                 const id = n.getAttribute('data-id');
-                const demand = n.getAttribute('data-demand');
-                const cl = clients.find(c => c.id == id);
+                const demand = parseFloat(n.getAttribute('data-demand')) || 1;
+                const cl = clients.find(item => item.id == id);
                 const dDepot = getDistance(depot, cl);
+                const estUnitCost = Math.round(((dDepot * c * 1.8) + (F / Math.max(1, sol.vehicleCount))) / demand);
+                const deficit = Math.max(0, demand - Q);
                 expBox.innerHTML = `
-                    <div class="p-2 rounded bg-amber-950/40 border border-amber-500/30">
-                        <strong class="text-amber-400 block">Клиент #${id}</strong>
+                    <div class="p-2 rounded ${deficit > 0 ? 'bg-rose-950/40 border border-rose-500/40' : 'bg-amber-950/40 border border-amber-500/30'}">
+                        <strong class="${deficit > 0 ? 'text-rose-400' : 'text-amber-400'} block">Клиент #${id}</strong>
                         <span>Заказ: <strong>${demand} кг</strong></span><br/>
-                        <span>Удаление от Депо: <strong>${dDepot} км</strong></span>
+                        ${deficit > 0 ? `<span class="text-rose-300">Не влезло в кузов: <strong>${deficit} кг</strong></span><br/>` : ''}
+                        <span>Удаление от Депо: <strong>${dDepot} км</strong></span><br/>
+                        <span>Удельная стоимость: <strong>~${estUnitCost.toLocaleString('ru-RU')} ₸/кг</strong></span>
                     </div>
-                    <p class="text-[11px] text-gray-300">Чем дальше клиент от центра и чем меньше его вес, тем выше у него <em>удельный кост доставки на 1 кг</em>.</p>
+                    <p class="text-[11px] text-gray-300">${deficit > 0 ? 'Заказ превышает ёмкость одного кузова Q: машина увозит максимум Q, а остаток попадает в невывоз со штрафом P.' : 'Чем дальше точка от Депо и чем меньше вес заказа, тем дороже обходится доставка каждого килограмма.'}</p>
                 `;
             });
         });
@@ -666,14 +845,16 @@
             r.addEventListener('mouseenter', () => {
                 const rNum = r.getAttribute('data-route');
                 const load = r.getAttribute('data-load');
+                const deficit = parseInt(r.getAttribute('data-deficit') || '0');
                 const dist = r.getAttribute('data-dist');
                 expBox.innerHTML = `
                     <div class="p-2 rounded bg-cyan-950/40 border border-cyan-500/30">
                         <strong class="text-cyan-400 block">Рейс Машины #${rNum}</strong>
                         <span>Загрузка кузова: <strong>${load} кг</strong></span><br/>
+                        ${deficit > 0 ? `<span class="text-rose-300">Невывезенный остаток: <strong>${deficit} кг</strong></span><br/>` : ''}
                         <span>Длина кольца: <strong>${dist} км</strong></span>
                     </div>
-                    <p class="text-[11px] text-gray-300">Алгоритм объединил этих клиентов в один замкнутый контур, чтобы машина выехала 1 раз и не возвращалась в Депо за каждым заказом отдельно.</p>
+                    <p class="text-[11px] text-gray-300">Алгоритм объединил этих клиентов в один замкнутый контур, чтобы машина выехала один раз и не возвращалась в Депо за каждым заказом отдельно.</p>
                 `;
             });
         });
@@ -687,9 +868,9 @@
             data: {
                 labels: ['Затраты'],
                 datasets: [
-                    { label: 'Фикс F', data: [sol.fixedCosts], backgroundColor: '#00f2fe' },
-                    { label: 'Переменка c', data: [sol.variableCosts], backgroundColor: '#10b981' },
-                    { label: 'Штрафы P', data: [sol.penaltyCosts], backgroundColor: '#ff2a5f' }
+                    { label: 'FC (выезд)', data: [sol.fixedCosts], backgroundColor: '#00f2fe' },
+                    { label: 'Пробег (c)', data: [sol.variableCosts], backgroundColor: '#10b981' },
+                    { label: 'Штраф за невывоз (P)', data: [sol.penaltyCosts], backgroundColor: '#ff2a5f' }
                 ]
             },
             options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
@@ -706,14 +887,12 @@
             options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: Math.max(Q * 1.1, 100) } } }
         });
 
-        // ИСПРАВЛЕННЫЙ МАТЕМАТИЧЕСКИЙ РАСЧЕТ ЧУВСТВИТЕЛЬНОСТИ ФЛОТА (ГРАФИК 3)
         const ctx3 = document.getElementById('chartFleetSensitivity').getContext('2d');
         if (chart3) chart3.destroy();
         
         const fleetK = [1, 2, 3, 4, 5, 6, 7, 8];
         const sensData = fleetK.map(k => {
             const fixedPart = k * F;
-            // Канонический износ при дробной разбивке контуров
             const distEst = sol.totalDist * (1 + 0.35 * (sol.vehicleCount - k));
             const varPart = Math.max(sol.totalDist * 0.5, distEst) * c;
             const totalDemand = clients.reduce((s, cl) => s + cl.demand, 0);
@@ -725,7 +904,7 @@
             type: 'line',
             data: {
                 labels: fleetK.map(k => `${k} ТС`),
-                datasets: [{ label: 'Total Cost (₸)', data: sensData, borderColor: '#10b981', tension: 0.3, fill: true, backgroundColor: 'rgba(16,185,129,0.1)' }]
+                datasets: [{ label: 'Общие затраты (₸)', data: sensData, borderColor: '#10b981', tension: 0.3, fill: true, backgroundColor: 'rgba(16,185,129,0.1)' }]
             },
             options: { responsive: true, maintainAspectRatio: false }
         });
@@ -734,12 +913,12 @@
         if (chart4) chart4.destroy();
         const bubbleData = clients.map(cl => ({
             x: getDistance(depot, cl),
-            y: Math.round(((getDistance(depot, cl) * c * 1.8) + (F / sol.vehicleCount)) / cl.demand),
+            y: Math.round(((getDistance(depot, cl) * c * 1.8) + (F / Math.max(1, sol.vehicleCount))) / Math.max(1, cl.demand)),
             r: Math.max(3, Math.round(cl.demand / 15))
         }));
         chart4 = new Chart(ctx4, {
             type: 'bubble',
-            data: { datasets: [{ label: 'Клиенты', data: bubbleData, backgroundColor: 'rgba(245, 158, 11, 0.7)' }] },
+            data: { datasets: [{ label: '₸/кг по клиентам', data: bubbleData, backgroundColor: 'rgba(245, 158, 11, 0.7)' }] },
             options: { responsive: true, maintainAspectRatio: false }
         });
     }
