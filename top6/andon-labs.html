@@ -55,10 +55,10 @@
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3.5">
                 <div id="logo-place" class="h-11 px-2.5 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/10 shrink-0">
-    <img src="https://ogaydv-prog.github.io/Managerial-Economics/top6/andon-labs.png" 
-         alt="Andon Labs Logo" 
-         class="h-8 w-auto max-w-[160px] object-contain">
-</div>
+                    <img src="https://ogaydv-prog.github.io/Managerial-Economics/top6/andon-labs.png" 
+                         alt="Andon Labs Logo" 
+                         class="h-8 w-auto max-w-[160px] object-contain">
+                </div>
                 <div>
                     <div class="flex items-center gap-2">
                         <span class="text-[10px] font-bold uppercase tracking-widest text-blue-400">MBA Master Case | AlmaU GSB</span>
@@ -95,6 +95,9 @@
             </button>
             <button onclick="switchTab('solution')" id="tab-solution" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 border border-rose-500/30 text-rose-400 hover:bg-rose-950/30 whitespace-nowrap">
                 <i class="fa-solid fa-key"></i> 6. Разгадка Преподавателя
+            </button>
+            <button onclick="switchTab('update2026')" id="tab-update2026" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-950/30 whitespace-nowrap">
+                <i class="fa-solid fa-bolt"></i> 7. Апдейт Ноябрь 2026
             </button>
         </div>
     </div>
@@ -235,45 +238,69 @@
             <h3 class="font-bold text-lg text-white mb-2">Официальные материалы и валидные источники</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-    <!-- Video 1: Interview with Founder -->
-    <div class="custom-card rounded-2xl overflow-hidden p-2">
-        <div class="aspect-video rounded-xl overflow-hidden">
-            <iframe class="w-full h-full" src="https://www.youtube.com/embed/AzPEw7FZq3I?rel=0" title="Axel Backlund Interview" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="p-3">
-            <h4 class="font-bold text-xs text-white">Интервью: Аксель Баклунд (Andon Labs)</h4>
-            <p class="text-[11px] text-slate-400 mt-1">Сооснователь Andon Labs о том, как Mona управляет кофейней в Стокгольме.</p>
-            <a href="https://www.youtube.com/watch?v=AzPEw7FZq3I" target="_blank" class="text-[11px] text-blue-400 hover:underline mt-2 inline-block">Смотреть на YouTube <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
-        </div>
-    </div>
+                <!-- Video 1: Interview with Founder -->
+                <div class="custom-card rounded-2xl overflow-hidden p-2">
+                    <div class="aspect-video rounded-xl overflow-hidden">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/AzPEw7FZq3I?rel=0" title="Axel Backlund Interview" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-3">
+                        <h4 class="font-bold text-xs text-white">Интервью: Аксель Баклунд (Andon Labs)</h4>
+                        <p class="text-[11px] text-slate-400 mt-1">Сооснователь Andon Labs о том, как Mona управляет кофейней в Стокгольме.</p>
+                        <a href="https://www.youtube.com/watch?v=AzPEw7FZq3I" target="_blank" class="text-[11px] text-blue-400 hover:underline mt-2 inline-block">Смотреть на YouTube <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                    </div>
+                </div>
 
-    <!-- Video 2: News Report about Mona -->
-    <div class="custom-card rounded-2xl overflow-hidden p-2">
-        <div class="aspect-video rounded-xl overflow-hidden">
-            <iframe class="w-full h-full" src="https://www.youtube.com/embed/J32qbZTpHeI?rel=0" title="AI Runs a Cafe in Stockholm" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="p-3">
-            <h4 class="font-bold text-xs text-white">Репортаж: ИИ-менеджер Mona в Стокгольме</h4>
-            <p class="text-[11px] text-slate-400 mt-1">Обзор работы кофейни, ошибок в закупках и ночных сообщений бариста.</p>
-            <a href="https://www.youtube.com/watch?v=J32qbZTpHeI" target="_blank" class="text-[11px] text-blue-400 hover:underline mt-2 inline-block">Смотреть на YouTube <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
-        </div>
-    </div>
+                <!-- Video 2: News Report about Mona -->
+                <div class="custom-card rounded-2xl overflow-hidden p-2">
+                    <div class="aspect-video rounded-xl overflow-hidden">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/J32qbZTpHeI?rel=0" title="AI Runs a Cafe in Stockholm" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-3">
+                        <h4 class="font-bold text-xs text-white">Репортаж: ИИ-менеджер Mona в Стокгольме</h4>
+                        <p class="text-[11px] text-slate-400 mt-1">Обзор работы кофейни, ошибок в закупках и ночных сообщений бариста.</p>
+                        <a href="https://www.youtube.com/watch?v=J32qbZTpHeI" target="_blank" class="text-[11px] text-blue-400 hover:underline mt-2 inline-block">Смотреть на YouTube <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                    </div>
+                </div>
 
-    <!-- Video 3: Case Analysis -->
-    <div class="custom-card rounded-2xl overflow-hidden p-2">
-        <div class="aspect-video rounded-xl overflow-hidden">
-            <iframe class="w-full h-full" src="https://www.youtube.com/embed/GTQbzWlhCqY?rel=0" title="The AI Cafe Was Designed to Fail" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="p-3">
-            <h4 class="font-bold text-xs text-white">Анализ: Why The AI Café Failed</h4>
-            <p class="text-[11px] text-slate-400 mt-1">Разбор системных причин провала Mona и отсутствия Hard Limits.</p>
-            <a href="https://www.youtube.com/watch?v=GTQbzWlhCqY" target="_blank" class="text-[11px] text-blue-400 hover:underline mt-2 inline-block">Смотреть на YouTube <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
-        </div>
-    </div>
-</div>
+                <!-- Video 3: Case Analysis -->
+                <div class="custom-card rounded-2xl overflow-hidden p-2">
+                    <div class="aspect-video rounded-xl overflow-hidden">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/GTQbzWlhCqY?rel=0" title="The AI Cafe Was Designed to Fail" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-3">
+                        <h4 class="font-bold text-xs text-white">Анализ: Why The AI Café Failed</h4>
+                        <p class="text-[11px] text-slate-400 mt-1">Разбор системных причин провала Mona и отсутствия Hard Limits.</p>
+                        <a href="https://www.youtube.com/watch?v=GTQbzWlhCqY" target="_blank" class="text-[11px] text-blue-400 hover:underline mt-2 inline-block">Смотреть на YouTube <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Официальные публикации и отчёты -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <a href="https://andonlabs.com/blog/ai-cafe-stockholm" target="_blank" class="custom-card p-4 rounded-2xl hover:border-blue-500/50 transition block space-y-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400">Официальный блог Andon Labs</span>
+                    <h4 class="text-xs font-bold text-white">AI Café in Stockholm: Полный отчёт</h4>
+                    <p class="text-[11px] text-slate-400">Хроника запуска кофейни на Norrbackagatan 48, переписки агента Mona и разбор ошибок.</p>
+                    <span class="text-[11px] text-blue-400 inline-block pt-1">andonlabs.com/blog/ai-cafe-stockholm <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></span>
+                </a>
+
+                <a href="https://andonlabs.com/evals/vending-bench-2" target="_blank" class="custom-card p-4 rounded-2xl hover:border-emerald-500/50 transition block space-y-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Бенчмарк и лидерборд</span>
+                    <h4 class="text-xs font-bold text-white">Vending-Bench 2 & Arena</h4>
+                    <p class="text-[11px] text-slate-400">Результаты 365-дневной симуляции управления вендинговым бизнесом для ведущих моделей.</p>
+                    <span class="text-[11px] text-emerald-400 inline-block pt-1">andonlabs.com/evals/vending-bench-2 <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></span>
+                </a>
+
+                <a href="https://www.nextgov.com/artificial-intelligence/2026/11/mona-ai-running-stockholm-cafe-still-cant-turn-profit/417191/" target="_blank" class="custom-card p-4 rounded-2xl hover:border-amber-500/50 transition block space-y-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Репортаж (Ноябрь 2026)</span>
+                    <h4 class="text-xs font-bold text-white">Nextgov: Итоги работы Mona к ноябрю 2026</h4>
+                    <p class="text-[11px] text-slate-400">Новые цифры убытков (-691 893 SEK), расходы на токены API и переход на новую модель OpenAI.</p>
+                    <span class="text-[11px] text-amber-400 inline-block pt-1">Читать статью Nextgov <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></span>
+                </a>
+            </div>
         </div>
 
-        <!-- TAB 4: 4 SUBTABS FOR CASE QUESTIONS (CLEAN TEXT WITHOUT MATH JUNK) -->
+        <!-- TAB 4: 4 SUBTABS FOR CASE QUESTIONS -->
         <div id="content-case" class="tab-content space-y-6 hidden">
             <div class="flex space-x-2 border-b border-slate-800 pb-3 overflow-x-auto">
                 <button onclick="switchTask('task-1')" id="subtab-task-1" class="subtab-btn active px-4 py-2 rounded-xl text-xs font-bold transition border border-transparent whitespace-nowrap">
@@ -464,7 +491,7 @@
                     <div class="custom-card p-5 rounded-2xl border-l-4 border-l-blue-500 space-y-2">
                         <h4 class="font-bold text-sm text-blue-400">Эталонный ответ — Задача 1: FC/VC и BEP</h4>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Неликвидные товары (яйца, томаты, 3000 перчаток) за счет порчи переходят из переменной части в списания FC waste. BEP = FC total / (P - VC cup). При росте FC на $630 (6,000 SEK) и маржинальном доходе $3.2 с чашки, точке безубыточности требуется продать дополнительные **197 чашек кофе** в месяц только для покрытия фейлов.
+                            Неликвидные товары (яйца, томаты, 3000 перчаток) за счет порчи переходят из переменной части в списания FC waste. BEP = FC total / (P - VC cup). При росте FC на $630 (6,000 SEK) и маржинальном доходе $3.2 с чашки, точке безубыточности требуется продать дополнительные <strong>197 чашек кофе</strong> в месяц только для покрытия фейлов.
                         </p>
                     </div>
 
@@ -495,6 +522,94 @@
             </div>
         </div>
 
+        <!-- TAB 7: NOVEMBER 2026 FIELD UPDATE -->
+        <div id="content-update2026" class="tab-content space-y-6 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 custom-card p-6 rounded-2xl space-y-4 border-l-4 border-l-emerald-500">
+                    <div class="flex flex-wrap justify-between items-start gap-2">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Продолжение эксперимента (Ноябрь 2026)</span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-white mt-0.5">Andon Café спустя 7 месяцев: новые данные и смена модели</h2>
+                        </div>
+                        <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold px-3 py-1 rounded-full">Апдейт 12.11.2026</span>
+                    </div>
+
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        Осенью 2026 года основатели Andon Labs (Аксель Баклунд и Лукас Петерссон) продолжили эксперимент в Стокгольме. Несмотря на смену языковых моделей и увеличение бюджета на дашборде в кофейне до <strong>700,000 SEK</strong>, кофейня так и не вышла в операционный плюс — проявились новые экономические эффекты автономного управления.
+                    </p>
+
+                    <div class="overflow-x-auto pt-1">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 font-bold uppercase">
+                                    <th class="py-2 px-3">Показатель (Ноябрь 2026)</th>
+                                    <th class="py-2 px-3">Значение</th>
+                                    <th class="py-2 px-3">Экономический вывод для кейса</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50 text-slate-300">
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-white">Эволюция движка Mona</td>
+                                    <td class="py-2.5 px-3 text-blue-400 font-bold">Gemini → GPT-5.5 → новая модель OpenAI</td>
+                                    <td class="py-2.5 px-3 text-slate-400">Плюс отдельная голосовая модель на телефоне для ответов про меню и часы работы</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-white">Накопленный убыток</td>
+                                    <td class="py-2.5 px-3 text-rose-400 font-bold">-691,893 SEK (~-$69,900)</td>
+                                    <td class="py-2.5 px-3 text-slate-400">Доходность составила -98.8% от выделенного капитала 700,000 SEK</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-white">Совокупная выручка и трафик</td>
+                                    <td class="py-2.5 px-3 text-emerald-400 font-bold">156,979 SEK (~$15,900) / 1,949 чеков</td>
+                                    <td class="py-2.5 px-3 text-slate-400">В большинство дней проходило меньше 10 покупок</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-white">Расходы на токены LLM (API)</td>
+                                    <td class="py-2.5 px-3 text-amber-400 font-bold">106,195 SEK (~$10,700)</td>
+                                    <td class="py-2.5 px-3 text-slate-400">Во многие дни оплата «мозгов» ИИ превышала всю дневную выручку кофейни</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="custom-card p-6 rounded-2xl flex flex-col justify-between space-y-4 border-l-4 border-l-amber-500">
+                    <div class="space-y-3">
+                        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-scale-unbalanced text-amber-400"></i>
+                            Эффект «маятника» без Hard Limits
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            После летних списаний нераспроданной еды Mona впала в противоположную крайность: <strong>вообще перестала заказывать свежую выпечку и сэндвичи</strong>.
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-1.5">
+                            <p class="text-amber-400 font-bold">Что осталось на витрине:</p>
+                            <p>Только шоколадные шарики <em>Delicatoboll</em> в фабричном пластике, которые не портятся без холодильника. Гости заходят в обед, видят пустую витрину и уходят без покупки.</p>
+                        </div>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            <strong>Урок для MBA:</strong> оптимизация одних только списаний (VC waste) без нижнего порога ассортимента уничтожает выручку (TR) и лояльность клиентов.
+                        </p>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-800 space-y-2">
+                        <span class="text-[11px] font-bold text-slate-300 block">Первоисточники и репортаж:</span>
+                        <a href="https://andonlabs.com/blog/ai-cafe-stockholm" target="_blank" class="flex items-center justify-between text-xs text-blue-400 hover:underline bg-slate-950 px-3 py-2 rounded-lg border border-slate-800">
+                            <span>Официальный блог Andon Labs</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                        <a href="https://www.nextgov.com/artificial-intelligence/2026/11/mona-ai-running-stockholm-cafe-still-cant-turn-profit/417191/" target="_blank" class="flex items-center justify-between text-xs text-emerald-400 hover:underline bg-slate-950 px-3 py-2 rounded-lg border border-slate-800">
+                            <span>Репортаж Nextgov (Ноябрь 2026)</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                        <a href="https://andonlabs.com/evals/vending-bench-2" target="_blank" class="flex items-center justify-between text-xs text-amber-400 hover:underline bg-slate-950 px-3 py-2 rounded-lg border border-slate-800">
+                            <span>Бенчмарк Vending-Bench 2</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer class="bg-slate-900 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
@@ -506,13 +621,19 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(b => {
                 b.classList.remove('active', 'bg-blue-600', 'text-white');
-                b.classList.add('text-slate-400');
+                if (b.id === 'tab-solution') {
+                    b.classList.add('text-rose-400');
+                } else if (b.id === 'tab-update2026') {
+                    b.classList.add('text-emerald-400');
+                } else {
+                    b.classList.add('text-slate-400');
+                }
             });
 
             document.getElementById('content-' + tabId).classList.remove('hidden');
             const activeBtn = document.getElementById('tab-' + tabId);
             activeBtn.classList.add('active');
-            activeBtn.classList.remove('text-slate-400');
+            activeBtn.classList.remove('text-slate-400', 'text-rose-400', 'text-emerald-400');
 
             if (tabId === 'benchmark' && !vendingChart) initBenchmarkCharts();
             if (tabId === 'simulator' && !simChart) initSimCharts();
