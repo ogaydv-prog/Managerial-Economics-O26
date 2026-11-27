@@ -87,10 +87,10 @@
                 <div>
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="text-[10px] font-bold uppercase tracking-widest text-blue-400">MBA Master Case | AlmaU GSB</span>
-                        <span class="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/40 px-2.5 py-0.5 rounded-full font-extrabold">Поток О26-MBA-МД</span>
+                        <span class="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/40 px-2.5 py-0.5 rounded-full font-extrabold">О26-MBA-МД</span>
                         <span class="text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded-full font-bold">Andon Report 2026</span>
                     </div>
-                    <h1 class="text-xl sm:text-2xl font-black text-white mt-0.5">Andon Labs: Автономная ИИ-Субъектность и Операционный Аудит</h1>
+                    <h1 class="text-xl sm:text-2xl font-black text-white mt-0.5">Andon Labs: Бизнес-кейс и операционный Аудит</h1>
                 </div>
             </div>
             <div class="flex items-center gap-3">
@@ -770,8 +770,6 @@
         const draftStorage = {};
 
         function triggerIntegrityWarning(reason) {
-            // Срабатывает только если пользователь уходит за пределы этого HTML-документа или копирует/вставляет текст.
-            // Переключения между вкладками внутри этой же страницы кейса не вызывают срабатываний.
             violationCount++;
             document.getElementById('violation-counter-badge').textContent = violationCount;
             const headerCounter = document.getElementById('header-violation-count');
@@ -800,7 +798,6 @@
             modal.classList.remove('flex');
         }
 
-        // Отслеживание только реального ухода за пределы текущей вкладки/окна браузера
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 triggerIntegrityWarning('Переключение на другую вкладку браузера или сворачивание окна!');
@@ -948,10 +945,10 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Отправка...';
 
             try {
+                // Отправка без custom headers (text/plain по умолчанию), чтобы браузер не делал preflight OPTIONS, который ломает Apps Script
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 statusEl.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Ответ ${data.groupName} (${sender}) успешно отправлен в Google Таблицу!</span>`;
