@@ -328,7 +328,7 @@
             <div class="bg-amber-950/30 border border-amber-500/40 p-3.5 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div class="text-xs text-amber-200 flex items-center gap-2.5">
                     <i class="fa-solid fa-user-shield text-amber-400 text-base"></i>
-                    <span><strong>Поток О26-MBA-МД • Режим академической честности активен:</strong> копирование условий, вставка текста (Ctrl+V) и переключение на другие вкладки браузера фиксируются и ведут к аннулированию ответа.</span>
+                    <span><strong>Поток О26-MBA-МД • Режим академической честности активен:</strong> вы можете свободно переключаться между вкладками внутри этого сайта, но выход в другие вкладки/окна браузера, копирование задания и вставка текста (Ctrl+V) фиксируются и ведут к аннулированию ответа.</span>
                 </div>
                 <span class="text-[11px] font-mono bg-slate-950 px-3 py-1 rounded-lg border border-slate-800 text-slate-300 shrink-0">
                     Нарушений: <strong id="header-violation-count" class="text-emerald-400">0</strong>
@@ -370,7 +370,7 @@
 
                     <div class="bg-emerald-950/25 p-3.5 rounded-xl border border-emerald-500/30 space-y-1">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block">
-                            <i class="fa-solid fa-user-check mr-1"></i> Ответственный за заполнение и отправку:
+                            <i class="fa-solid fa-user-pen mr-1"></i> Заполняет и отправляет ответ группы:
                         </span>
                         <div id="assigned-submitter" class="text-xs sm:text-sm font-extrabold text-white">
                             Симакова Юлия (МВА-В26-МД)
@@ -674,8 +674,8 @@
     </main>
 
     <script>
-        // ВСТАВЬТЕ СЮДА ССЫЛКУ НА ВАШ GOOGLE APPS SCRIPT WEB APP:
-        const GOOGLE_SCRIPT_URL = "";
+        // Вшитый навсегда URL Google Apps Script Web App:
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcCB3n29w2trmDAnt710cmm7MKdZecpvURZnz1TA5NU5O1WbbQYM44KZ6jpqW38tIT/exec";
 
         const GROUPS_DATA = {
             'task-1': {
@@ -770,9 +770,8 @@
         const draftStorage = {};
 
         function triggerIntegrityWarning(reason) {
-            const caseTabVisible = !document.getElementById('content-case').classList.contains('hidden');
-            if (!caseTabVisible) return;
-
+            // Срабатывает только если пользователь уходит за пределы этого HTML-документа или копирует/вставляет текст.
+            // Переключения между вкладками внутри этой же страницы кейса не вызывают срабатываний.
             violationCount++;
             document.getElementById('violation-counter-badge').textContent = violationCount;
             const headerCounter = document.getElementById('header-violation-count');
@@ -787,7 +786,7 @@
                 updateWordCounter();
                 modalText.innerHTML = `<strong>Причина: ${reason}</strong><br><br>Ваши действия нарушают Кодекс академической честности AlmaU! Из-за повторного нарушения ваш текущий черновик <strong>аннулирован</strong>, а отметка о нарушении будет передана в ведомость преподавателя.`;
             } else {
-                modalText.innerHTML = `<strong>Причина: ${reason}</strong><br><br>Ваши действия нарушают Кодекс академической честности AlmaU! Переключение на другие вкладки/окна, копирование задания и вставка текста запрещены. При следующем нарушении ваши данные будут аннулированы.`;
+                modalText.innerHTML = `<strong>Причина: ${reason}</strong><br><br>Ваши действия нарушают Кодекс академической честности AlmaU! Выход в другие вкладки/окна браузера, копирование задания и вставка текста запрещены. При следующем нарушении ваши данные будут аннулированы.`;
             }
 
             const modal = document.getElementById('integrity-modal');
@@ -801,16 +800,17 @@
             modal.classList.remove('flex');
         }
 
+        // Отслеживание только реального ухода за пределы текущей вкладки/окна браузера
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                triggerIntegrityWarning('Переключение на другую вкладку или сворачивание браузера во время выполнения задания!');
+                triggerIntegrityWarning('Переключение на другую вкладку браузера или сворачивание окна!');
             }
         });
 
         window.addEventListener('blur', () => {
             setTimeout(() => {
                 if (!document.hasFocus()) {
-                    triggerIntegrityWarning('Потеря фокуса окна (переход в другое приложение или вкладку)!');
+                    triggerIntegrityWarning('Переход в другое приложение или окно браузера!');
                 }
             }, 150);
         });
@@ -948,17 +948,13 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Отправка...';
 
             try {
-                if (GOOGLE_SCRIPT_URL) {
-                    await fetch(GOOGLE_SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    statusEl.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Ответ ${data.groupName} (${sender}) успешно отправлен в Google Таблицу!</span>`;
-                } else {
-                    statusEl.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Ответ ${data.groupName} (${sender}, число: ${numericVal}, ${wordCount} слов) принят! (Подключите URL Google Apps Script для записи в таблицу).</span>`;
-                }
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                statusEl.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Ответ ${data.groupName} (${sender}) успешно отправлен в Google Таблицу!</span>`;
             } catch (err) {
                 statusEl.innerHTML = '<span class="text-rose-400 font-bold">Ошибка сети при отправке. Сохраните текст и повторите попытку.</span>';
             } finally {
